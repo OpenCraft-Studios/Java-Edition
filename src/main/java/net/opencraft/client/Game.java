@@ -13,7 +13,7 @@ import net.opencraft.util.Screen;
 public class Game implements Runnable {
 
 	public static final String NAME = "OpenCraft";
-	public static final String VERSION = "24r01";
+	public static final String VERSION = "24r02";
 	public static final VersionType VERSION_TYPE = VersionType.RELEASE;
 	public static final String TITLE = NAME + " " + VERSION + VERSION_TYPE.menuScreenTitle();
 

@@ -22,15 +22,11 @@ public class Screen implements Renderizable {
 		return getImage().getGraphics();
 	}
 
-	public Image scale(Image img, final int width, final int height) {
-		return img.getScaledInstance(width, height, Image.SCALE_FAST);
-	}
-	
 	@Override
 	public void render(Graphics g, final int width, final int height) {
-		g.drawImage(scale(getImage(), width, height), 0, 0, null);
+		g.drawImage(getImage(), 0, 0, width, height, null);
 	}
-	
+
 	@Override
 	public void render(Graphics g) {
 		g.drawImage(getImage(), 0, 0, null);
@@ -48,7 +44,7 @@ public class Screen implements Renderizable {
 		Graphics g = getGraphics();
 		g.drawImage(img, 0, 0, null);
 	}
-	
+
 	public void draw(Image img, int x, int y) {
 		Graphics g = getGraphics();
 		g.drawImage(img, x, y, null);

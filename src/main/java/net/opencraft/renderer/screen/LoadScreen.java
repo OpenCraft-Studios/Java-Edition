@@ -76,7 +76,7 @@ public class LoadScreen implements Renderizable {
 	}
 
 	public void changeScreen(long time) {
-		if (time < 1) {
+		if (time > 1) {
 			try {
 				Thread.sleep(time);
 			} catch (Exception ignored) {

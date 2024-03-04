@@ -13,7 +13,7 @@ public class DisplayManager {
 	}
 
 	public static void createDisplay() {
-		display = new Display(Game.NAME + " " + Game.VERSION);
+		display = new Display(Game.TITLE);
 		display.setDefaultCloseOperation(Display.EXIT_ON_CLOSE);
 		display.setSize(Display.SIZE);
 		display.setPreferredSize(Display.SIZE);
@@ -50,7 +50,7 @@ public class DisplayManager {
 	public static int getDisplayHeight() {
 		return display.getHeight();
 	}
-	
+
 	public static void updateDisplay() {
 		display.repaint();
 	}
