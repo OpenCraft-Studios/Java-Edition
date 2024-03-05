@@ -7,6 +7,8 @@ import java.util.logging.SimpleFormatter;
 
 import javax.swing.JOptionPane;
 
+import net.opencraft.util.Utils;
+
 public class LoggerConfig {
 
 	public static final String LOG_FORMAT = "[%1$tH:%1$tM:%1$tS] [%3$s/%4$-4s]: %5$s%n";
@@ -20,7 +22,8 @@ public class LoggerConfig {
 		try {
 			logger.addHandler(logFile());
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Cannot save logging traces to file! More information in console.", "FATAL SEVERE ERROR!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Cannot save logging traces to file! More information in console.",
+					"FATAL SEVERE ERROR!", JOptionPane.ERROR_MESSAGE);
 			System.err.println("Cannot save logging traces to file!");
 			System.err.println("Exception -> class " + e.getClass().getCanonicalName());
 			System.err.println("  * Cause: " + e.getCause());
@@ -31,7 +34,7 @@ public class LoggerConfig {
 	}
 
 	public static FileHandler logFile() throws SecurityException, IOException {
-		FileHandler fh = new FileHandler("latest.log");
+		FileHandler fh = new FileHandler(Utils.getLatestFile());
 		fh.setFormatter(new SimpleFormatter());
 		return fh;
 	}

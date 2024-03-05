@@ -36,7 +36,10 @@ public class DisplayManager {
 	}
 
 	public static boolean existDisplay() {
-		return display != null;
+		boolean nullDisplay = display == null;
+		boolean closedDisplay = !display.isDisplayable();
+		
+		return !(nullDisplay || closedDisplay);
 	}
 
 	public static Display getDisplay() {

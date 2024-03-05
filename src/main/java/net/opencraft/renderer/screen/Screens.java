@@ -1,5 +1,8 @@
 package net.opencraft.renderer.screen;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
 import net.opencraft.renderer.Renderizable;
 import net.opencraft.util.Resource;
 
@@ -27,6 +30,18 @@ public enum Screens {
 		return getScene(this);
 	}
 
+	public static void renderCurrent(BufferedImage bi) {
+		getCurrent().getScene().render(bi);
+	}
+	
+	public static void renderCurrent(Graphics g, int width, int height) {
+		getCurrent().getScene().render(g, width, height);
+	}
+	
+	public static void renderCurrent(Graphics g) {
+		getCurrent().getScene().render(g);
+	}
+	
 	public static Screens getCurrent() {
 		return current;
 	}

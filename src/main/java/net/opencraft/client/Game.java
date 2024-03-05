@@ -1,9 +1,14 @@
 package net.opencraft.client;
 
+import static net.opencraft.LoggerConfig.LOG_FORMAT;
+import static net.opencraft.LoggerConfig.handle;
 import static net.opencraft.renderer.display.DisplayManager.destroyDisplay;
+import static net.opencraft.renderer.display.DisplayManager.existDisplay;
 
 import java.awt.Graphics;
+import java.util.logging.Logger;
 
+import net.opencraft.config.GameConfig;
 import net.opencraft.config.Workspace;
 import net.opencraft.renderer.RenderDragon;
 import net.opencraft.renderer.screen.LoadScreen;
@@ -14,7 +19,7 @@ public class Game implements Runnable {
 
 	public static final String NAME = "OpenCraft";
 	public static final String VERSION = "24r02";
-	public static final VersionType VERSION_TYPE = VersionType.RELEASE;
+	public static final VersionType VERSION_TYPE = VersionType.INDEV;
 	public static final String TITLE = NAME + " " + VERSION + VERSION_TYPE.menuScreenTitle();
 
 	public static enum VersionType {
@@ -54,22 +59,31 @@ public class Game implements Runnable {
 	}
 	
 	public static final int NANOSECONDS = 1000000000;
-	public static byte TICK_RATE = 60;
-	public static final double NANO_PER_TICK = NANOSECONDS / TICK_RATE;
+	public static final double NANO_PER_TICK = NANOSECONDS / GameConfig.TICK_RATE;
 
+	private static final Logger logger = Logger.getLogger("gameThread");
+	
 	private static boolean running = false;
 	private Screen screen;
 
+	static {
+		// Set logging format
+		System.setProperty("java.util.logging.SimpleFormatter.format", LOG_FORMAT);
+		handle(logger);
+	}
+	
 	@Override
 	public void run() {
+		logger.info("Initializing the game...");
 		init();
-
+		logger.info("Game initializated!");
+		
 		long lastUpdate = System.nanoTime();
 
 		double timePassed;
 		double delta = 0;
 
-		while (running) {
+		while (running & existDisplay()) {
 			final long loopStart = System.nanoTime();
 
 			timePassed = loopStart - lastUpdate;
@@ -78,30 +92,30 @@ public class Game implements Runnable {
 			delta += timePassed / NANO_PER_TICK;
 
 			while (delta >= 1) {
-				runStep();
+				tick();
 				delta--;
 			}
 
 		}
+		
+		stop();
+		System.exit(0);
 
-	}
-
-	public void tick() {
 	}
 
 	public void render() {
-		Graphics g = screen.getGraphics();
-		Screens.getCurrent().getScene().render(g);
+		Graphics g = this.screen.getGraphics();
+		Screens.renderCurrent(g);
 		RenderDragon.update();
 
 	}
 
-	public void runStep() {
-		tick();
+	public void tick() {
 		render();
 	}
 
 	public void stop() {
+		logger.info("Stopping game...");
 		screen.getGraphics().dispose();
 		destroyDisplay();
 	}
@@ -116,6 +130,10 @@ public class Game implements Runnable {
 		Screens.setCurrent(LoadScreen.SCREEN);
 
 		running = true;
+	}
+	
+	public static void main(String[] args) {
+		new Thread(new Game()).start();
 	}
 
 }

@@ -1,25 +1,40 @@
 package net.opencraft.config;
 
+import java.io.File;
+
 public class Workspace {
 
-	public static String GAME_DIR = ".";
+	public static String GAME_DIR = "opcraft";
 
 	public static String ASSETS_DIR = GAME_DIR + "/assets";
-	public static String WORLD_DIR = GAME_DIR + "/worlds";
+	public static String WORLDS_DIR = GAME_DIR + "/worlds";
 	public static String LOGS_DIR = GAME_DIR + "/logs";
 
 	private Workspace() {
 	}
 
-	private static void create(String gameDir, String assetsDir, String worldDir, String logsDir) {
+	public static void createFolders() {
+		File gameDir = new File(GAME_DIR);
+		File logsDir = new File(LOGS_DIR);
+		File assetsDir = new File(ASSETS_DIR);
+		File worldsDir = new File(WORLDS_DIR);
+
+		gameDir.mkdirs();
+		logsDir.mkdirs();
+		assetsDir.mkdirs();
+		worldsDir.mkdirs();
+	}
+	
+	private static void create(String gameDir, String assetsDir, String worldsDir, String logsDir) {
 		GAME_DIR = gameDir;
 		ASSETS_DIR = assetsDir;
-		WORLD_DIR = worldDir;
+		WORLDS_DIR = worldsDir;
 		LOGS_DIR = logsDir;
+		createFolders();
 	}
 
 	private static void create(String gameDir, String assetsDir) {
-		create(gameDir, assetsDir, autoWorldDir(), autoLogsDir());
+		create(gameDir, assetsDir, autoWorldsDir(), autoLogsDir());
 	}
 
 	private static void create(String gameDir) {
@@ -44,14 +59,14 @@ public class Workspace {
 	}
 
 	private static String autoGameDir() {
-		return ".";
+		return "opcraft";
 	}
 
 	private static String autoAssetsDir() {
 		return GAME_DIR + "/assets";
 	}
 
-	private static String autoWorldDir() {
+	private static String autoWorldsDir() {
 		return GAME_DIR + "/worlds";
 	}
 
