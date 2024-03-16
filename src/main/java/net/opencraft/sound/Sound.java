@@ -15,24 +15,24 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import net.opencraft.config.Workspace;
 import net.opencraft.util.Resource;
 
-public enum Sounds {
+public enum Sound {
 	NONE("opencraft.sounds", "none", null),
 	MOOG_CITY("opencraft.sound", "title.moog_city", "MoogCity.wav"),
 	ARIA_MATH("opencraft.sound", "ambient.aria_math", "AriaMath.wav");
 
-	public static Sounds PLAYING = null;
+	public static Sound PLAYING = null;
 
 	final String origin;
 	final String soundId;
 	final String path;
 
-	Sounds(String origin, String soundTitle, String name) {
+	Sound(String origin, String soundTitle, String name) {
 		this.origin = origin;
 		this.soundId = soundTitle;
 		this.path = name;
 	}
 
-	public static void setCurrent(Sounds aures) {
+	public static void setCurrent(Sound aures) {
 		PLAYING = aures;
 	}
 
@@ -55,11 +55,11 @@ public enum Sounds {
 		return Workspace.ASSETS_DIR + "/opencraft/sounds/" + path;
 	}
 
-	public static Sounds getCurrent() {
+	public static Sound getCurrent() {
 		return PLAYING;
 	}
 
-	public Sounds fromResource(Resource res) {
+	public Sound fromResource(Resource res) {
 		return switch (res.toString()) {
 			case "opencraft.sound:title.moog_city" -> MOOG_CITY;
 			case "opencraft.sound:ambient.aria_math" -> ARIA_MATH;
@@ -67,7 +67,7 @@ public enum Sounds {
 		};
 	}
 
-	public static void play(Clip player, Sounds sound)
+	public static void play(Clip player, Sound sound)
 			throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 		if (player == null)
 			return;
@@ -81,7 +81,7 @@ public enum Sounds {
 		play(player, this);
 	}
 
-	public static InputStream getSound(Sounds snd) throws IOException {
+	public static InputStream getSound(Sound snd) throws IOException {
 		return new BufferedInputStream(new FileInputStream(snd.getPath()));
 	}
 

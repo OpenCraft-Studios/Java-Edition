@@ -16,8 +16,7 @@ import net.opencraft.config.Workspace;
 import net.opencraft.data.packs.Pack;
 import net.opencraft.renderer.RenderDragon;
 import net.opencraft.renderer.Screen;
-import net.opencraft.renderer.scenes.LoadScene;
-import net.opencraft.renderer.scenes.Scenes;
+import net.opencraft.renderer.scenes.Scene;
 import net.opencraft.sound.SoundManager;
 
 public class Game implements Runnable {
@@ -76,7 +75,7 @@ public class Game implements Runnable {
 
 	public void render() {
 		Graphics g = this.screen.getGraphics();
-		Scenes.renderCurrent(g);
+		Scene.renderCurrent(g);
 		RenderDragon.update();
 	}
 
@@ -99,7 +98,7 @@ public class Game implements Runnable {
 
 		RenderDragon.init();
 		screen = RenderDragon.getScreen();
-		Scenes.setCurrent(LoadScene.SCENE);
+		Scene.setCurrent(Scene.LOAD_SCENE);
 
 		running = true;
 	}
@@ -125,7 +124,7 @@ public class Game implements Runnable {
 	}
 
 	public static void skipIntro() {
-		Scenes.setCurrent(Scenes.TITLE_SCENE);
+		Scene.setCurrent(Scene.TITLE_SCENE);
 	}
 
 	public static void selectPack(Pack pack) {

@@ -10,13 +10,14 @@ import java.util.logging.Logger;
 
 import net.opencraft.config.GameExperiments;
 import net.opencraft.renderer.display.Display;
+import net.opencraft.sound.Sound;
 import net.opencraft.util.Assets;
 import net.opencraft.util.Resource;
 
 public class LoadScene extends Scene {
 
 	public static final Resource RESOURCE = Resource.format("opencraft.scene:load");
-	public static final Scenes SCENE = Scenes.LOAD_SCREEN;
+	public static final Sound SOUND = Sound.NONE;
 
 	private static final Logger logger = Logger.getLogger("loadscene");
 	private static final int I_MAX = Display.HEIGHT / 2;
@@ -28,6 +29,10 @@ public class LoadScene extends Scene {
 		// Set logging format
 		System.setProperty("java.util.logging.SimpleFormatter.format", LOG_FORMAT);
 		handle(logger);
+	}
+
+	public LoadScene() {
+		super(RESOURCE, SOUND);
 	}
 
 	public void render(Graphics g) {
@@ -84,7 +89,7 @@ public class LoadScene extends Scene {
 			}
 		}
 
-		Scenes.setCurrent(Scenes.TITLE_SCENE);
+		Scene.setCurrent(Scene.TITLE_SCENE);
 	}
 
 	public static LoadScene renewInstance() {

@@ -9,24 +9,24 @@ import java.util.Calendar;
 
 import net.opencraft.client.Game;
 import net.opencraft.language.Translator;
-import net.opencraft.renderer.Renderizable;
 import net.opencraft.renderer.display.Display;
+import net.opencraft.sound.Sound;
 import net.opencraft.util.Assets;
 import net.opencraft.util.Fonts;
 import net.opencraft.util.Resource;
 import net.opencraft.util.coords.Coordinates;
 import net.opencraft.util.coords.Vec2;
 
-public class TitleScene implements Renderizable {
+public class TitleScene extends Scene {
 
 	public static final Resource RESOURCE = Resource.format("opencraft.scene:title");
-
-	/**
-	 * Don't use it, it's bugged for some reason
-	 */
-	public static final Scenes SCENE = Scenes.TITLE_SCENE;
+	public static final Sound SOUND = Sound.MOOG_CITY;
 
 	private static TitleScene instance = new TitleScene();
+
+	public TitleScene() {
+		super(RESOURCE, SOUND);
+	}
 
 	@Override
 	public void render(Graphics g) {

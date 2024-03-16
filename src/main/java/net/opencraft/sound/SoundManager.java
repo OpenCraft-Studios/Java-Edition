@@ -2,8 +2,8 @@ package net.opencraft.sound;
 
 import static net.opencraft.LoggerConfig.LOG_FORMAT;
 import static net.opencraft.LoggerConfig.handle;
-import static net.opencraft.sound.Sounds.getCurrent;
-import static net.opencraft.sound.Sounds.setCurrent;
+import static net.opencraft.sound.Sound.getCurrent;
+import static net.opencraft.sound.Sound.setCurrent;
 
 import java.util.Objects;
 import java.util.logging.Logger;
@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
-import net.opencraft.renderer.scenes.Scenes;
+import net.opencraft.renderer.scenes.Scene;
 
 public class SoundManager {
 
@@ -42,14 +42,14 @@ public class SoundManager {
 	}
 
 	public static void update() {
-		Sounds sound = Scenes.getCurrent().getSound();
+		Sound sound = Scene.getCurrent().getSound();
 		if (!isSupported() || Objects.isNull(sound.getPath()))
 			return;
 		
 		if (getCurrent() != sound) {
 			resetPlayer();
 			try {
-				Sounds.play(player, sound);
+				Sound.play(player, sound);
 			} catch (Exception e) {
 				logger.severe(e.getMessage());
 			}
