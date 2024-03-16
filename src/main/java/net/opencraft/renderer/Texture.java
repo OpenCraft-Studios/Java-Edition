@@ -1,4 +1,4 @@
-package net.opencraft.raster;
+package net.opencraft.renderer;
 
 import java.awt.Color;
 import java.awt.Image;
@@ -11,6 +11,10 @@ public class Texture {
 
 	public Texture(Image img) {
 		this.img = Optional.ofNullable(img);
+	}
+	
+	public static Texture empty() {
+		return new Texture(null);
 	}
 
 	public Texture(int width, int height, boolean alpha) {

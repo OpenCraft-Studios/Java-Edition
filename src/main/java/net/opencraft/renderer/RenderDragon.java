@@ -12,7 +12,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
 import net.opencraft.renderer.display.Display;
-import net.opencraft.util.Screen;
 
 public class RenderDragon extends Canvas {
 

@@ -1,10 +1,8 @@
-package net.opencraft.util;
+package net.opencraft.renderer;
 
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-
-import net.opencraft.renderer.Renderizable;
 
 public class Screen implements Renderizable {
 
@@ -58,6 +56,10 @@ public class Screen implements Renderizable {
 	public void draw(Image img, int dx1, int dy1, int dx2, int dy2, int sx1, int sy1, int sx2, int sy2) {
 		Graphics g = getGraphics();
 		g.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
+	}
+	
+	public BufferedImage screenshot() {
+		return screenImg;
 	}
 
 }

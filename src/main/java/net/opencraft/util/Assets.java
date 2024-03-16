@@ -1,43 +1,39 @@
 package net.opencraft.util;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
 
 import javax.imageio.ImageIO;
 
+import net.opencraft.client.Game;
 import net.opencraft.config.Workspace;
-import net.opencraft.raster.Texture;
+import net.opencraft.data.ButtonInfo;
+import net.opencraft.renderer.Texture;
 
 public class Assets {
-
-	public static final int NORMAL_BUTTON = 0;
-
+	
 	private Assets() {
 	}
-	
-	public static int[] getButtonBounds(int button) {
+		
+	public static ButtonInfo getButton(int button) {
 		return switch (button) {
-			case NORMAL_BUTTON -> new int[] { 0, 66, 200, 86 };
-			default -> new int[] { 0, 0, 0, 0 };
+			case 0 -> ButtonInfo.of().vertices(new int[] { 0, 66, 200, 86 }).build();
+			default -> ButtonInfo.EMPTY;
 		};
 	}
 
 	public static Image getLogo() {
-		return Assets.bindTexture("/gui/title/minecraft.png");
+		return bindTexture("/gui/title/minecraft.png").getImage();
 	}
 
 	public static Image getLoadscreen() {
-		return Assets.bindTexture("/gui/title/background/loadscreen.jpg");
+		return bindTexture("/gui/title/background/loadscreen.jpg").getImage();
 	}
 
 	public static Image getPanorama(int index) {
-		return bindTexture(String.format("/gui/title/background/panorama_%d.png", index));
+		return bindTexture(String.format("/gui/title/background/panorama_%d.png", index)).getImage();
 	}
 
 	public static Image getPanoramas() {
@@ -53,47 +49,49 @@ public class Assets {
 
 		return bi;
 	}
-
-	public static Cursor getCursor() {
-		BufferedImage bi = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
-		Graphics g = bi.getGraphics();
-
-		g.setColor(Color.BLACK);
-		g.drawLine(0, 16, 32, 16);
-		g.drawLine(16, 0, 16, 32);
-	
-		Toolkit tk = Toolkit.getDefaultToolkit();
-		return tk.createCustomCursor(bi.getSubimage(8, 8, 16, 16), new Point(0, 0), "dg_cursor");
-
-	}
 	
 	public static Image getIcon() {
-		return bindTexture("/gui/release_icon.png");
+		return bindInternalTexture("/icon.png").getImage();
 	}
 
-	public static Image bindExternalTexture(String path) {
+	public static Texture bindExternalTexture(String path) {
 		Image img = null;
 		try {
-			img = ImageIO.read(new FileInputStream(path));
+			img = ImageIO.read(Resource.bindExternalResource(path));
 		} catch (Exception ignored) {
 		}
 
-		return Texture.of(img).getImage();
+		return Texture.of(img);
 	}
 
-	public static Image bindInternalTexture(String path) {
+	public static Texture bindInternalTexture(String path) {
 		Image img = null;
 		try {
-			img = ImageIO.read(Assets.class.getResourceAsStream(path));
+			img = ImageIO.read(Resource.bindInternalResource(path));
 		} catch (Exception ignored) {
 		}
 
-		return Texture.of(img).getImage();
+		return Texture.of(img);
 
 	}
+	
+	public static Texture bindPackTexture(String path) {
+		Image img = null;
+		try {
+			img = ImageIO.read(Game.getResourcePack().getResource(path));
+		} catch (Exception ignored) {
+		}
+		
+		return Texture.of(img);
+	
+	}
 
-	public static Image bindTexture(String path) {
+	public static Texture bindTexture(String path) {
+		if (!Game.isDefaultPackSelected())
+			return bindPackTexture("assets/opencraft/textures" + path);
+			
 		return bindExternalTexture(Workspace.ASSETS_DIR + "/opencraft/textures" + path);
 	}
+	
 
 }

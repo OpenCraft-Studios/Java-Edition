@@ -6,10 +6,14 @@ public final class Vec2 {
 
 	public int x;
 	public int y;
-
+	
 	public Vec2(int x, int y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public Vec2(Point p) {
+		this(p.x, p.y);
 	}
 
 	public int getX() {

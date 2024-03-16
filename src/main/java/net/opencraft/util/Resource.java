@@ -1,5 +1,10 @@
 package net.opencraft.util;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
 public class Resource {
 
 	private final String origin;
@@ -37,6 +42,18 @@ public class Resource {
 		String name = sources[1];
 		
 		return Resource.of(origin, name);
+	}
+	
+	public static InputStream bindInternalResource(String respath) {
+		return Resource.class.getResourceAsStream(respath);
+	}
+	
+	public static URL getResourceURL(String respath) {
+		return Resource.class.getResource(respath);
+	}
+	
+	public static InputStream bindExternalResource(String respath) throws IOException {
+		return new FileInputStream(respath);
 	}
 	
 	public String getOrigin() {

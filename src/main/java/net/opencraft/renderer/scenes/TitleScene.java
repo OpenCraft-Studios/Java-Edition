@@ -1,6 +1,4 @@
-package net.opencraft.renderer.screen;
-
-import static net.opencraft.util.Assets.NORMAL_BUTTON;
+package net.opencraft.renderer.scenes;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,10 +6,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Calendar;
-import java.util.Locale;
 
 import net.opencraft.client.Game;
-import net.opencraft.config.GameConfig;
 import net.opencraft.language.Translator;
 import net.opencraft.renderer.Renderizable;
 import net.opencraft.renderer.display.Display;
@@ -21,16 +17,16 @@ import net.opencraft.util.Resource;
 import net.opencraft.util.coords.Coordinates;
 import net.opencraft.util.coords.Vec2;
 
-public class TitleScreen implements Renderizable {
+public class TitleScene implements Renderizable {
 
-	public static final Resource RESOURCE = Resource.format("opencraft.screen:title");
+	public static final Resource RESOURCE = Resource.format("opencraft.scene:title");
 
 	/**
 	 * Don't use it, it's bugged for some reason
 	 */
-	public static final Screens SCREEN = Screens.TITLE_SCREEN;
+	public static final Scenes SCENE = Scenes.TITLE_SCENE;
 
-	private static TitleScreen instance = new TitleScreen();
+	private static TitleScene instance = new TitleScene();
 
 	@Override
 	public void render(Graphics g) {
@@ -43,7 +39,7 @@ public class TitleScreen implements Renderizable {
 		g.fillRect(0, 0, width, height);
 
 		// Set font
-		g.setFont(Fonts.MOJANGLES.getFont(Font.PLAIN, 18));
+		g.setFont(Fonts.MOJANGLES.deriveFont(Font.PLAIN, 18));
 
 		// Draw panoramas
 		g.drawImage(Assets.getPanoramas(), 0, 0, height * 3, height, null);
@@ -53,16 +49,19 @@ public class TitleScreen implements Renderizable {
 
 		// Draw buttons
 		int[] b1 = Coordinates.XYWHtoP4(Vec2.newTemp((width - 400) / 2, height / 2 - 50), new Dimension(400, 45));
-		int[] b2 = Coordinates.XYWHtoP4(Vec2.newTemp((width - 400) / 2, height / 2), new Dimension(400, 45));
+		int[] b2 = Coordinates.XYWHtoP4(Vec2.newTemp((width - 390) / 2, height / 2), new Dimension(190, 45));
+		int[] b3 = Coordinates.XYWHtoP4(Vec2.newTemp((width) / 2, height / 2), new Dimension(190, 45));
 
-		int[] bb = Assets.getButtonBounds(NORMAL_BUTTON);
-		g.drawImage(Assets.bindTexture("/gui/widgets.png"), b1[0], b1[1], b1[2], b1[3], bb[0], bb[1], bb[2], bb[3],
-				null);
-		g.drawImage(Assets.bindTexture("/gui/widgets.png"), b2[0], b2[1], b2[2], b2[3], bb[0], bb[1], bb[2], bb[3],
-				null);
+		int[] bb = Assets.getButton(0).getBounds();
+		g.drawImage(Assets.bindTexture("/gui/widgets.png").getImage(), b1[0], b1[1], b1[2], b1[3], bb[0], bb[1], bb[2],
+				bb[3], null);
+		g.drawImage(Assets.bindTexture("/gui/widgets.png").getImage(), b2[0], b2[1], b2[2], b2[3], bb[0], bb[1], bb[2],
+				bb[3], null);
+		g.drawImage(Assets.bindTexture("/gui/widgets.png").getImage(), b3[0], b3[1], b3[2], b3[3], bb[0], bb[1], bb[2],
+				bb[3], null);
 
 		// Legal terms
-		g.setFont(Fonts.MOJANGLES.getFont(Font.PLAIN, 20));
+		g.setFont(Fonts.MOJANGLES.deriveFont(Font.PLAIN, 20));
 		final String COPYLEFT = String.format("CopyLeft (-C) Sibermatica 2023-%d",
 				Calendar.getInstance().get(Calendar.YEAR));
 
@@ -72,9 +71,8 @@ public class TitleScreen implements Renderizable {
 		g.drawString(Game.TITLE, 15, height - 70);
 		g.drawString(Translator.translate("opencraft.buttons:singleplayer"), width / 2 - 69, height / 2 - 23);
 
-		// In Spanish the words are a little bit large
-		int settings_x = GameConfig.LANGUAGE == Locale.forLanguageTag("es-ES") ? width / 2 - 73 : width / 2 - 45;
-		g.drawString(Translator.translate("opencraft.buttons:config"), settings_x, height / 2 + 27);
+		g.drawString(Translator.translate("opencraft.buttons:config"), (width - 300) / 2, (height + 55) / 2);
+		g.drawString(Translator.translate("opencraft.buttons:quit"), (width + 90) / 2, (height + 55) / 2);
 	}
 
 	@Override
@@ -87,11 +85,11 @@ public class TitleScreen implements Renderizable {
 		render(bi.getGraphics(), bi.getWidth(), bi.getHeight());
 	}
 
-	public static TitleScreen renewInstance() {
-		return instance = new TitleScreen();
+	public static TitleScene renewInstance() {
+		return instance = new TitleScene();
 	}
 
-	public static TitleScreen getInstance() {
+	public static TitleScene getInstance() {
 		return instance;
 	}
 

@@ -3,67 +3,38 @@ package net.opencraft.client;
 import static net.opencraft.LoggerConfig.LOG_FORMAT;
 import static net.opencraft.LoggerConfig.handle;
 import static net.opencraft.renderer.display.DisplayManager.destroyDisplay;
-import static net.opencraft.renderer.display.DisplayManager.existDisplay;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import net.opencraft.config.GameConfig;
+import net.opencraft.config.GameExperiments;
 import net.opencraft.config.Workspace;
+import net.opencraft.data.packs.Pack;
 import net.opencraft.renderer.RenderDragon;
-import net.opencraft.renderer.screen.LoadScreen;
-import net.opencraft.renderer.screen.Screens;
-import net.opencraft.util.Screen;
+import net.opencraft.renderer.Screen;
+import net.opencraft.renderer.scenes.LoadScene;
+import net.opencraft.renderer.scenes.Scenes;
+import net.opencraft.sound.SoundManager;
 
 public class Game implements Runnable {
 
 	public static final String NAME = "OpenCraft";
-	public static final String VERSION = "24r02";
-	public static final VersionType VERSION_TYPE = VersionType.INDEV;
-	public static final String TITLE = NAME + " " + VERSION + VERSION_TYPE.menuScreenTitle();
+	public static final String VERSION = "24r03";
+	public static final String TITLE = NAME + ' ' + VERSION;
 
-	public static enum VersionType {
-		RELEASE("release"), INDEV("indev"), ALPHA("alpha"), BETA("beta"), PRECLASSIC("pre-classic"),
-		SNAPSHOT("snapshot");
-
-		private String name;
-
-		VersionType(String name) {
-			this.name = name;
-		}
-
-		@Override
-		public String toString() {
-			return this.name;
-		}
-		
-		public String menuScreenTitle() {
-			if (this.equals(RELEASE))
-				return "";
-			
-			return " " + this.name;
-		}
-
-		public VersionType fromString(String str) {
-			return switch (str.toUpperCase()) {
-				case "RELEASE" -> VersionType.RELEASE;
-				case "INDEV" -> VersionType.INDEV;
-				case "ALPHA" -> VersionType.ALPHA;
-				case "BETA" -> VersionType.BETA;
-				case "PRE-CLASSIC" -> VersionType.PRECLASSIC;
-				case "SNAPSHOT" -> VersionType.SNAPSHOT;
-				default -> null;
-			};
-		}
-
-	}
-	
 	public static final int NANOSECONDS = 1000000000;
 	public static final double NANO_PER_TICK = NANOSECONDS / GameConfig.TICK_RATE;
 
-	private static final Logger logger = Logger.getLogger("gameThread");
-	
-	private static boolean running = false;
+	private static Game instance;
+	private static Pack selected_pack;
+
+	private static final Logger logger = Logger.getLogger("main");
+
+	private boolean running = false;
 	private Screen screen;
 
 	static {
@@ -71,19 +42,19 @@ public class Game implements Runnable {
 		System.setProperty("java.util.logging.SimpleFormatter.format", LOG_FORMAT);
 		handle(logger);
 	}
-	
+
 	@Override
 	public void run() {
 		logger.info("Initializing the game...");
 		init();
 		logger.info("Game initializated!");
-		
+
 		long lastUpdate = System.nanoTime();
 
 		double timePassed;
 		double delta = 0;
 
-		while (running & existDisplay()) {
+		while (running) {
 			final long loopStart = System.nanoTime();
 
 			timePassed = loopStart - lastUpdate;
@@ -97,7 +68,7 @@ public class Game implements Runnable {
 			}
 
 		}
-		
+
 		stop();
 		System.exit(0);
 
@@ -105,13 +76,14 @@ public class Game implements Runnable {
 
 	public void render() {
 		Graphics g = this.screen.getGraphics();
-		Screens.renderCurrent(g);
+		Scenes.renderCurrent(g);
 		RenderDragon.update();
-
 	}
 
 	public void tick() {
 		render();
+		if (!GameExperiments.PLAY_SOUND_ONCE)
+			SoundManager.update();
 	}
 
 	public void stop() {
@@ -121,19 +93,67 @@ public class Game implements Runnable {
 	}
 
 	public void init() {
-		Thread.currentThread().setName("Game Thread");
+		Thread.currentThread().setName("main");
 
 		Workspace.create();
 
 		RenderDragon.init();
 		screen = RenderDragon.getScreen();
-		Screens.setCurrent(LoadScreen.SCREEN);
+		Scenes.setCurrent(LoadScene.SCENE);
 
 		running = true;
 	}
-	
-	public static void main(String[] args) {
-		new Thread(new Game()).start();
+
+	public static Locale getLanguage() {
+		return GameConfig.LANGUAGE;
 	}
 
+	public static void setLanguage(Locale language) {
+		GameConfig.LANGUAGE = language;
+	}
+
+	public static void setTickRate(int tick_rate) {
+		GameConfig.TICK_RATE = (byte) (tick_rate & 0xFF);
+	}
+
+	public static void enableUnicode() {
+		GameConfig.UNICODE = true;
+	}
+
+	public static void disableUnicode() {
+		GameConfig.UNICODE = false;
+	}
+
+	public static void skipIntro() {
+		Scenes.setCurrent(Scenes.TITLE_SCENE);
+	}
+
+	public static void selectPack(Pack pack) {
+		selected_pack = pack;
+	}
+
+	public static void useDefaultPack() {
+		selectPack(null);
+	}
+
+	public static Pack getResourcePack() {
+		return selected_pack;
+	}
+
+	public static Game getInstance() {
+		return instance;
+	}
+
+	public static boolean isDefaultPackSelected() {
+		return selected_pack == null;
+	}
+
+	public static BufferedImage screenshot() {
+		Game game = getInstance();
+		return game.screen.screenshot();
+	}
+
+	public static void main(String[] args) throws IOException {
+		new Thread(instance = new Game()).start();
+	}
 }

@@ -36,13 +36,13 @@ public class GameExperiments {
 	 * FAILS:</br>
 	 *  • It takes so long to quit
 	 */
-	public static final boolean CLASSIC_LOAD_SCREEN = false;
+	public static final boolean CLASSIC_LOAD_SCENE = false;
 	
 	/**
 	 * <h2>GameExperiments.SKIP_LOAD_SCREEN</h2>
 	 * This experiment skip completly the load screen.<br>
 	 * Recommended for developers!
 	 * */
-	public static final boolean SKIP_LOAD_SCREEN = false;
+	public static final boolean SKIP_LOAD_SCENE = false;
 	
 }
