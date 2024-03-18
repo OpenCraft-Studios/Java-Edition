@@ -5,7 +5,6 @@ import static net.opencraft.LoggerConfig.handle;
 import static net.opencraft.sound.Sound.getCurrent;
 import static net.opencraft.sound.Sound.setCurrent;
 
-import java.util.Objects;
 import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioSystem;
@@ -21,10 +20,11 @@ public class SoundManager {
 	public static final boolean SUPPORTED;
 
 	static {
-		// Set logging format
+		/* Set logging format */
 		System.setProperty("java.util.logging.SimpleFormatter.format", LOG_FORMAT);
 		handle(logger);
 
+		// Create clip instance
 		Clip clip = null;
 		boolean supported = true;
 		try {
@@ -43,17 +43,14 @@ public class SoundManager {
 
 	public static void update() {
 		Sound sound = Scene.getCurrent().getSound();
-		if (!isSupported() || Objects.isNull(sound.getPath()))
+		if (!isSupported())
 			return;
 		
 		if (getCurrent() != sound) {
 			resetPlayer();
-			try {
-				Sound.play(player, sound);
-			} catch (Exception e) {
-				logger.severe(e.getMessage());
-			}
-			setCurrent(sound);
+			
+			Sound.play(player, sound);
+		setCurrent(sound);
 		}
 
 	}

@@ -1,7 +1,6 @@
 package net.opencraft.renderer;
 
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Screen implements Renderizable {
@@ -10,6 +9,10 @@ public class Screen implements Renderizable {
 
 	public Screen(final int width, final int height) {
 		screenImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		Graphics g = screenImg.getGraphics();
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, width, height);
+		g.dispose();
 	}
 
 	public BufferedImage getImage() {
@@ -20,17 +23,14 @@ public class Screen implements Renderizable {
 		return getImage().getGraphics();
 	}
 
-	@Override
 	public void render(Graphics g, final int width, final int height) {
 		g.drawImage(getImage(), 0, 0, width, height, null);
 	}
 
-	@Override
 	public void render(Graphics g) {
 		g.drawImage(getImage(), 0, 0, null);
 	}
 
-	@Override
 	public void render(BufferedImage bi) {
 		if (bi.equals(screenImg))
 			return;

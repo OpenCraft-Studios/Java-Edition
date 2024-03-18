@@ -6,6 +6,7 @@ import static net.opencraft.LoggerConfig.handle;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.logging.Logger;
 
 import net.opencraft.config.GameExperiments;
@@ -35,7 +36,9 @@ public class LoadScene extends Scene {
 		super(RESOURCE, SOUND);
 	}
 
-	public void render(Graphics g) {
+	@Override
+	public void render(BufferedImage img) {
+		Graphics g = img.getGraphics();
 		if (GameExperiments.SKIP_LOAD_SCENE) {
 			changeScreen(0);
 			return;
@@ -51,7 +54,7 @@ public class LoadScene extends Scene {
 
 	public void classicLS(Graphics g) {
 		if (i == Display.HEIGHT - 1)
-			g.drawImage(Assets.getLoadscreen(), 0, 0, Display.WIDTH, Display.HEIGHT, null);
+			g.drawImage(Assets.getLoadscene(), 0, 0, Display.WIDTH, Display.HEIGHT, null);
 
 		i--;
 

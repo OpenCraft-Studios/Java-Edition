@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-public class ResourcePack implements Pack {
+public class ResourcePack extends Pack {
 
 	private ZipFile zfile;
 

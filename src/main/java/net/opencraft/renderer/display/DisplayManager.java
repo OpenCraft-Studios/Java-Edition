@@ -2,12 +2,13 @@ package net.opencraft.renderer.display;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
+import java.awt.Point;
+import java.awt.Rectangle;
 
 import net.opencraft.client.Game;
 import net.opencraft.util.Assets;
 
 public class DisplayManager {
-
 	public static Display display = null;
 
 	private DisplayManager() {
@@ -24,6 +25,7 @@ public class DisplayManager {
 		display.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 		display.setIconImage(Assets.getIcon());
 		display.pack();
+		
 	}
 
 	public static void showDisplay() {
@@ -53,6 +55,14 @@ public class DisplayManager {
 
 	public static int getDisplayHeight() {
 		return display.getHeight();
+	}
+
+	public static Point getDisplayLocation() {
+		return display.getLocation();
+	}
+
+	public static Rectangle getDisplayRect() {
+		return new Rectangle(display.getLocation().x, display.getLocation().y, display.getWidth(), display.getHeight());
 	}
 
 	public static void updateDisplay() {

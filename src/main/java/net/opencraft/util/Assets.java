@@ -5,93 +5,61 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
-import javax.imageio.ImageIO;
-
-import net.opencraft.client.Game;
-import net.opencraft.config.Workspace;
-import net.opencraft.data.ButtonInfo;
+import net.opencraft.config.GameConfig;
 import net.opencraft.renderer.Texture;
 
 public class Assets {
+
+	public final static Image LOGO;
+	public final static Image WIDGETS;
+	public final static Image PANORAMAS;
+
+	public static String TEXTURE_DIR = GameConfig.GAME_DIR + "/assets/opencraft/textures";
 	
+	static {
+		LOGO = getLogo().getImage();
+		WIDGETS = getWidgets().getImage();
+		PANORAMAS = getPanoramas().getImage();
+	}
+
 	private Assets() {
 	}
-		
-	public static ButtonInfo getButton(int button) {
-		return switch (button) {
-			case 0 -> ButtonInfo.of().vertices(new int[] { 0, 66, 200, 86 }).build();
-			default -> ButtonInfo.EMPTY;
-		};
+
+	private static Texture getLogo() {
+		return bindTexture("/gui/title/minecraft.png");
 	}
 
-	public static Image getLogo() {
-		return bindTexture("/gui/title/minecraft.png").getImage();
-	}
-
-	public static Image getLoadscreen() {
-		return bindTexture("/gui/title/background/loadscreen.jpg").getImage();
-	}
-
-	public static Image getPanorama(int index) {
+	private static Image getPanorama(int index) {
 		return bindTexture(String.format("/gui/title/background/panorama_%d.png", index)).getImage();
 	}
 
-	public static Image getPanoramas() {
+	private static Texture getPanoramas() {
 		BufferedImage bi = new BufferedImage(3072, 1024, BufferedImage.TYPE_INT_RGB);
 		Graphics g = bi.getGraphics();
 
-		g.setColor(Color.BLACK);
+		g.setColor(Color.PINK);
 		g.fillRect(0, 0, 3072, 1024);
 		g.drawImage(getPanorama(0), 0, 0, null);
 		g.drawImage(getPanorama(1), 1024, 0, null);
 		g.drawImage(getPanorama(2), 2048, 0, null);
 		g.dispose();
 
-		return bi;
+		return Texture.of(bi);
 	}
-	
+
+	private static Texture getWidgets() {
+		return bindTexture("/gui/widgets.png");
+	}
+
 	public static Image getIcon() {
-		return bindInternalTexture("/icon.png").getImage();
+		return Texture.of(Resource.bindInternalResource("/icon.png")).getImage();
 	}
 
-	public static Texture bindExternalTexture(String path) {
-		Image img = null;
-		try {
-			img = ImageIO.read(Resource.bindExternalResource(path));
-		} catch (Exception ignored) {
-		}
-
-		return Texture.of(img);
-	}
-
-	public static Texture bindInternalTexture(String path) {
-		Image img = null;
-		try {
-			img = ImageIO.read(Resource.bindInternalResource(path));
-		} catch (Exception ignored) {
-		}
-
-		return Texture.of(img);
-
-	}
-	
-	public static Texture bindPackTexture(String path) {
-		Image img = null;
-		try {
-			img = ImageIO.read(Game.getResourcePack().getResource(path));
-		} catch (Exception ignored) {
-		}
-		
-		return Texture.of(img);
-	
+	public static Image getLoadscene() {
+		return bindTexture("/gui/title/background/loadscreen.jpg").getImage();
 	}
 
 	public static Texture bindTexture(String path) {
-		if (!Game.isDefaultPackSelected())
-			return bindPackTexture("assets/opencraft/textures" + path);
-			
-		return bindExternalTexture(Workspace.ASSETS_DIR + "/opencraft/textures" + path);
+		return Texture.of(Resource.bindResource(Assets.TEXTURE_DIR + path));
 	}
-	
-
 }

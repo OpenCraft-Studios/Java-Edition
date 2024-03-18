@@ -4,7 +4,6 @@ import static net.opencraft.LoggerConfig.LOG_FORMAT;
 import static net.opencraft.LoggerConfig.handle;
 import static net.opencraft.renderer.display.DisplayManager.destroyDisplay;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Locale;
@@ -12,7 +11,7 @@ import java.util.logging.Logger;
 
 import net.opencraft.config.GameConfig;
 import net.opencraft.config.GameExperiments;
-import net.opencraft.config.Workspace;
+import net.opencraft.data.packs.DefaultPack;
 import net.opencraft.data.packs.Pack;
 import net.opencraft.renderer.RenderDragon;
 import net.opencraft.renderer.Screen;
@@ -22,16 +21,16 @@ import net.opencraft.sound.SoundManager;
 public class Game implements Runnable {
 
 	public static final String NAME = "OpenCraft";
-	public static final String VERSION = "24r03";
-	public static final String TITLE = NAME + ' ' + VERSION;
+	public static final String VERSION = "24r04";
+	public static final String TITLE = NAME + ((char) 0x20) + VERSION;
 
 	public static final int NANOSECONDS = 1000000000;
-	public static final double NANO_PER_TICK = NANOSECONDS / GameConfig.TICK_RATE;
+	public static final double NANO_PER_TICK = (double) NANOSECONDS / GameConfig.TICK_RATE;
 
-	private static Game instance;
-	private static Pack selected_pack;
-
+	private static final Game instance = new Game();
 	private static final Logger logger = Logger.getLogger("main");
+
+	private static Pack selected_pack = DefaultPack.getDefaultPack();
 
 	private boolean running = false;
 	private Screen screen;
@@ -41,12 +40,21 @@ public class Game implements Runnable {
 		System.setProperty("java.util.logging.SimpleFormatter.format", LOG_FORMAT);
 		handle(logger);
 	}
+	
+	public void init() {
+		Thread.currentThread().setName("main");
+
+		RenderDragon.init();
+		this.screen = RenderDragon.getScreen();
+		Scene.setCurrent(Scene.LOAD_SCENE);
+		
+		running = true;
+	}
 
 	@Override
 	public void run() {
-		logger.info("Initializing the game...");
 		init();
-		logger.info("Game initializated!");
+		logger.info(Game.TITLE + " started!");
 
 		long lastUpdate = System.nanoTime();
 
@@ -74,8 +82,8 @@ public class Game implements Runnable {
 	}
 
 	public void render() {
-		Graphics g = this.screen.getGraphics();
-		Scene.renderCurrent(g);
+		BufferedImage img = this.screen.getImage();
+		Scene.renderCurrent(img);
 		RenderDragon.update();
 	}
 
@@ -89,18 +97,6 @@ public class Game implements Runnable {
 		logger.info("Stopping game...");
 		screen.getGraphics().dispose();
 		destroyDisplay();
-	}
-
-	public void init() {
-		Thread.currentThread().setName("main");
-
-		Workspace.create();
-
-		RenderDragon.init();
-		screen = RenderDragon.getScreen();
-		Scene.setCurrent(Scene.LOAD_SCENE);
-
-		running = true;
 	}
 
 	public static Locale getLanguage() {
@@ -132,7 +128,7 @@ public class Game implements Runnable {
 	}
 
 	public static void useDefaultPack() {
-		selectPack(null);
+		selectPack(DefaultPack.getDefaultPack());
 	}
 
 	public static Pack getResourcePack() {
@@ -144,15 +140,14 @@ public class Game implements Runnable {
 	}
 
 	public static boolean isDefaultPackSelected() {
-		return selected_pack == null;
+		return selected_pack instanceof DefaultPack;
 	}
 
 	public static BufferedImage screenshot() {
-		Game game = getInstance();
-		return game.screen.screenshot();
+		return getInstance().screen.screenshot();
 	}
 
 	public static void main(String[] args) throws IOException {
-		new Thread(instance = new Game()).start();
+		new Thread(instance).start();
 	}
 }

@@ -4,7 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
+import java.util.Optional;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -12,12 +12,11 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import net.opencraft.config.Workspace;
+import net.opencraft.config.GameConfig;
 import net.opencraft.util.Resource;
 
 public enum Sound {
-	NONE("opencraft.sounds", "none", null),
-	MOOG_CITY("opencraft.sound", "title.moog_city", "MoogCity.wav"),
+	NONE("opencraft.sounds", "none", null), MOOG_CITY("opencraft.sound", "title.moog_city", "MoogCity.wav"),
 	ARIA_MATH("opencraft.sound", "ambient.aria_math", "AriaMath.wav");
 
 	public static Sound PLAYING = null;
@@ -44,15 +43,18 @@ public enum Sound {
 		return soundId;
 	}
 
-	public String getRelativePath() {
-		return path;
+	public Optional<String> getRelativePath() {
+		return Optional.ofNullable(path);
 	}
 
-	public String getPath() {
-		if (Objects.isNull(path))
-			return null;
-		
-		return Workspace.ASSETS_DIR + "/opencraft/sounds/" + path;
+	public Optional<String> getPath() {
+
+		Optional<String> relativePath = getRelativePath();
+
+		if (relativePath.isEmpty())
+			return Optional.empty();
+
+		return Optional.of(GameConfig.GAME_DIR + "/assets/opencraft/sounds/" + path);
 	}
 
 	public static Sound getCurrent() {
@@ -61,28 +63,43 @@ public enum Sound {
 
 	public Sound fromResource(Resource res) {
 		return switch (res.toString()) {
-			case "opencraft.sound:title.moog_city" -> MOOG_CITY;
-			case "opencraft.sound:ambient.aria_math" -> ARIA_MATH;
-			default -> null;
+		case "opencraft.sound:title.moog_city" -> MOOG_CITY;
+		case "opencraft.sound:ambient.aria_math" -> ARIA_MATH;
+		default -> NONE;
 		};
 	}
 
-	public static void play(Clip player, Sound sound)
-			throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+	public static void play(Clip player, Sound sound) {
 		if (player == null)
 			return;
 
-		AudioInputStream audioStream = AudioSystem.getAudioInputStream(getSound(sound));
-		player.open(audioStream);
-		player.loop(Clip.LOOP_CONTINUOUSLY);
+		try {
+			AudioInputStream audioStream = AudioSystem.getAudioInputStream(getSound(sound).get());
+			player.open(audioStream);
+			player.loop(Clip.LOOP_CONTINUOUSLY);
+		} catch (Exception ignored) {
+		}
 	}
 
 	public void play(Clip player) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 		play(player, this);
 	}
 
-	public static InputStream getSound(Sound snd) throws IOException {
-		return new BufferedInputStream(new FileInputStream(snd.getPath()));
+	public static Optional<InputStream> getSound(Sound snd) {
+		Optional<String> path = snd.getPath();
+
+		if (path.isEmpty())
+			return Optional.empty();
+
+		BufferedInputStream bis;
+		try {
+			var fis = new FileInputStream(path.get());
+			bis = new BufferedInputStream(fis);
+		} catch (Exception ignored) {
+			return Optional.empty();
+		}
+
+		return Optional.of(bis);
 	}
 
 	public Resource toResource() {

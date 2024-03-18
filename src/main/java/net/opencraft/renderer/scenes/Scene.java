@@ -1,6 +1,5 @@
 package net.opencraft.renderer.scenes;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import net.opencraft.config.GameExperiments;
@@ -32,14 +31,6 @@ public abstract class Scene implements Renderizable {
 
 	public static void renderCurrent(BufferedImage bi) {
 		getCurrent().render(bi);
-	}
-	
-	public static void renderCurrent(Graphics g, int width, int height) {
-		getCurrent().render(g, width, height);
-	}
-	
-	public static void renderCurrent(Graphics g) {
-		getCurrent().render(g);
 	}
 	
 	public static Scene getCurrent() {
