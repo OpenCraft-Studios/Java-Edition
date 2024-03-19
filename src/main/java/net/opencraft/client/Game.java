@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.Logger;
 
+import net.opencraft.LoggerConfig;
 import net.opencraft.config.GameConfig;
 import net.opencraft.config.GameExperiments;
 import net.opencraft.data.packs.DefaultPack;
@@ -36,24 +37,28 @@ public class Game implements Runnable {
 	private Screen screen;
 
 	static {
+		LoggerConfig.clearLogDir();
+		
 		// Set logging format
 		System.setProperty("java.util.logging.SimpleFormatter.format", LOG_FORMAT);
-		handle(logger);
+		handle(logger, "/game.log");
 	}
 	
 	public void init() {
-		Thread.currentThread().setName("main");
-
 		RenderDragon.init();
 		this.screen = RenderDragon.getScreen();
 		Scene.setCurrent(Scene.LOAD_SCENE);
-		
+
 		running = true;
 	}
 
 	@Override
 	public void run() {
 		init();
+		logger.info(String.format("Selected language: %s",
+				getLanguage().getDisplayName(getLanguage())));
+
+		System.out.println();
 		logger.info(Game.TITLE + " started!");
 
 		long lastUpdate = System.nanoTime();
@@ -76,9 +81,6 @@ public class Game implements Runnable {
 
 		}
 
-		stop();
-		System.exit(0);
-
 	}
 
 	public void render() {
@@ -93,10 +95,10 @@ public class Game implements Runnable {
 			SoundManager.update();
 	}
 
-	public void stop() {
+	public static void stop() {
 		logger.info("Stopping game...");
-		screen.getGraphics().dispose();
 		destroyDisplay();
+		LoggerConfig.clearLogDir();
 	}
 
 	public static Locale getLanguage() {
@@ -148,6 +150,17 @@ public class Game implements Runnable {
 	}
 
 	public static void main(String[] args) throws IOException {
-		new Thread(instance).start();
+		// Set system output to a file
+		Thread gameThread = new Thread(instance);
+		gameThread.setName("gameThread");
+		gameThread.start();
+		try {
+			gameThread.join();
+		} catch (InterruptedException e) {
+			logger.warning("The game has not finished correctly!");
+		}
+		
+		stop();
+		System.exit(0);
 	}
 }

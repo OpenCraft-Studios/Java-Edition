@@ -18,7 +18,6 @@ public final class DefaultPack extends Pack {
 	public InputStream getResource(String resource) {
 		InputStream in = InputStream.nullInputStream();
 		
-		System.out.println("Resource adquired: " + resource);
 		try {
 			in = new FileInputStream(resource);
 		} catch (Exception ignored) {

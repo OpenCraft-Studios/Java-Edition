@@ -67,10 +67,10 @@ public class TitleScene extends Scene {
 
 		// Legal terms
 		g.setFont(Fonts.MOJANGLES.deriveFont(Font.PLAIN, 20));
-		final String COPYLEFT = String.format("CopyLeft (-C) Sibermatica 2023-%d",
+		final String COPYLEFT = String.format("Copyleft Sibermatica ORG. %d",
 				Calendar.getInstance().get(Calendar.YEAR));
 
-		g.drawString(COPYLEFT, width - 425, height - 70);
+		g.drawString(COPYLEFT, width - 360, height - 70);
 
 		// Draw GameInfo
 		g.drawString(Game.TITLE, 15, height - 70);

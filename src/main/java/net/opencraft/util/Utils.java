@@ -24,9 +24,5 @@ public class Utils {
 	public static String getGameDir() {
 		return GameConfig.GAME_DIR;
 	}
-
-	public static String getLatestFile() {
-		return GameConfig.GAME_DIR + "/logs/latest.log";
-	}
 	
 }

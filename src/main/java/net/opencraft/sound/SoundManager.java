@@ -22,7 +22,7 @@ public class SoundManager {
 	static {
 		/* Set logging format */
 		System.setProperty("java.util.logging.SimpleFormatter.format", LOG_FORMAT);
-		handle(logger);
+		handle(logger, "/soundmanager.log");
 
 		// Create clip instance
 		Clip clip = null;

@@ -1,5 +1,6 @@
 package net.opencraft;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -7,7 +8,7 @@ import java.util.logging.SimpleFormatter;
 
 import javax.swing.JOptionPane;
 
-import net.opencraft.util.Utils;
+import net.opencraft.config.GameConfig;
 
 public class LoggerConfig {
 
@@ -18,9 +19,9 @@ public class LoggerConfig {
 		System.setProperty("java.util.logging.SimpleFormatter.format", LOG_FORMAT);
 	}
 
-	public static void handle(Logger logger) {
+	public static void handle(Logger logger, String filepath) {
 		try {
-			logger.addHandler(logFile());
+			logger.addHandler(logFile(filepath));
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Cannot save logging traces to file! More information in console.",
 					"FATAL SEVERE ERROR!", JOptionPane.ERROR_MESSAGE);
@@ -33,10 +34,26 @@ public class LoggerConfig {
 		}
 	}
 
-	public static FileHandler logFile() throws SecurityException, IOException {
-		FileHandler fh = new FileHandler(Utils.getLatestFile());
+	public static String getLogDir() {
+		return GameConfig.GAME_DIR + "/logs";
+	}
+	
+	public static FileHandler logFile(String filepath) throws SecurityException, IOException {
+		FileHandler fh = new FileHandler(getLogDir() + filepath);
 		fh.setFormatter(new SimpleFormatter());
 		return fh;
+	}
+	
+	public static void clearLogDir() {
+		File logDir = new File(getLogDir());
+		
+		if (!(logDir.exists() || logDir.isFile()))
+			return;
+		
+		File[] logs = logDir.listFiles();
+		for (File log : logs)
+			log.delete();
+		
 	}
 
 }

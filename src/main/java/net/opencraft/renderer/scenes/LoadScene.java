@@ -1,13 +1,9 @@
 package net.opencraft.renderer.scenes;
 
-import static net.opencraft.LoggerConfig.LOG_FORMAT;
-import static net.opencraft.LoggerConfig.handle;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.logging.Logger;
 
 import net.opencraft.config.GameExperiments;
 import net.opencraft.renderer.display.Display;
@@ -20,17 +16,10 @@ public class LoadScene extends Scene {
 	public static final Resource RESOURCE = Resource.format("opencraft.scene:load");
 	public static final Sound SOUND = Sound.NONE;
 
-	private static final Logger logger = Logger.getLogger("loadscene");
 	private static final int I_MAX = Display.HEIGHT / 2;
-	private static LoadScene instance = new LoadScene();
+	private static final LoadScene instance = new LoadScene();
 
 	private float i = Display.HEIGHT - 1;
-
-	static {
-		// Set logging format
-		System.setProperty("java.util.logging.SimpleFormatter.format", LOG_FORMAT);
-		handle(logger);
-	}
 
 	public LoadScene() {
 		super(RESOURCE, SOUND);
@@ -88,15 +77,10 @@ public class LoadScene extends Scene {
 			try {
 				Thread.sleep(time);
 			} catch (Exception ignored) {
-				logger.severe("Cannot wait for Thread.sleep()!");
 			}
 		}
 
 		Scene.setCurrent(Scene.TITLE_SCENE);
-	}
-
-	public static LoadScene renewInstance() {
-		return instance = new LoadScene();
 	}
 
 	public static LoadScene getInstance() {

@@ -12,6 +12,7 @@ public class Translator {
 	private static final Map<String, String> ENGLISH = new HashMap<>();
 	private static final Map<String, String> GALICIAN = new HashMap<>();
 	private static final Map<String, String> SPANISH = new HashMap<>();
+	private static final Map<String, String> FRENCH = new HashMap<>();
 	
 	static {
 		
@@ -33,14 +34,22 @@ public class Translator {
 		SPANISH.put("opencraft.button:settings", "Configuración");
 		SPANISH.put("opencraft.button:quit", "Salir");
 		
+		// French translation
+		FRENCH.put("opencraft.button:singleplayer", "Un joueur");
+		FRENCH.put("opencraft.button:multiplayer", "Multijoueur");
+		FRENCH.put("opencraft.button:settings", "Paramètres");
+		FRENCH.put("opencraft.button:quit", "Quitter le jeu");
+		
 	}
 	
 	public static String translate(String property, Locale language) {
 		
-		if (language.equals(Languages.get("es-ES")))
+		if (language.getDisplayName().equalsIgnoreCase("Spanish"))
 			return SPANISH.getOrDefault(property, property);
-		else if (language.equals(Languages.get("gl-GL")))
+		else if (language.getDisplayName().equalsIgnoreCase("Galician"))
 			return GALICIAN.getOrDefault(property, property);
+		else if (language.getDisplayLanguage().equalsIgnoreCase("French"))
+			return FRENCH.getOrDefault(property, property);
 		else
 			return ENGLISH.getOrDefault(property, property);
 		

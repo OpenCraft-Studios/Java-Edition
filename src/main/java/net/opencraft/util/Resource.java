@@ -1,14 +1,27 @@
 package net.opencraft.util;
 
+import static net.opencraft.LoggerConfig.LOG_FORMAT;
+import static net.opencraft.LoggerConfig.handle;
+
 import java.io.InputStream;
 import java.net.URL;
+import java.util.logging.Logger;
 
 import net.opencraft.client.Game;
 
 public class Resource {
 
+	private static final Logger logger = Logger.getLogger("resourceBinder");
+
 	private final String origin;
 	private final String name;
+
+	static {
+		// Set logging format
+		System.setProperty("java.util.logging.SimpleFormatter.format", LOG_FORMAT);
+
+		handle(logger, "/resbinder.log");
+	}
 
 	public Resource(String origin, String name) {
 		this.origin = origin;
@@ -51,6 +64,7 @@ public class Resource {
 		} catch (Exception ignored) {
 		}
 
+		logger.finest(String.format("Internal resource adquired: %s!", respath));
 		return in;
 	}
 
@@ -64,7 +78,8 @@ public class Resource {
 			in = Game.getResourcePack().getResource(respath);
 		} catch (Exception ignored) {
 		}
-	
+
+		logger.finest(String.format("Resource adquired: %s!", respath));
 		return in;
 	}
 
