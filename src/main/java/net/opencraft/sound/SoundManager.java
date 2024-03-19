@@ -59,7 +59,6 @@ public class SoundManager {
 		Sound sound = Sound.NONE;
 		try {
 			int sndIndex = (int) Math.round(Math.random() * (usedSounds.size() - 1));
-			System.out.println(sndIndex);
 			sound = usedSounds.get(sndIndex);
 		} catch (Exception ignored) {
 		}
