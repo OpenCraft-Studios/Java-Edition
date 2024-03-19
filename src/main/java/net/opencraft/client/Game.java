@@ -38,16 +38,19 @@ public class Game implements Runnable {
 
 	static {
 		LoggerConfig.clearLogDir();
-		
+
 		// Set logging format
 		System.setProperty("java.util.logging.SimpleFormatter.format", LOG_FORMAT);
 		handle(logger, "/game.log");
 	}
-	
+
 	public void init() {
 		RenderDragon.init();
 		this.screen = RenderDragon.getScreen();
-		Scene.setCurrent(Scene.LOAD_SCENE);
+		if (GameExperiments.SKIP_LOAD_SCENE)
+			Scene.setCurrent(Scene.MENU_SCENE);
+		else
+			Scene.setCurrent(Scene.LOAD_SCENE);
 
 		running = true;
 	}
@@ -55,8 +58,7 @@ public class Game implements Runnable {
 	@Override
 	public void run() {
 		init();
-		logger.info(String.format("Selected language: %s",
-				getLanguage().getDisplayName(getLanguage())));
+		logger.info(String.format("Selected language: %s", getLanguage().getDisplayName(getLanguage())));
 
 		System.out.println();
 		logger.info(Game.TITLE + " started!");
@@ -122,7 +124,7 @@ public class Game implements Runnable {
 	}
 
 	public static void skipIntro() {
-		Scene.setCurrent(Scene.TITLE_SCENE);
+		Scene.setCurrent(Scene.MENU_SCENE);
 	}
 
 	public static void selectPack(Pack pack) {
@@ -159,7 +161,7 @@ public class Game implements Runnable {
 		} catch (InterruptedException e) {
 			logger.warning("The game has not finished correctly!");
 		}
-		
+
 		stop();
 		System.exit(0);
 	}

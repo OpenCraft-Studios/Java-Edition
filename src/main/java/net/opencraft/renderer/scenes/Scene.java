@@ -11,22 +11,19 @@ import net.opencraft.util.Resource;
 public abstract class Scene implements Renderizable {
 
 	public static final Scene LOAD_SCENE = LoadScene.getInstance();
-	public static final Scene TITLE_SCENE = TitleScene.getInstance();
-	
-//	LOAD_SCREEN(LoadScene.RESOURCE, Sound.NONE),
-//	TITLE_SCENE(TitleScene.RESOURCE, Sound.MOOG_CITY);
+	public static final Scene MENU_SCENE = MenuScene.getInstance();
 
-	protected static Scene current = TITLE_SCENE;
+	protected static Scene current = MENU_SCENE;
 	protected final Resource res;
-	protected final Sound snd;
+	protected final Sound[] sounds;
 
-	public Scene(Resource res, Sound snd) {
+	public Scene(Resource res, Sound[] sounds) {
 		this.res = res;
-		this.snd = snd;
+		this.sounds = sounds;
 	}
 	
-	public Sound getSound() {
-		return this.snd;
+	public Sound[] getSounds() {
+		return this.sounds;
 	}
 
 	public static void renderCurrent(BufferedImage bi) {

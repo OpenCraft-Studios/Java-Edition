@@ -11,5 +11,6 @@ public class GameConfig {
 	public static boolean UNICODE = false;
 	public static Pack PACK_SELECTED = null;
 	public static String GAME_DIR = "opcraft";
+	public static boolean SYNTHWAVE = false;
 
 }

@@ -14,7 +14,7 @@ import net.opencraft.util.Resource;
 public class LoadScene extends Scene {
 
 	public static final Resource RESOURCE = Resource.format("opencraft.scene:load");
-	public static final Sound SOUND = Sound.NONE;
+	public static final Sound[] SOUNDS = { Sound.NONE };
 
 	private static final int I_MAX = Display.HEIGHT / 2;
 	private static final LoadScene instance = new LoadScene();
@@ -22,16 +22,12 @@ public class LoadScene extends Scene {
 	private float i = Display.HEIGHT - 1;
 
 	public LoadScene() {
-		super(RESOURCE, SOUND);
+		super(RESOURCE, SOUNDS);
 	}
 
 	@Override
 	public void render(BufferedImage img) {
 		Graphics g = img.getGraphics();
-		if (GameExperiments.SKIP_LOAD_SCENE) {
-			changeScreen(0);
-			return;
-		}
 
 		if (GameExperiments.CLASSIC_LOAD_SCENE) {
 			classicLS(g);
@@ -46,7 +42,6 @@ public class LoadScene extends Scene {
 			g.drawImage(Assets.getLoadscene(), 0, 0, Display.WIDTH, Display.HEIGHT, null);
 
 		i--;
-
 		if (i < 100)
 			changeScreen(1000);
 	}
@@ -80,7 +75,7 @@ public class LoadScene extends Scene {
 			}
 		}
 
-		Scene.setCurrent(Scene.TITLE_SCENE);
+		Scene.setCurrent(Scene.MENU_SCENE);
 	}
 
 	public static LoadScene getInstance() {

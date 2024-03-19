@@ -16,31 +16,32 @@ import net.opencraft.config.GameConfig;
 import net.opencraft.util.Resource;
 
 public enum Sound {
-	NONE("opencraft.sounds", "none", null), MOOG_CITY("opencraft.sound", "title.moog_city", "MoogCity.wav"),
-	ARIA_MATH("opencraft.sound", "ambient.aria_math", "AriaMath.wav");
+	NONE("opencraft.sounds:none", null, false),
+	MENU2("opencraft.sound:menu.moog_city", "menu/menu2.wav", false),
+	MENU3("opencraft.sound:menu.beginning_2", "menu/menu3.wav", false),
+	MENU3_SYNTHWAVE("opencraft.sound:menu.beginning_2.synthwave", "menu/menu3.swav", true),
+	CREATIVE4("opencraft.sound:ambient.creative4", "creative/creative4.wav", false),
+	CREATIVE4_SYNTHWAVE("opencraft.sound:ambient.creative4.synthwave", "creative/creative4.swav", true);
 
 	public static Sound PLAYING = null;
 
-	final String origin;
-	final String soundId;
+	final Resource resource;
 	final String path;
 
-	Sound(String origin, String soundTitle, String name) {
-		this.origin = origin;
-		this.soundId = soundTitle;
-		this.path = name;
+	final boolean synthwave;
+
+	Sound(String id, String path, boolean synthwave) {
+		this.resource = Resource.format(id);
+		this.path = path;
+		this.synthwave = synthwave;
 	}
 
 	public static void setCurrent(Sound aures) {
 		PLAYING = aures;
 	}
 
-	public String getOrigin() {
-		return origin;
-	}
-
-	public String getSoundId() {
-		return soundId;
+	public boolean isSynthwave() {
+		return this.synthwave;
 	}
 
 	public Optional<String> getRelativePath() {
@@ -63,9 +64,13 @@ public enum Sound {
 
 	public Sound fromResource(Resource res) {
 		return switch (res.toString()) {
-		case "opencraft.sound:title.moog_city" -> MOOG_CITY;
-		case "opencraft.sound:ambient.aria_math" -> ARIA_MATH;
-		default -> NONE;
+			case "opencraft.sound:menu.moog_city" -> MENU2;
+			case "opencraft.sound:ambient.aria_math" -> CREATIVE4;
+			case "opencraft.sound:menu.beginning_2" -> MENU3;
+			case "opencraft.sound:menu.beginning_2.synthwave" -> MENU3_SYNTHWAVE;
+			case "opencraft.sound:ambient.creative4" -> CREATIVE4;
+			case "opencraft.sound:ambient.creative4.synthwave" -> CREATIVE4_SYNTHWAVE;
+			default -> NONE;
 		};
 	}
 
@@ -103,12 +108,12 @@ public enum Sound {
 	}
 
 	public Resource toResource() {
-		return Resource.of(origin, soundId);
+		return resource;
 	}
 
 	@Override
 	public String toString() {
-		return toResource().toString();
+		return resource.getName();
 	}
 
 }

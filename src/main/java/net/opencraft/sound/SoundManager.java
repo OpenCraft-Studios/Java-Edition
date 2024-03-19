@@ -5,11 +5,14 @@ import static net.opencraft.LoggerConfig.handle;
 import static net.opencraft.sound.Sound.getCurrent;
 import static net.opencraft.sound.Sound.setCurrent;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
+import net.opencraft.config.GameConfig;
 import net.opencraft.renderer.scenes.Scene;
 
 public class SoundManager {
@@ -42,15 +45,33 @@ public class SoundManager {
 	}
 
 	public static void update() {
-		Sound sound = Scene.getCurrent().getSound();
+		Sound[] sounds = Scene.getCurrent().getSounds();
+		List<Sound> usedSounds = new ArrayList<>();
+
+		for (Sound sound : sounds) {
+			if (sound.isSynthwave() && GameConfig.SYNTHWAVE)
+				usedSounds.add(sound);
+
+			if (!sound.isSynthwave() && !GameConfig.SYNTHWAVE)
+				usedSounds.add(sound);
+		}
+
+		Sound sound = Sound.NONE;
+		try {
+			int sndIndex = (int) Math.round(Math.random() * (usedSounds.size() - 1));
+			System.out.println(sndIndex);
+			sound = usedSounds.get(sndIndex);
+		} catch (Exception ignored) {
+		}
+
 		if (!isSupported())
 			return;
-		
+
 		if (getCurrent() != sound) {
 			resetPlayer();
-			
+
 			Sound.play(player, sound);
-		setCurrent(sound);
+			setCurrent(sound);
 		}
 
 	}
