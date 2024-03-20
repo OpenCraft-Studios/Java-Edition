@@ -43,6 +43,6 @@ public class GameExperiments {
 	 * This experiment skip completly the load screen.<br>
 	 * Recommended for developers!
 	 * */
-	public static final boolean SKIP_LOAD_SCENE = false;
+	public static final boolean SKIP_LOAD_SCENE = true;
 	
 }

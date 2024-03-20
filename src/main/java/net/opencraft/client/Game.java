@@ -46,6 +46,8 @@ public class Game implements Runnable {
 
 	public void init() {
 		RenderDragon.init();
+		System.out.println();
+
 		this.screen = RenderDragon.getScreen();
 		if (GameExperiments.SKIP_LOAD_SCENE)
 			Scene.setCurrent(Scene.MENU_SCENE);
@@ -60,7 +62,6 @@ public class Game implements Runnable {
 		init();
 		logger.info(String.format("Selected language: %s", getLanguage().getDisplayName(getLanguage())));
 
-		System.out.println();
 		logger.info(Game.TITLE + " started!");
 
 		long lastUpdate = System.nanoTime();

@@ -7,6 +7,7 @@ import static net.opencraft.sound.Sound.setCurrent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioSystem;
@@ -45,20 +46,27 @@ public class SoundManager {
 	}
 
 	public static void update() {
-		Sound[] sounds = Scene.getCurrent().getSounds();
 		List<Sound> usedSounds = new ArrayList<>();
 
-		for (Sound sound : sounds) {
-			if (sound.isSynthwave() && GameConfig.SYNTHWAVE)
-				usedSounds.add(sound);
-
+		for (Sound sound : Scene.getCurrent().getSounds()) {
 			if (!sound.isSynthwave() && !GameConfig.SYNTHWAVE)
+				usedSounds.add(sound);
+			else if (sound.isSynthwave() && GameConfig.SYNTHWAVE)
 				usedSounds.add(sound);
 		}
 
 		Sound sound = Sound.NONE;
+		
+		int rand = (int) (Math.random() * Math.pow(10, 5));
+		rand = rand >> 5;
+		rand = rand * 2;
+		rand = (int) (rand ^ System.nanoTime());
+		rand = rand >> 8;
+		rand = ++rand & usedSounds.size() - 1;
+		
 		try {
-			int sndIndex = (int) Math.round(Math.random() * (usedSounds.size() - 1));
+			int sndIndex = rand;
+			System.out.println(rand);
 			sound = usedSounds.get(sndIndex);
 		} catch (Exception ignored) {
 		}
