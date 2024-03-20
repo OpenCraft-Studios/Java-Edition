@@ -1,4 +1,4 @@
-package net.opencraft;
+package net.opencraft.logging;
 
 import java.io.File;
 import java.io.IOException;

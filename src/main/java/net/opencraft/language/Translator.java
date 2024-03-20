@@ -13,6 +13,8 @@ public class Translator {
 	private static final Map<String, String> GALICIAN = new HashMap<>();
 	private static final Map<String, String> SPANISH = new HashMap<>();
 	private static final Map<String, String> FRENCH = new HashMap<>();
+	private static final Map<String, String> ITALIAN = new HashMap<>();
+	private static final Map<String, String> DULLUTIANO = new HashMap<>();
 	
 	static {
 		
@@ -40,16 +42,33 @@ public class Translator {
 		FRENCH.put("opencraft.button:settings", "Paramètres");
 		FRENCH.put("opencraft.button:quit", "Quitter le jeu");
 		
+		// Italian translation
+		ITALIAN.put("opencraft.button:singleplayer", "Giocatore singolo");
+		ITALIAN.put("opencraft.button:multiplayer", "Multigiocatore");
+		ITALIAN.put("opencraft.button:settings", "Impostazioni");
+		ITALIAN.put("opencraft.button:quit", "Abbandonare");
+		
+		// Dullutian translation
+		DULLUTIANO.put("opencraft.button:singleplayer", "Unh jocattore");
+		DULLUTIANO.put("opencraft.button:multiplayer", "Jocatoreus");
+		DULLUTIANO.put("opencraft.button:settings", "Configuraçionne");
+		DULLUTIANO.put("opencraft.button:quit", "Schiatta jogo");
+		
+		
 	}
 	
 	public static String translate(String property, Locale language) {
 		
-		if (language.getDisplayName().equalsIgnoreCase("Spanish"))
+		if (language.getDisplayLanguage().equalsIgnoreCase("Spanish"))
 			return SPANISH.getOrDefault(property, property);
-		else if (language.getDisplayName().equalsIgnoreCase("Galician"))
+		else if (language.getDisplayLanguage().equalsIgnoreCase("Galician"))
 			return GALICIAN.getOrDefault(property, property);
 		else if (language.getDisplayLanguage().equalsIgnoreCase("French"))
 			return FRENCH.getOrDefault(property, property);
+		else if (language.getDisplayLanguage().equalsIgnoreCase("Italian"))
+			return ITALIAN.getOrDefault(property, property);
+		else if (language.equals(Languages.get("du-DU")))
+			return DULLUTIANO.getOrDefault(property, property);
 		else
 			return ENGLISH.getOrDefault(property, property);
 		

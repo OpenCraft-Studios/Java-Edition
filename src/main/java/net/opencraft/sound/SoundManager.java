@@ -1,19 +1,19 @@
 package net.opencraft.sound;
 
-import static net.opencraft.LoggerConfig.LOG_FORMAT;
-import static net.opencraft.LoggerConfig.handle;
+import static net.opencraft.logging.LoggerConfig.LOG_FORMAT;
+import static net.opencraft.logging.LoggerConfig.handle;
 import static net.opencraft.sound.Sound.getCurrent;
 import static net.opencraft.sound.Sound.setCurrent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 import net.opencraft.config.GameConfig;
+import net.opencraft.logging.InternalLogger;
 import net.opencraft.renderer.scenes.Scene;
 
 public class SoundManager {
@@ -34,12 +34,18 @@ public class SoundManager {
 		try {
 			clip = AudioSystem.getClip();
 		} catch (Exception ignored) {
+			InternalLogger.out.printf("[%s] Ignored exception:\n", SoundManager.class.getName());
+			ignored.printStackTrace(InternalLogger.out);
+			InternalLogger.out.println();
 			clip = null;
 			supported = false;
 		}
 
 		player = clip;
 		SUPPORTED = supported;
+		logger.info("Sound manager started!");
+		if (!SUPPORTED)
+			System.err.println("\t(!) It seems like your computer doesn't allows sound!");
 	}
 
 	private SoundManager() {
@@ -57,18 +63,22 @@ public class SoundManager {
 
 		Sound sound = Sound.NONE;
 		
-		int rand = (int) (Math.random() * Math.pow(10, 5));
-		rand = rand >> 5;
-		rand = rand * 2;
-		rand = (int) (rand ^ System.nanoTime());
-		rand = rand >> 8;
-		rand = ++rand & usedSounds.size() - 1;
+		int sndIndex = (int) (Math.random() * Math.pow(10, 5));
+		sndIndex = sndIndex >> 5;
+		sndIndex = sndIndex * 2;
+		sndIndex = (int) (sndIndex ^ System.nanoTime());
+		sndIndex = sndIndex >> 8;
+		sndIndex = ++sndIndex & usedSounds.size() - 1;
+		
+		if (sndIndex >= usedSounds.size())
+			System.err.printf("WARNING: Wrong sound index detected! -> %d\n", sndIndex);
 		
 		try {
-			int sndIndex = rand;
-			System.out.println(rand);
 			sound = usedSounds.get(sndIndex);
 		} catch (Exception ignored) {
+			InternalLogger.out.printf("[%s] Ignored exception:\n", SoundManager.class.getName());
+			ignored.printStackTrace(InternalLogger.out);
+			InternalLogger.out.println();
 		}
 
 		if (!isSupported())

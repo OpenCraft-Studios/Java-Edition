@@ -1,7 +1,7 @@
 package net.opencraft.renderer;
 
-import static net.opencraft.LoggerConfig.LOG_FORMAT;
-import static net.opencraft.LoggerConfig.handle;
+import static net.opencraft.logging.LoggerConfig.LOG_FORMAT;
+import static net.opencraft.logging.LoggerConfig.handle;
 import static net.opencraft.renderer.display.DisplayManager.createDisplay;
 import static net.opencraft.renderer.display.DisplayManager.getDisplay;
 import static net.opencraft.renderer.display.DisplayManager.getDisplayHeight;
@@ -15,8 +15,11 @@ import java.awt.image.BufferStrategy;
 import java.util.logging.Logger;
 
 import net.opencraft.renderer.display.Display;
+import net.opencraft.renderer.scenes.Scene;
+import net.opencraft.renderer.scenes.SceneListener;
+import net.opencraft.util.Resource;
 
-public class RenderDragon extends Canvas {
+public class RenderDragon extends Canvas implements SceneListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger("renderThread");
@@ -29,7 +32,6 @@ public class RenderDragon extends Canvas {
 	static {
 		// Set logging format
 		System.setProperty("java.util.logging.SimpleFormatter.format", LOG_FORMAT);
-
 		handle(logger, "/renderdragon.log");
 	}
 	
@@ -41,6 +43,7 @@ public class RenderDragon extends Canvas {
 			return;
 
 		instance = new RenderDragon();
+		Scene.addListener(instance);
 		initializated = true;
 
 		createDisplay();
@@ -54,6 +57,7 @@ public class RenderDragon extends Canvas {
 	}
 
 	public static void update() {
+		Scene.renderCurrent(screen.getImage());
 		instance.render();
 		updateDisplay();
 	}
@@ -78,6 +82,16 @@ public class RenderDragon extends Canvas {
 
 	public static boolean isInitializated() {
 		return initializated;
+	}
+
+
+	@Override
+	public void onSceneChanged(Resource scene1, Resource scene2) {
+		logger.info(String.format("Rendered scene %s", scene2));
+		
+	}
+	@Override
+	public void onSceneUpdated(Resource scene_res) {
 	}
 
 }

@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
+import net.opencraft.logging.InternalLogger;
+
 public class Texture {
 	
 	public final Optional<Image> img;
@@ -30,6 +32,9 @@ public class Texture {
 		try {
 			img = ImageIO.read(in);
 		} catch (Exception ignored) {
+			InternalLogger.out.printf("[%s] Ignored exception:\n", Texture.class.getName());
+			ignored.printStackTrace(InternalLogger.out);
+			InternalLogger.out.println();
 		}
 		
 		return Texture.of(img);

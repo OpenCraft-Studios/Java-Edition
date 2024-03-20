@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import net.opencraft.config.GameExperiments;
+import net.opencraft.logging.InternalLogger;
 import net.opencraft.renderer.display.Display;
 import net.opencraft.sound.Sound;
 import net.opencraft.util.Assets;
@@ -72,6 +73,9 @@ public class LoadScene extends Scene {
 			try {
 				Thread.sleep(time);
 			} catch (Exception ignored) {
+				InternalLogger.out.printf("[%s] Ignored exception:\n", getClass().getName());
+				ignored.printStackTrace(InternalLogger.out);
+				InternalLogger.out.println();
 			}
 		}
 

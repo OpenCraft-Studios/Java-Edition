@@ -1,13 +1,14 @@
 package net.opencraft.util;
 
-import static net.opencraft.LoggerConfig.LOG_FORMAT;
-import static net.opencraft.LoggerConfig.handle;
+import static net.opencraft.logging.LoggerConfig.LOG_FORMAT;
+import static net.opencraft.logging.LoggerConfig.handle;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.util.logging.Logger;
 
 import net.opencraft.client.Game;
+import net.opencraft.logging.InternalLogger;
 
 public class Resource {
 
@@ -62,6 +63,9 @@ public class Resource {
 		try {
 			in = Resource.class.getResourceAsStream(respath);
 		} catch (Exception ignored) {
+			InternalLogger.out.printf("[%s] Ignored exception:\n", Resource.class.getName());
+			ignored.printStackTrace(InternalLogger.out);
+			InternalLogger.out.println();
 		}
 
 		logger.finest(String.format("Internal resource adquired: %s!", respath));
@@ -77,6 +81,9 @@ public class Resource {
 		try {
 			in = Game.getResourcePack().getResource(respath);
 		} catch (Exception ignored) {
+			InternalLogger.out.printf("[%s] Ignored exception:\n", Resource.class.getName());
+			ignored.printStackTrace(InternalLogger.out);
+			InternalLogger.out.println();
 		}
 
 		logger.finest(String.format("Resource adquired: %s!", respath));

@@ -1,0 +1,10 @@
+[net.opencraft.sound.Sound] Ignored exception:
+java.util.NoSuchElementException: No value present
+	at java.base/java.util.Optional.get(Optional.java:143)
+	at net.opencraft.sound.Sound.play(Sound.java:83)
+	at net.opencraft.sound.SoundManager.update(SoundManager.java:90)
+	at net.opencraft.renderer.scenes.Scene.setCurrent(Scene.java:56)
+	at net.opencraft.client.Game.init(Game.java:51)
+	at net.opencraft.client.Game.run(Game.java:59)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+

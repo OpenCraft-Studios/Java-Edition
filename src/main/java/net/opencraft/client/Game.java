@@ -1,28 +1,27 @@
 package net.opencraft.client;
 
-import static net.opencraft.LoggerConfig.LOG_FORMAT;
-import static net.opencraft.LoggerConfig.handle;
-import static net.opencraft.renderer.display.DisplayManager.destroyDisplay;
+import static net.opencraft.logging.LoggerConfig.*;
+import static net.opencraft.renderer.display.DisplayManager.*;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-import net.opencraft.LoggerConfig;
 import net.opencraft.config.GameConfig;
 import net.opencraft.config.GameExperiments;
 import net.opencraft.data.packs.DefaultPack;
 import net.opencraft.data.packs.Pack;
+import net.opencraft.language.Languages;
+import net.opencraft.logging.LoggerConfig;
 import net.opencraft.renderer.RenderDragon;
-import net.opencraft.renderer.Screen;
 import net.opencraft.renderer.scenes.Scene;
 import net.opencraft.sound.SoundManager;
 
 public class Game implements Runnable {
 
 	public static final String NAME = "OpenCraft";
-	public static final String VERSION = "24r04";
+	public static final String VERSION = "24r05";
 	public static final String TITLE = NAME + ((char) 0x20) + VERSION;
 
 	public static final int NANOSECONDS = 1000000000;
@@ -34,7 +33,6 @@ public class Game implements Runnable {
 	private static Pack selected_pack = DefaultPack.getDefaultPack();
 
 	private boolean running = false;
-	private Screen screen;
 
 	static {
 		LoggerConfig.clearLogDir();
@@ -46,21 +44,20 @@ public class Game implements Runnable {
 
 	public void init() {
 		RenderDragon.init();
-		System.out.println();
 
-		this.screen = RenderDragon.getScreen();
 		if (GameExperiments.SKIP_LOAD_SCENE)
 			Scene.setCurrent(Scene.MENU_SCENE);
 		else
 			Scene.setCurrent(Scene.LOAD_SCENE);
 
+		System.out.println();
 		running = true;
 	}
 
 	@Override
 	public void run() {
 		init();
-		logger.info(String.format("Selected language: %s", getLanguage().getDisplayName(getLanguage())));
+		logger.info(String.format("Selected language: %s", Languages.getDisplayName(getLanguage())));
 
 		logger.info(Game.TITLE + " started!");
 
@@ -87,8 +84,6 @@ public class Game implements Runnable {
 	}
 
 	public void render() {
-		BufferedImage img = this.screen.getImage();
-		Scene.renderCurrent(img);
 		RenderDragon.update();
 	}
 
@@ -149,7 +144,7 @@ public class Game implements Runnable {
 	}
 
 	public static BufferedImage screenshot() {
-		return getInstance().screen.screenshot();
+		return RenderDragon.getScreen().screenshot();
 	}
 
 	public static void main(String[] args) throws IOException {

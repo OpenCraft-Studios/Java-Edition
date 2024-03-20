@@ -13,6 +13,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import net.opencraft.config.GameConfig;
+import net.opencraft.logging.InternalLogger;
 import net.opencraft.util.Resource;
 
 public enum Sound {
@@ -83,6 +84,9 @@ public enum Sound {
 			player.open(audioStream);
 			player.loop(Clip.LOOP_CONTINUOUSLY);
 		} catch (Exception ignored) {
+			InternalLogger.out.printf("[%s] Ignored exception:\n", Sound.class.getName());
+			ignored.printStackTrace(InternalLogger.out);
+			InternalLogger.out.println();
 		}
 	}
 
@@ -101,6 +105,9 @@ public enum Sound {
 			var fis = new FileInputStream(path.get());
 			bis = new BufferedInputStream(fis);
 		} catch (Exception ignored) {
+			InternalLogger.out.printf("[%s] Ignored exception:\n", Sound.class.getName());
+			ignored.printStackTrace(InternalLogger.out);
+			InternalLogger.out.println();
 			return Optional.empty();
 		}
 
