@@ -1,0 +1,19 @@
+gui.Done=Done
+gui.Cancel=Cancel
+gui.toMenu=Back to title screen
+gui.Up=Up
+gui.Down=Down
+gui.Yes=Yes
+gui.No=No
+
+menu.singleplayer=Singleplayer
+menu.multiplayer=Multiplayer
+menu.Mods=Mods and Texture Packs
+menu.Quit=Quit Game
+menu.Options=Options...
+
+options.language=Language
+options.localesTab=Regions
+options.music=Music
+options.on=ON
+options.off=OFF

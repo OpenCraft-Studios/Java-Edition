@@ -1,0 +1,19 @@
+gui.Done=Hecho
+gui.Cancel=Cancelar
+gui.toMenu=Volver a la pantalla de título
+gui.Up=Arriba
+gui.Down=Abajo
+gui.Yes=Sí
+gui.No=No
+
+menu.singleplayer=Un jugador
+menu.multiplayer=Multijugador
+menu.Mods=Mods y Texture Packs
+menu.Options=Opciones...
+menu.Quit=Salir del juego
+
+options.language=Idioma
+options.localesTab=Regiones
+options.music=Música
+options.on=ON
+options.off=OFF
