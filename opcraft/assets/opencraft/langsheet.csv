@@ -1,0 +1,23 @@
+Id,EN,ES,IT,FR,GL,CA
+gui.Done,Done,Hecho,Fatto,Fait,Feito,Fet
+gui.Cancel,Cancel,Cancelar,Anulla,Cancel,Cancelar,Cancelar
+gui.toMenu,Back to title screen,Volver a la pantalla de título,Torna alla schermata del titolo,Retour à l’écran titre,Volver a pantalla de título,Tornar a la pantalla de titol
+gui.Up,Up,Arriba,Sopra,Dessus,Arriba,A dalt
+gui.Down,Down,Abajo,Sotto,Ci-dessous,Abaixo,A baix
+gui.Yes,Yes,Sí,Sì,Oui,Sí,Sí
+gui.No,No,No,Non,Non,Non,No
+gui.gotoOfcPage,Go to official website,Ir al sitio oficial,,,Ir ao sitio oficial,
+menu.singleplayer,Singleplayer,Un jugador,Giocatore singolo,Un joueur,Un xogador,Un jugador
+menu.multiplayer,Multiplayer,Multijugador,Multigiocatore,Multijoueur,Multixogador,Multijugador
+menu.Mods,Mods and Texture Packs,Mods y Texture Packs,Mods e Texture Packs,Mods et Texture Packs,Mods e Texture Packs,Mods i Texture Packs
+menu.Quit,Quit Game,Salir del juego,Abbandonare,Quitter le jeu,Saír do xogo,Surtir del joc
+menu.Options,Options…,Opciones…,Opzioni…,Options…,Opcións…,Opcións...
+options.localesTab,Regions,Regiones,Regioni,Règions,Regións,Regións
+options.music,Music,Música,,,Música,
+options.generalTab,General,General,,,Xeral,
+options.optimize,Optimize,Optimizar,,,Optimizar,
+options.ON,ON,SÍ,,,SÍ,
+options.OFF,OFF,NO,,,NON,
+fml.Mods2,Mods loaded:,Mods cargados:,,,Mods cargados:,
+fml.Mods,%d %s loaded,Hay %d %s cargados,,,Hai %d %s cargados,
+fml.noMods,No mods loaded,No hay mods cargados,,,Non hai mods cargados,

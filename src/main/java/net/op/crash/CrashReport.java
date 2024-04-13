@@ -58,11 +58,13 @@ public class CrashReport {
 	 */
 	public void save(File file) {
 		try {
+			System.out.println(file.getAbsolutePath());
 			if (!file.exists())
 				file.createNewFile();
 
 			this.write(new FileOutputStream(file));
 		} catch (Exception ignored) {
+			ignored.printStackTrace();
 			System.err.println("FATAL ERROR: Cannot save Report Info to file!");
 		}
 	}

@@ -1,23 +1,22 @@
 package net.op.language;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
-
 import net.op.Client;
-import net.op.render.textures.Assets;
+import net.op.Config;
+import net.op.render.textures.Tilesheet;
 
 public class Languages {
 
-	private static final Locale[] locales = new Locale[] { Languages.get("en-US"), Languages.get("es-AR"),
-			Languages.get("it-IT"), Languages.get("fr-FR"), Languages.get("gl-ES"), Languages.get("ca-ES") };
-	
+	private static final Locale[] complete_locales = new Locale[] { Languages.get("en-US"), Languages.get("es-AR"),
+			Languages.get("gl-ES") };
+
 	private static final Map<String, String> ENGLISH = new HashMap<>();
 	private static final Map<String, String> GALICIAN = new HashMap<>();
 	private static final Map<String, String> SPANISH = new HashMap<>();
@@ -26,34 +25,57 @@ public class Languages {
 	private static final Map<String, String> CATALAN = new HashMap<>();
 
 	static {
-		read("/lang/es_AR.lang", SPANISH);
-		read("/lang/gl_ES.lang", GALICIAN);
-		read("/lang/en_US.lang", ENGLISH);
-		read("/lang/it_IT.lang", ITALIAN);
-		read("/lang/fr_FR.lang", FRENCH);
-		read("/lang/ca_ES.lang", CATALAN);
+		read(Tilesheet.forResources(Config.ResourcePack).bindOrDefault("/assets/opencraft/langsheet.csv"));
 	}
 
-	public static void read(String filepath, Map<String, String> lang) {
+	public static void read(InputStream in) {
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				Assets.forResources(Client.getResourcePack()).bindOrDefault("/assets/opencraft" + filepath)));
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+			reader.readLine(); // Skip first line
 
-		try {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				if (line.isEmpty() || line.isBlank())
 					continue;
-				
-				String key = line.split("=")[0].trim();
-				String value = line.split("=")[1].trim();
 
-				lang.put(key.toLowerCase(), StringEscapeUtils.unescapeJava(value));
+				String[] snippets = line.split(",");
+				String key = snippets[0].trim().toLowerCase();
+
+				ENGLISH.put(key, get(snippets, 1, key));
+				SPANISH.put(key, get(snippets, 2, key));
+				ITALIAN.put(key, get(snippets, 3, key));
+				FRENCH.put(key, get(snippets, 4, key));
+				GALICIAN.put(key, get(snippets, 5, key));
+				CATALAN.put(key, get(snippets, 6, key));
+
 			}
+
 		} catch (Exception ignored) {
+			System.err.println("WARNING: Error loading game languages!");
 			// TODO Internal logger
 		}
 
+	}
+
+	public static boolean isComplete(Locale locale) {
+		return Arrays.stream(complete_locales).anyMatch(l -> l.equals(locale));
+	}
+
+	private static String get(String[] snippets, int i, String key) {
+		String result = key;
+
+		try {
+			result = snippets[i].trim();
+
+			if (result == null)
+				result = key;
+
+			if (result.isBlank() || result.isEmpty())
+				result = key;
+		} catch (Exception ignored) {
+		}
+
+		return result;
 	}
 
 	public static String translate(String property, Locale language) {
@@ -83,36 +105,13 @@ public class Languages {
 	}
 
 	public static String getDisplayName(Locale locale) {
-		return StringUtils.capitalize(locale.getDisplayName(Client.getLanguage()));
-	}
-
-	public static Locale getLocaleByIndex(int index) {
-		return locales[index];
-	}
-
-	public static int indexOf(Locale language) {
-		return Arrays.asList(locales).indexOf(language);
-	}
-	
-	public static int getLocaleIndexByLanguage(String language) {
-		if (language.equalsIgnoreCase("Spanish"))
-			return 1;
-		else if (language.equalsIgnoreCase("Italian"))
-			return 2;
-		else if (language.equalsIgnoreCase("French"))
-			return 3;
-		else if (language.equalsIgnoreCase("Galician"))
-			return 4;
-		else
-			return 0;
-	}
-	
-	public static Locale getLocaleByLanguage(String language) {
-		return getLocaleByIndex(getLocaleIndexByLanguage(language));
+		String text = locale.getDisplayName(Client.getLanguage());
+		return text.substring(0, 1).toUpperCase() + text.substring(1);
 	}
 
 	public static String getLanguageName(Locale language) {
-		return StringUtils.capitalize(language.getDisplayLanguage(language));
+		String text = language.getDisplayLanguage(language);
+		return text.substring(0, 1).toUpperCase() + text.substring(1);
 	}
 
 }

@@ -1,11 +1,11 @@
-package net.op.render.scenes;
+package net.op.render.screens;
 
 import static net.op.language.Languages.translate;
 import static net.op.render.display.DisplayManager.getDisplayHeight;
 import static net.op.render.display.DisplayManager.getDisplayWidth;
-import static net.op.render.textures.Assets.BUTTON;
-import static net.op.render.textures.Assets.BUTTON_DISABLED;
-import static net.op.render.textures.Assets.BUTTON_HIGHLIGHTED;
+import static net.op.render.textures.Tilesheet.BUTTON;
+import static net.op.render.textures.Tilesheet.BUTTON_DISABLED;
+import static net.op.render.textures.Tilesheet.BUTTON_HIGHLIGHTED;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -16,7 +16,7 @@ import org.josl.openic.input.ComponentMouse;
 
 import net.op.Client;
 import net.op.render.display.Display;
-import net.op.render.textures.Assets;
+import net.op.render.textures.Tilesheet;
 import net.op.util.OCFont;
 import net.op.util.MouseUtils;
 import net.op.util.Resource;
@@ -35,7 +35,7 @@ public class MenuScreen extends Screen {
 	}
 
 	@Override
-	public void render(Graphics g, Assets assets) {
+	public void render(Graphics g, Tilesheet assets) {
 		int width = getDisplayWidth();
 		int height = getDisplayHeight();
 		OCFont font = OCFont.mojangles();
@@ -45,7 +45,7 @@ public class MenuScreen extends Screen {
 
 		for (int x = 0; x < width; x += 64) {
 			for (int y = 0; y < height; y += 64) {
-				g.drawImage(assets.getBackground(), x, y, 64, 64, null);
+				g.drawImage(assets.getBackground(), x, y, 64, 64, null); 
 			}
 		}
 
@@ -70,19 +70,21 @@ public class MenuScreen extends Screen {
 		/* Center texts from another languages */
 		{
 			if (Client.getLanguage().getDisplayLanguage(Locale.ENGLISH).equalsIgnoreCase("French")) {
-				quitgame_x = width / 2 + 37;
-				settings_x = width / 2 - 155;
+				quitgame_x = width / 2 + 30;
 			}
 
 			if (Client.getLanguage().getDisplayLanguage(Locale.ENGLISH).equalsIgnoreCase("Galician")) {
-				settings_x = width / 2 - 164;
-				quitgame_x = width / 2 + 40;
+				quitgame_x = width / 2 + 34;
 			}
-
+			
+			if (Client.getLanguage().getDisplayLanguage(Locale.ENGLISH).equalsIgnoreCase("Catalan")) {
+				quitgame_x = width / 2 + 27;
+			}
+			
 			if (Client.getLanguage().getDisplayLanguage(Locale.ENGLISH).equalsIgnoreCase("Italian")) {
 				singlepy_x = width / 2 - 87;
-				settings_x = width / 2 - 156;
-				quitgame_x = width / 2 + 39;
+				settings_x = width / 2 - 145;
+				quitgame_x = width / 2 + 34;
 			}
 
 			if (Client.getLanguage().getDisplayLanguage(Locale.ENGLISH).equalsIgnoreCase("Spanish")) {

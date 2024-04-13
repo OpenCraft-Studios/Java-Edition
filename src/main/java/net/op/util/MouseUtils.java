@@ -25,10 +25,5 @@ public class MouseUtils {
 	public static boolean isButtonPressed(int button) {
 		return ((ComponentMouse) IC.getDefaultMouse()).isButtonPressed(button);
 	}
-	
-	public static void runIfButtonPressed(int button, Runnable lambda) {
-		if (isButtonPressed(button))
-			lambda.run();
-	}
 
 }

@@ -1,9 +1,9 @@
-package net.op.render.scenes;
+package net.op.render.screens;
 
 import java.awt.Graphics;
 
 import net.op.render.Renderizable;
-import net.op.render.textures.Assets;
+import net.op.render.textures.Tilesheet;
 import net.op.util.Resource;
 
 public abstract class Screen implements Renderizable {
@@ -23,7 +23,7 @@ public abstract class Screen implements Renderizable {
 		return current;
 	}
 	
-	public static void renderCurrent(Graphics g, Assets assets) {
+	public static void renderCurrent(Graphics g, Tilesheet assets) {
 		if (current == null)
 			return;
 		

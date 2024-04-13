@@ -42,7 +42,7 @@ public class Texture {
 	}
 	
 	public Image getImage() {
-		return opImg.orElse(Assets.missignoImage());
+		return opImg.orElse(Tilesheet.missignoImage());
 	}
 	
 }

@@ -1,12 +1,14 @@
 package net.op;
 
+import java.util.Locale;
 import java.util.Properties;
 
 import net.op.data.packs.Pack;
+import net.op.language.Languages;
 
 public class Config {
-	public static int Language = 0;
-	public static int FPS_CAP = 60;
+	public static Locale Language = Locale.ENGLISH;
+	public static int FPS_CAP = 70;
 	public static String Directory = "opcraft";
 	public static Pack ResourcePack = Pack.getDefaultPack();
 
@@ -14,7 +16,7 @@ public class Config {
 		Properties properties = new Properties();
 
 		properties.setProperty("gameDir", Directory);
-		properties.setProperty("lang", Integer.toString(Language));
+		properties.setProperty("lang", Language.toLanguageTag());
 
 		String strPack = "another";
 		if (ResourcePack.equals(Pack.getDefaultPack()))
@@ -29,7 +31,7 @@ public class Config {
 
 	public static void read(Properties properties) {
 		Directory = properties.getProperty("gameDir");
-		Language = Integer.parseInt(properties.getProperty("lang"));
+		Language = Languages.get(properties.getProperty("lang"));
 		String strPack = properties.getProperty("respack");
 
 		if (strPack.equalsIgnoreCase("default"))

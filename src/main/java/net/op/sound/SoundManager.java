@@ -12,7 +12,7 @@ import javax.sound.sampled.Clip;
 public class SoundManager {
 
 	private static final Clip player;
-	public static final Logger logger = Logger.getLogger("net.op.sound.SoundManager");
+	public static final Logger logger = Logger.getLogger(SoundManager.class.getName());
 	public static boolean ENABLED = false;
 
 	static {
@@ -28,6 +28,7 @@ public class SoundManager {
 
 		player = clip;
 		logger.info("Sound manager started!");
+		logger.info("[SoundAPI] Sound API status: %s".formatted(ENABLED ? "Active" : "Passive"));
 	}
 
 	private SoundManager() {
@@ -70,6 +71,14 @@ public class SoundManager {
 		player.loop(0);
 		player.stop();
 		player.close();
+	}
+	
+	public static void enable() {
+		ENABLED = true;
+	}
+	
+	public static void disable() {
+		ENABLED = false;
 	}
 
 	public static boolean isSupported() {

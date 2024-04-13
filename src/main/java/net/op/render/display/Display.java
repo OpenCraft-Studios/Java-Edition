@@ -15,7 +15,7 @@ import org.josl.openic.input.Mouse;
 import net.java.games.input.Controller;
 import net.op.Client;
 import net.op.render.Render;
-import net.op.render.textures.Assets;
+import net.op.render.textures.Tilesheet;
 
 public final class Display extends JFrame {
 
@@ -44,7 +44,9 @@ public final class Display extends JFrame {
 		setLocationRelativeTo(null); // Center display
 
 		// Set icons
-		setIconImages(Assets.getIcons());
+		setIconImages(Tilesheet.getIcons());
+		requestFocus();
+
 	}
 
 	public void update() {

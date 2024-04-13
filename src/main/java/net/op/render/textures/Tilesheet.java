@@ -1,6 +1,9 @@
 package net.op.render.textures;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
@@ -10,36 +13,54 @@ import java.util.logging.Logger;
 
 import net.op.data.packs.Pack;
 
-public class Assets {
+public class Tilesheet {
+
+	private static final GraphicsConfiguration GFX_CONFIG = GraphicsEnvironment.getLocalGraphicsEnvironment()
+			.getDefaultScreenDevice().getDefaultConfiguration();
 
 	public static final int BUTTON_DISABLED = 0;
 	public static final int BUTTON = 1;
 	public static final int BUTTON_HIGHLIGHTED = 2;
-	public static final Logger logger = Logger.getLogger("net.op.render.textures.Assets");
+	public static final Logger logger = Logger.getLogger(Tilesheet.class.getName());
 
-	private final BufferedImage spritesheet;
+	private final BufferedImage tilesheet;
 
 	private Pack pack;
 
-	public Assets(Pack pack, boolean loadTextures) {
+	public Tilesheet(Pack pack, boolean loadTextures) {
 		this.pack = pack;
 
 		if (loadTextures)
-			spritesheet = (BufferedImage) this.bindTexture("/gui/everything.png").getImage();
+			tilesheet = toCompatibleImage((BufferedImage) this.bindTexture("/gui/everything.png").getImage());
 		else
-			spritesheet = null;
+			tilesheet = null;
 	}
 
-	public Assets(boolean loadTextures) {
+	public Tilesheet(boolean loadTextures) {
 		this(Pack.getDefaultPack(), loadTextures);
 	}
 
-	public static Assets forTextures(Pack resourcePack) {
-		return new Assets(resourcePack, true);
+	public static BufferedImage toCompatibleImage(final BufferedImage image) {
+		if (image.getColorModel().equals(GFX_CONFIG.getColorModel()))
+			return image;
+
+		final BufferedImage new_image = GFX_CONFIG.createCompatibleImage(image.getWidth(), image.getHeight(),
+				image.getTransparency());
+
+		final Graphics2D g2d = (Graphics2D) new_image.getGraphics();
+
+		g2d.drawImage(image, 0, 0, null);
+		g2d.dispose();
+
+		return new_image;
 	}
 
-	public static Assets forResources(Pack resourcePack) {
-		return new Assets(resourcePack, false);
+	public static Tilesheet forTextures(Pack resourcePack) {
+		return new Tilesheet(resourcePack, true);
+	}
+
+	public static Tilesheet forResources(Pack resourcePack) {
+		return new Tilesheet(resourcePack, false);
 	}
 
 	public static InputStream bindExternalResource(String resourceURL) {
@@ -101,7 +122,7 @@ public class Assets {
 
 			default -> 0;
 		};
-		return spritesheet.getSubimage(0, y, 200, 20);
+		return tilesheet.getSubimage(0, y, 200, 20);
 	}
 
 	public Image getArrow(int arrow) {
@@ -114,16 +135,16 @@ public class Assets {
 			default -> 0;
 		};
 
-		return spritesheet.getSubimage(x, 20, 14, 22);
+		return tilesheet.getSubimage(x, 20, 14, 22);
 
 	}
 
 	public Image getLogo() {
-		return spritesheet.getSubimage(0, 61, 271, 44);
+		return tilesheet.getSubimage(0, 61, 271, 44);
 	}
 
 	public Image getBackground() {
-		return spritesheet.getSubimage(242, 0, 16, 16);
+		return tilesheet.getSubimage(242, 0, 16, 16);
 	}
 
 	public static BufferedImage missignoImage() {

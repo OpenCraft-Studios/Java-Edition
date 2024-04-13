@@ -9,7 +9,7 @@ import java.util.logging.SimpleFormatter;
 import net.op.Client;
 import net.op.crash.CrashReport;
 import net.op.render.Render;
-import net.op.render.textures.Assets;
+import net.op.render.textures.Tilesheet;
 import net.op.sound.SoundManager;
 
 public class LoggerConfig {
@@ -27,7 +27,7 @@ public class LoggerConfig {
 		handle(Client.logger, "/game.log");
 		handle(Render.logger, "/renderdragon.log");
 		handle(SoundManager.logger, "/soundmanager.log");
-		handle(Assets.logger, "/assets.log");
+		handle(Tilesheet.logger, "/assets.log");
 	}
 
 	public static void handle(Logger logger, String filepath) {
@@ -56,8 +56,10 @@ public class LoggerConfig {
 			return;
 
 		File[] logs = logDir.listFiles();
-		for (File log : logs)
-			log.delete();
+		for (File log : logs) {
+			if (!log.getName().equalsIgnoreCase("crashes"))
+				log.delete();
+		}
 
 	}
 	
