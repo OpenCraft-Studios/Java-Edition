@@ -1,4 +1,4 @@
-package net.op.util;
+package net.op.input;
 
 import static org.josl.openic.IC12.icGetMouseDX;
 import static org.josl.openic.IC12.icGetMouseDY;

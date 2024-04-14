@@ -4,8 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 
 import net.op.Config;
-import net.op.render.textures.Assets;
 import net.op.util.Resource;
+import net.op.util.ResourceGetter;
 
 public class Sound {
 
@@ -55,7 +55,7 @@ public class Sound {
 
     public InputStream inputStream() {
         InputStream in;
-        in = Assets.forResources(Config.PACK).bindOrDefault("/assets/opencraft/sounds" + path);
+        in = ResourceGetter.getExternal("/assets/opencraft/sounds" + path);
 
         return new BufferedInputStream(in);
     }

@@ -1,9 +1,11 @@
 package net.op;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.Locale;
 import java.util.Properties;
-
-import net.op.data.packs.Pack;
+import static net.op.Client.logger;
 
 public class Config {
 
@@ -11,7 +13,6 @@ public class Config {
     public static int FPS_CAP = 70;
 
     public static String DIRECTORY = "opcraft";
-    public static Pack PACK = Pack.getDefaultPack();
 
     public static Properties toProperties() {
         Properties properties = new Properties();
@@ -19,27 +20,35 @@ public class Config {
         properties.setProperty("gameDir", DIRECTORY);
         properties.setProperty("lang", LOCALE.toLanguageTag());
 
-        String strPack = "another";
-        if (PACK.equals(Pack.getDefaultPack())) {
-            strPack = "default";
-        } else if (PACK.equals(Pack.getInternalPack())) {
-            strPack = "internal";
-        }
-
-        properties.setProperty("respack", strPack);
-
         return properties;
     }
 
     public static void read(Properties properties) {
         DIRECTORY = properties.getProperty("gameDir");
         LOCALE = Locales.get(properties.getProperty("lang"));
-        String strPack = properties.getProperty("respack");
+    }
 
-        if (strPack.equalsIgnoreCase("default")) {
-            PACK = Pack.getDefaultPack();
-        } else if (strPack.equalsIgnoreCase("internal")) {
-            PACK = Pack.getInternalPack();
+    public static void read() {
+        File gameSettingsFile = new File(Config.DIRECTORY + "/settings.yml");
+        if (gameSettingsFile.exists()) {
+            Properties gameSettings = new Properties();
+            try {
+                gameSettings.load(new FileInputStream(gameSettingsFile));
+            } catch (Exception ignored) {
+                logger.warning("Failed to load game settings!");
+                // TODO Internal logger
+            }
+            Config.read(gameSettings);
+        }
+    }
+
+    public static void save() {
+        Properties gameSettings = Config.toProperties();
+        try {
+            gameSettings.store(new FileOutputStream(Config.DIRECTORY + "/settings.yml"), "Game Settings");
+        } catch (Exception ignored) {
+            logger.warning("Failed to save game settings!");
+            // TODO Internal logger
         }
     }
 
@@ -76,24 +85,6 @@ public class Config {
      */
     public static String getDirectory() {
         return Config.DIRECTORY;
-    }
-
-    /**
-     * Returns the current resource pack used by the game.
-     *
-     * @return The resource pack used by the game
-     */
-    public static Pack getPack() {
-        return Config.PACK;
-    }
-
-    /**
-     * Sets the resource pack to a specific one.
-     *
-     * @param pack the resource pack
-     */
-    public static void setPack(Pack pack) {
-        Config.PACK = pack;
     }
 
 }

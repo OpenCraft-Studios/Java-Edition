@@ -7,13 +7,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
-import net.op.render.textures.Assets;
+import net.op.util.ResourceGetter;
 
 public class Locales {
 
-    private static final Locale[] complete_locales = new Locale[]{Locales.get("en-US"), Locales.get("es-AR"),
-        Locales.get("gl-ES")};
+    private static final Locale[] complete_locales = new Locale[] { Locales.get("en-US"), Locales.get("es-AR"),
+        Locales.get("gl-ES") };
 
     private static final Map<String, String> ENGLISH = new HashMap<>();
     private static final Map<String, String> GALICIAN = new HashMap<>();
@@ -23,7 +22,7 @@ public class Locales {
     private static final Map<String, String> CATALAN = new HashMap<>();
 
     static {
-        read(Assets.forResources(Config.PACK).bindOrDefault("/assets/opencraft/langsheet.csv"));
+        read(ResourceGetter.getExternal("/assets/opencraft/langsheet.csv"));
     }
 
     public static void read(InputStream in) {
