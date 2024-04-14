@@ -24,7 +24,7 @@ import net.op.util.OCFont;
 public final class Client implements Runnable {
 
     public static final String NAME = "OpenCraft";
-    public static final String VERSION = "24r07";
+    public static final String VERSION = "24r08";
     public static final String CODENAME = "CODENAME STYLEFML";
     public static final String DISPLAY_NAME = NAME + ' ' + VERSION;
 
