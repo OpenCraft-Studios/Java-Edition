@@ -6,6 +6,7 @@ import static org.josl.openic.IC15.icGenDeviceId;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Frame;
 
 import javax.swing.JFrame;
 
@@ -15,7 +16,7 @@ import org.josl.openic.input.Mouse;
 import net.java.games.input.Controller;
 import net.op.Client;
 import net.op.render.Render;
-import net.op.render.textures.Tilesheet;
+import net.op.render.textures.Assets;
 
 public final class Display extends JFrame {
 
@@ -44,7 +45,7 @@ public final class Display extends JFrame {
 		setLocationRelativeTo(null); // Center display
 
 		// Set icons
-		setIconImages(Tilesheet.getIcons());
+		setIconImages(Assets.getIcons());
 		requestFocus();
 
 	}
@@ -52,6 +53,10 @@ public final class Display extends JFrame {
 	public void update() {
 		repaint();
 		revalidate();
+	}
+	
+	public boolean isMinimized() {
+		return (getExtendedState() & Frame.ICONIFIED) != 0;
 	}
 
 	public void setGraphics(Render renderDragon) {

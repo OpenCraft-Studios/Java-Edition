@@ -1,0 +1,4 @@
+net\op\render\textures\Assets.class
+net\op\render\textures\GUITilesheet.class
+net\op\Locales.class
+net\op\util\ResourceGetter.class

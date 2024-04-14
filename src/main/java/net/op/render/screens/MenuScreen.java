@@ -1,11 +1,11 @@
 package net.op.render.screens;
 
-import static net.op.language.Languages.translate;
+import static net.op.Locales.translate;
 import static net.op.render.display.DisplayManager.getDisplayHeight;
 import static net.op.render.display.DisplayManager.getDisplayWidth;
-import static net.op.render.textures.Tilesheet.BUTTON;
-import static net.op.render.textures.Tilesheet.BUTTON_DISABLED;
-import static net.op.render.textures.Tilesheet.BUTTON_HIGHLIGHTED;
+import static net.op.render.textures.Assets.BUTTON;
+import static net.op.render.textures.Assets.BUTTON_DISABLED;
+import static net.op.render.textures.Assets.BUTTON_HIGHLIGHTED;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -15,8 +15,10 @@ import org.josl.openic.IC;
 import org.josl.openic.input.ComponentMouse;
 
 import net.op.Client;
+import net.op.Config;
 import net.op.render.display.Display;
-import net.op.render.textures.Tilesheet;
+import net.op.render.textures.Assets;
+import net.op.render.textures.GUITilesheet;
 import net.op.util.OCFont;
 import net.op.util.MouseUtils;
 import net.op.util.Resource;
@@ -35,7 +37,9 @@ public class MenuScreen extends Screen {
 	}
 
 	@Override
-	public void render(Graphics g, Tilesheet assets) {
+	public void render(Graphics g, Assets assets) {
+                GUITilesheet gts = GUITilesheet.getInstance();
+            
 		int width = getDisplayWidth();
 		int height = getDisplayHeight();
 		OCFont font = OCFont.mojangles();
@@ -45,7 +49,7 @@ public class MenuScreen extends Screen {
 
 		for (int x = 0; x < width; x += 64) {
 			for (int y = 0; y < height; y += 64) {
-				g.drawImage(assets.getBackground(), x, y, 64, 64, null); 
+				g.drawImage(gts.getBackground(), x, y, 64, 64, null); 
 			}
 		}
 
@@ -54,13 +58,13 @@ public class MenuScreen extends Screen {
 		setsel = MouseUtils.inRange((width - 400) / 2, height / 2 - 4, 198, 40);
 
 		// Draw buttons
-		g.drawImage(assets.getButton(BUTTON_DISABLED), (width - 400) / 2, height / 2 - 50, 400, 40, null);
-		g.drawImage(assets.getButton(setsel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 400) / 2, height / 2 - 4, 198, 40,
+		g.drawImage(gts.getButton(BUTTON_DISABLED), (width - 400) / 2, height / 2 - 50, 400, 40, null);
+		g.drawImage(gts.getButton(setsel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 400) / 2, height / 2 - 4, 198, 40,
 				null);
-		g.drawImage(assets.getButton(quitsel ? BUTTON_HIGHLIGHTED : BUTTON), width / 2, height / 2 - 4, 200, 40, null);
+		g.drawImage(gts.getButton(quitsel ? BUTTON_HIGHLIGHTED : BUTTON), width / 2, height / 2 - 4, 200, 40, null);
 
 		// Logo
-		g.drawImage(assets.getLogo(), (width - 500) / 2, (Display.HEIGHT > height) ? 10 : 30, 500, 87, null);
+		g.drawImage(gts.getLogo(), (width - 500) / 2, (Display.HEIGHT > height) ? 10 : 30, 500, 87, null);
 		g.setColor(Color.WHITE);
 
 		int singlepy_x = width / 2 - 59;
@@ -69,25 +73,25 @@ public class MenuScreen extends Screen {
 
 		/* Center texts from another languages */
 		{
-			if (Client.getLanguage().getDisplayLanguage(Locale.ENGLISH).equalsIgnoreCase("French")) {
+			if (Config.LOCALE.getDisplayLanguage(Locale.ENGLISH).equalsIgnoreCase("French")) {
 				quitgame_x = width / 2 + 30;
 			}
 
-			if (Client.getLanguage().getDisplayLanguage(Locale.ENGLISH).equalsIgnoreCase("Galician")) {
+			if (Config.LOCALE.getDisplayLanguage(Locale.ENGLISH).equalsIgnoreCase("Galician")) {
 				quitgame_x = width / 2 + 34;
 			}
 			
-			if (Client.getLanguage().getDisplayLanguage(Locale.ENGLISH).equalsIgnoreCase("Catalan")) {
+			if (Config.LOCALE.getDisplayLanguage(Locale.ENGLISH).equalsIgnoreCase("Catalan")) {
 				quitgame_x = width / 2 + 27;
 			}
 			
-			if (Client.getLanguage().getDisplayLanguage(Locale.ENGLISH).equalsIgnoreCase("Italian")) {
+			if (Config.LOCALE.getDisplayLanguage(Locale.ENGLISH).equalsIgnoreCase("Italian")) {
 				singlepy_x = width / 2 - 87;
 				settings_x = width / 2 - 145;
 				quitgame_x = width / 2 + 34;
 			}
 
-			if (Client.getLanguage().getDisplayLanguage(Locale.ENGLISH).equalsIgnoreCase("Spanish")) {
+			if (Config.LOCALE.getDisplayLanguage(Locale.ENGLISH).equalsIgnoreCase("Spanish")) {
 				settings_x = width / 2 - 155;
 				quitgame_x = width / 2 + 21;
 			}

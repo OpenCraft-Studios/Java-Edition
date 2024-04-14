@@ -10,7 +10,7 @@ import java.awt.Graphics;
 import java.io.IOException;
 import java.io.InputStream;
 
-import net.op.render.textures.Tilesheet;
+import net.op.render.textures.Assets;
 
 public class OCFont {
 
@@ -37,7 +37,7 @@ public class OCFont {
 		this(getSystemFont(fontname));
 	}
 
-	public static void create(Tilesheet assets) {
+	public static void create(Assets assets) {
 		MOJANGLES = getFont(assets, "/assets/opencraft/fonts/Mojangles.ttf");
 	}
 
@@ -57,7 +57,7 @@ public class OCFont {
 		return OCFont.of(createFont(TRUETYPE_FONT, in));
 	}
 
-	public static OCFont getFont(Tilesheet assets, String fontpath) {
+	public static OCFont getFont(Assets assets, String fontpath) {
 		InputStream in = assets.bindOrDefault(fontpath);
 		OCFont font = OCFont.monospace();
 		try {

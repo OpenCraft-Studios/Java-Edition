@@ -1,36 +1,50 @@
 package net.op.render;
 
 import static net.op.render.display.DisplayManager.createDisplay;
+import static net.op.render.display.DisplayManager.getDisplay;
 import static net.op.render.display.DisplayManager.setDisplayGraphics;
 import static net.op.render.display.DisplayManager.showDisplay;
 import static net.op.render.display.DisplayManager.updateDisplay;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.util.logging.Logger;
 
+import net.op.Client;
+import net.op.Config;
 import net.op.render.display.Display;
 import net.op.render.screens.Screen;
-import net.op.render.textures.Tilesheet;
+import net.op.render.textures.Assets;
 
 /**
  * <h1>Render</h1> This class is used to draw into the display.
- * 
+ *
  * @see Display
  */
 public final class Render extends Canvas {
 
-	private static final long serialVersionUID = 1L;
 	public static final Logger logger = Logger.getLogger(Render.class.getName());
-	private Tilesheet assets;
+	private static final long serialVersionUID = 1L;
 
-	private Render(Tilesheet assets) {
-		this.assets = assets;
+	private static final boolean OPEN_GL;
+	private Assets assets;
+
+	static {
+		if (System.getProperty("sun.java2d.opengl") != null) {
+			OPEN_GL = System.getProperty("sun.java2d.opengl").equalsIgnoreCase("true");
+		} else {
+			OPEN_GL = false;
+		}
 	}
 
-	public static Render create(Tilesheet assets) {
+	private Render(Assets assets) {
+		this.assets = assets;
+		setBackground(Color.BLACK);
+	}
+
+	public static Render create(Assets assets) {
 		return new Render(assets);
 	}
 
@@ -41,12 +55,21 @@ public final class Render extends Canvas {
 		setDisplayGraphics(this);
 
 		logger.info("Render system initialized!");
+		logger.info("[OpenGL] Using OpenGL: %s".formatted(OPEN_GL ? "Yes" : "No"));
+
+		// Do "VSync"
+		try {
+			Client.getClient().vsync();
+		} catch (Exception ex) {
+			logger.warning(ex.getMessage());
+		}
+
+		logger.info("FPS Rate: %d".formatted(Config.FPS_CAP));
 	}
 
 	public void update() {
 		render();
 		updateDisplay();
-		Toolkit.getDefaultToolkit().sync();
 	}
 
 	public void render() {
@@ -55,13 +78,17 @@ public final class Render extends Canvas {
 			createBufferStrategy(2);
 			return;
 		}
-		
+
 		Graphics2D g2d = (Graphics2D) bs.getDrawGraphics();
 		Screen.renderCurrent(g2d, this.assets);
 		g2d.dispose();
-		
+
 		bs.show();
 
+	}
+	
+	public boolean shouldRender() {
+		return getDisplay().isShowing() && !getDisplay().isMinimized();
 	}
 
 }

@@ -1,10 +1,10 @@
 package net.op.render.screens;
 
-import static net.op.language.Languages.translate;
+import static net.op.Locales.translate;
 import static net.op.render.display.DisplayManager.getDisplayHeight;
 import static net.op.render.display.DisplayManager.getDisplayWidth;
-import static net.op.render.textures.Tilesheet.BUTTON;
-import static net.op.render.textures.Tilesheet.BUTTON_HIGHLIGHTED;
+import static net.op.render.textures.Assets.BUTTON;
+import static net.op.render.textures.Assets.BUTTON_HIGHLIGHTED;
 
 import java.awt.Color;
 import java.awt.Desktop;
@@ -12,13 +12,10 @@ import java.awt.Graphics;
 import java.net.URI;
 import java.util.Locale;
 
-import org.josl.openic.IC;
-import org.josl.openic.input.ComponentMouse;
-
-import net.op.Client;
-import net.op.language.Languages;
+import net.op.Config;
+import net.op.Locales;
 import net.op.performance.Perfine;
-import net.op.render.textures.Tilesheet;
+import net.op.render.textures.Assets;
 import net.op.sound.SoundManager;
 import net.op.util.MouseUtils;
 import net.op.util.OCFont;
@@ -40,7 +37,7 @@ public class SettingsScreen extends Screen {
 	}
 
 	@Override
-	public void render(Graphics g, Tilesheet assets) {
+	public void render(Graphics g, Assets assets) {
 		int width = getDisplayWidth();
 		int height = getDisplayHeight();
 
@@ -105,7 +102,7 @@ public class SettingsScreen extends Screen {
 
 	}
 
-	private void drawGeneralTab(Graphics g, Tilesheet assets) {
+	private void drawGeneralTab(Graphics g, Assets assets) {
 		OCFont font = OCFont.mojangles();
 
 		boolean musicBtn = MouseUtils.inRange(30, 80, 200, 40);
@@ -125,18 +122,16 @@ public class SettingsScreen extends Screen {
 		font.color(Color.WHITE);
 
 		check(1, musicBtn, () -> {
+			SoundManager.ENABLED = !SoundManager.ENABLED;
 			try {
-				Thread.sleep(150);
+				Thread.sleep(90);
 			} catch (Exception ignored) {
 				// TODO Internal logger
 			}
-			SoundManager.ENABLED = !SoundManager.ENABLED;
-			System.out.println("Music button pressed");
 		});
 
 		check(1, optmBtn, () -> {
 			Perfine.optimizeGame();
-			System.out.println("ops");
 			try {
 				Thread.sleep(500);
 			} catch (Exception ignored) {
@@ -144,10 +139,10 @@ public class SettingsScreen extends Screen {
 		});
 	}
 
-	private void drawLocalesTab(Graphics g, Tilesheet assets) {
+	private void drawLocalesTab(Graphics g, Assets assets) {
 		// Draw buttons
 		final int width = getDisplayWidth();
-		final String strLang = Client.getLanguage().getDisplayLanguage(Locale.ENGLISH);
+		final String strLang = Config.LOCALE.getDisplayLanguage(Locale.ENGLISH);
 
 		OCFont font = OCFont.mojangles();
 
@@ -204,17 +199,17 @@ public class SettingsScreen extends Screen {
 
 		Locale lang = null;
 		if (enLang)
-			lang = Languages.get("en-US");
+			lang = Locales.get("en-US");
 		else if (spLang)
-			lang = Languages.get("es-AR");
+			lang = Locales.get("es-AR");
 		else if (itLang)
-			lang = Languages.get("it-IT");
+			lang = Locales.get("it-IT");
 		else if (frLang)
-			lang = Languages.get("fr-FR");
+			lang = Locales.get("fr-FR");
 		else if (glLang)
-			lang = Languages.get("gl-ES");
+			lang = Locales.get("gl-ES");
 		else if (caLang)
-			lang = Languages.get("ca-ES");
+			lang = Locales.get("ca-ES");
 
 		if (lang != null)
 			switchLanguage(lang);
@@ -226,17 +221,13 @@ public class SettingsScreen extends Screen {
 	}
 
 	private void check(int button, boolean condition, Runnable lambda) {
-		ComponentMouse mouse = (ComponentMouse) IC.getDefaultMouse();
-
-		if (mouse.isButtonPressed(button) && condition)
+		if (MouseUtils.isButtonPressed(button) && condition)
 			lambda.run();
 	}
 
 	public void switchLanguage(Locale lang) {
-		ComponentMouse mouse = (ComponentMouse) IC.getDefaultMouse();
-
-		if (mouse.isButtonPressed(1))
-			Client.setLanguage(lang);
+		if (MouseUtils.isButtonPressed(1))
+			Config.LOCALE = lang;
 
 	}
 

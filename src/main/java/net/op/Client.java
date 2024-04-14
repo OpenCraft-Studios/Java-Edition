@@ -7,11 +7,12 @@ import static org.josl.openic.IC13.icIsKeyPressed;
 import static org.josl.openic.IC15.icBindDevice;
 import static org.josl.openic.IC15.icGenDeviceId;
 
+import java.awt.DisplayMode;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -21,14 +22,13 @@ import org.josl.openic.input.Keyboard;
 
 import net.java.games.input.Controller;
 import net.op.crash.CrashReport;
-import net.op.data.packs.Pack;
-import net.op.language.Languages;
 import net.op.logging.InternalLogger;
 import net.op.logging.LoggerConfig;
 import net.op.render.Render;
 import net.op.render.screens.Loadscreen;
 import net.op.render.screens.Screen;
-import net.op.render.textures.Tilesheet;
+import net.op.render.textures.Assets;
+import net.op.render.textures.GUITilesheet;
 import net.op.sound.SoundManager;
 import net.op.util.OCFont;
 
@@ -40,7 +40,6 @@ public final class Client implements Runnable {
 	public static final String DISPLAY_NAME = NAME + ' ' + VERSION;
 
 	public static final int NANOSECONDS = 1000000000;
-	public static double NANO_PER_TICK = (double) NANOSECONDS / Config.FPS_CAP;
 
 	private static final Client instance = new Client();
 	public static final Logger logger = Logger.getLogger(Client.class.getName());
@@ -48,11 +47,11 @@ public final class Client implements Runnable {
 	private final Thread thread;
 	private boolean running = false;
 
-	private Tilesheet assets;
+	private Assets assets;
 	private Render render;
 
 	private Client() {
-		this.assets = Tilesheet.forTextures(getResourcePack());
+		this.assets = Assets.forTextures(Config.getPack());
 		this.render = Render.create(this.assets);
 		this.thread = new Thread(this);
 		this.thread.setName("gameThread");
@@ -78,7 +77,7 @@ public final class Client implements Runnable {
 			crash.report();
 		}
 
-		logger.info(String.format("Selected language: %s", Languages.getDisplayName(getLanguage())));
+		logger.info(String.format("Selected language: %s", Locales.getDisplayName(Config.LOCALE)));
 		logger.info(Client.DISPLAY_NAME + " started!");
 
 		long lastUpdate = System.nanoTime();
@@ -89,19 +88,21 @@ public final class Client implements Runnable {
 		byte exceptionCounter = 0;
 
 		try {
-			while (running) {
+			do {
 				final long loopStart = System.nanoTime();
 
 				timePassed = loopStart - lastUpdate;
 				lastUpdate = loopStart;
 
-				delta += timePassed / NANO_PER_TICK;
+				delta += timePassed / this.getNanoPerTick();
 
 				while (delta >= 1) {
 					tick();
+					render();
+
 					delta--;
 				}
-			}
+			} while (running);
 		} catch (OutOfMemoryError error) {
 			/*
 			 * If any OutOfMemoryError occurs while the game is in execution we can catch it
@@ -145,26 +146,31 @@ public final class Client implements Runnable {
 	public void tick() {
 		this.running = !(icIsKeyPressed(KeyEvent.VK_F3) && icIsKeyPressed(KeyEvent.VK_C)) && isDisplayAlive()
 				&& running;
-		this.render.update();
 		SoundManager.update();
+	}
+
+	public void render() {
+		if (this.render.shouldRender())
+			this.render.update();
 	}
 
 	/**
 	 * The method {@code init()} is used to initialize the game and its
 	 * dependencies.
-	 * 
+	 *
 	 * Is private because it shouldn't be executed twice.
 	 */
 	private void init() {
 		if (running) {
-			System.err.println("(1) This message shouldn't be displayed!");
+			System.err.println("(!) This message shouldn't be displayed!");
 			return;
 		}
+		GUITilesheet.create("/gui.png");
 
 		LoggerConfig.init();
 		InternalLogger.init();
 
-		File gameSettingsFile = new File(getDirectory() + "/settings.yml");
+		File gameSettingsFile = new File(Config.DIRECTORY + "/settings.yml");
 		if (gameSettingsFile.exists()) {
 			Properties gameSettings = new Properties();
 			try {
@@ -186,11 +192,26 @@ public final class Client implements Runnable {
 
 	/**
 	 * This method is used to get the game's current thread.
-	 * 
+	 *
 	 * @return The thread
 	 */
 	public Thread thread() {
 		return this.thread;
+	}
+
+	public void vsync() throws Exception {
+		int fpsRate;
+		fpsRate = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode()
+				.getRefreshRate();
+
+		if (fpsRate != DisplayMode.REFRESH_RATE_UNKNOWN)
+			Config.FPS_CAP = fpsRate;
+		else
+			throw new Exception("Imposible to determinate the refresh rate!");
+	}
+
+	public double getNanoPerTick() {
+		return (double) NANOSECONDS / Config.FPS_CAP;
 	}
 
 	/**
@@ -209,7 +230,7 @@ public final class Client implements Runnable {
 		// Save settings
 		Properties gameSettings = Config.toProperties();
 		try {
-			gameSettings.store(new FileOutputStream(getDirectory() + "/settings.yml"), "Game Settings");
+			gameSettings.store(new FileOutputStream(Config.DIRECTORY + "/settings.yml"), "Game Settings");
 		} catch (Exception ignored) {
 			logger.warning("Failed to save game settings!");
 			// TODO Internal logger
@@ -227,76 +248,23 @@ public final class Client implements Runnable {
 	}
 
 	/**
+	 * This method checks if the game is currently running.
+	 */
+	public boolean isRunning() {
+		return this.running;
+	}
+
+	/**
 	 * The {@code getClient()} method is often used for getting the current client
 	 * instance.
-	 * 
+	 *
 	 * The client is a <i>singleton</i> because is more easy to have a non-static
 	 * client and access it by a static method.
-	 * 
+	 *
 	 * @return The client
 	 */
 	public static Client getClient() {
 		return Client.instance;
-	}
-
-	/**
-	 * This method checks if the game is currently running.
-	 */
-	public static boolean isRunning() {
-		return Client.instance.running;
-	}
-
-	/**
-	 * This method sets the language of the game to a defined one.
-	 */
-	public static void setLanguage(Locale language) {
-		Config.Language = language;
-	}
-
-	/**
-	 * The {@code getLanguage()} method is used to get the current language used by
-	 * the game.
-	 */
-	public static Locale getLanguage() {
-		return Config.Language;
-	}
-
-	/**
-	 * It's used to set the current game directory.
-	 * 
-	 * @param gameDir Game's directory
-	 */
-	public static void setDirectory(String gameDir) {
-		Config.Directory = gameDir;
-	}
-
-	/**
-	 * Returns the game directory
-	 * 
-	 * @return The game directory
-	 * 
-	 * @see #setDirectory(String)
-	 */
-	public static String getDirectory() {
-		return Config.Directory;
-	}
-
-	/**
-	 * Returns the current resource pack used by the game.
-	 * 
-	 * @return The resource pack used by the game
-	 */
-	public static Pack getResourcePack() {
-		return Config.ResourcePack;
-	}
-
-	/**
-	 * Sets the resource pack to a specific one.
-	 * 
-	 * @param resourcePack the resource pack
-	 */
-	public static void setResourcePack(Pack resourcePack) {
-		Config.ResourcePack = resourcePack;
 	}
 
 	/**
@@ -305,6 +273,7 @@ public final class Client implements Runnable {
 	 * of the game.
 	 */
 	public static void main(String[] args) {
+		// Starting game
 		Client game = Client.getClient();
 		Thread gameThread = game.thread();
 		gameThread.start();
@@ -330,7 +299,6 @@ public final class Client implements Runnable {
 		 * System.out.println("  - OpenCraft's Developer Team " +
 		 * Calendar.getInstance().get(Calendar.YEAR));
 		 */
-		
 		// Stops the game
 		System.exit(status);
 

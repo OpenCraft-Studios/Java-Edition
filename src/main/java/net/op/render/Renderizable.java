@@ -2,7 +2,7 @@ package net.op.render;
 
 import java.awt.Graphics;
 
-import net.op.render.textures.Tilesheet;
+import net.op.render.textures.Assets;
 
 /**
  * <h1>Renderizable</h1>
@@ -16,6 +16,6 @@ public interface Renderizable {
 	 * @param g The graphics to write to
 	 * @param assets The assets
 	 */
-	void render(Graphics g, Tilesheet assets);
+	void render(Graphics g, Assets assets);
 	
 }

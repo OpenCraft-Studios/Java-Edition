@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 
 import net.op.Client;
 import net.op.render.display.Display;
-import net.op.render.textures.Tilesheet;
+import net.op.render.textures.Assets;
 import net.op.util.OCFont;
 import net.op.util.Resource;
 
@@ -35,11 +35,11 @@ public class Loadscreen extends Screen {
 	}
 
 	@Override
-	public void render(Graphics g, Tilesheet assets) {
+	public void render(Graphics g, Assets assets) {
 		animatedLS(g, assets, true);
 	}
 
-	public void animatedLS(Graphics g, Tilesheet assets, boolean slideUp) {
+	public void animatedLS(Graphics g, Assets assets, boolean slideUp) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, Display.WIDTH, Display.HEIGHT);
 
@@ -67,7 +67,7 @@ public class Loadscreen extends Screen {
 
 	}
 
-	public void attemptToChange(Graphics g, Tilesheet assets) {
+	public void attemptToChange(Graphics g, Assets assets) {
 		final long current = System.currentTimeMillis();
 		
 		if (start == -1)

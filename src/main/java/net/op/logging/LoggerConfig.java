@@ -7,9 +7,10 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import net.op.Client;
+import net.op.Config;
 import net.op.crash.CrashReport;
 import net.op.render.Render;
-import net.op.render.textures.Tilesheet;
+import net.op.render.textures.Assets;
 import net.op.sound.SoundManager;
 
 public class LoggerConfig {
@@ -27,7 +28,7 @@ public class LoggerConfig {
 		handle(Client.logger, "/game.log");
 		handle(Render.logger, "/renderdragon.log");
 		handle(SoundManager.logger, "/soundmanager.log");
-		handle(Tilesheet.logger, "/assets.log");
+		handle(Assets.logger, "/assets.log");
 	}
 
 	public static void handle(Logger logger, String filepath) {
@@ -40,7 +41,7 @@ public class LoggerConfig {
 	}
 
 	public static String getLogDir() {
-		return Client.getDirectory() + "/logs";
+		return Config.DIRECTORY + "/logs";
 	}
 
 	public static FileHandler logFile(String filepath) throws SecurityException, IOException {
