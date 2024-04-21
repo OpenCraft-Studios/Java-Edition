@@ -9,7 +9,6 @@ import java.awt.DisplayMode;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.logging.Logger;
 
