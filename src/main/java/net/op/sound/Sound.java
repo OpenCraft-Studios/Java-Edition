@@ -55,7 +55,7 @@ public class Sound {
 
     public InputStream inputStream() {
         InputStream in;
-        in = ResourceGetter.getExternal("/assets/opencraft/sounds" + path);
+        in = ResourceGetter.getExternal("/resources/opencraft/sounds" + path);
 
         return new BufferedInputStream(in);
     }

@@ -22,7 +22,7 @@ public class Locales {
     private static final Map<String, String> CATALAN = new HashMap<>();
 
     static {
-        read(ResourceGetter.getExternal("/assets/opencraft/langsheet.csv"));
+        read(ResourceGetter.getExternal("/resources/opencraft/langsheet.csv"));
     }
 
     public static void read(InputStream in) {

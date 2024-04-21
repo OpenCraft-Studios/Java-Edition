@@ -168,7 +168,7 @@ public final class Client implements Runnable {
 
         // Create basics resources
         GUITilesheet.create("/gui.png");
-        OCFont.create("/assets/opencraft/fonts");
+        OCFont.create("/resources/opencraft/fonts");
 
         // Initialize loggers & Render System
         LoggerConfig.init();
