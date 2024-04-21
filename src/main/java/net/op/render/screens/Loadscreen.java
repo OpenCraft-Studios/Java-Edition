@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import net.op.Client;
 import net.op.render.display.Display;
@@ -20,6 +21,8 @@ public class Loadscreen extends Screen {
 
     private static final int TIMEOUT = 3250;
     private static int I_MAX = Display.HEIGHT / 2;
+    private static BufferedImage star_background = null;
+
     public static Loadscreen instance = create();
 
     private float i = Display.HEIGHT - 1;
@@ -39,8 +42,7 @@ public class Loadscreen extends Screen {
     }
 
     public void animatedLS(Graphics2D g2d, boolean slideUp) {
-        g2d.setColor(Color.BLACK);
-        g2d.fillRect(0, 0, Display.WIDTH, Display.HEIGHT);
+        drawStars(g2d, 100);
 
         // Draw OpenCraft Text
         g2d.setColor(Color.MAGENTA);
@@ -67,7 +69,35 @@ public class Loadscreen extends Screen {
 
     }
 
-    public void attemptToChange(Graphics g) {
+    private void drawStars(Graphics2D g2d, int stars) {
+        BufferedImage oldStar_background = star_background;
+        star_background = new BufferedImage(Display.WIDTH, Display.HEIGHT, BufferedImage.TYPE_INT_RGB);
+        Graphics g = star_background.getGraphics();
+
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, Display.WIDTH, Display.HEIGHT);
+
+        if (oldStar_background != null) {
+            g.drawImage(oldStar_background, 0, (int) (System.currentTimeMillis() / 1000 % 100) * -1, null);
+        }
+        g.dispose();
+
+        Random random = new Random();
+        for (int star = 0; star < stars; star++) {
+            if ((random.nextBoolean() && random.nextBoolean()) == false) {
+                continue;
+            }
+
+            int star_x = random.nextInt(Display.WIDTH);
+            int star_y = random.nextInt(Display.HEIGHT);
+
+            star_background.setRGB(star_x, star_y, 0xFFFFFF);
+        }
+
+        g2d.drawImage(star_background, 0, 0, null);
+    }
+
+    private void attemptToChange(Graphics g) {
         final long current = System.currentTimeMillis();
 
         if (start == -1) {
