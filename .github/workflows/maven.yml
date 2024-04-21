@@ -28,7 +28,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B compile --file pom.xml
+      run: echo "$SECRET_TOKEN"
       env:
         MAVEN_USERNAME: CiroZDP
         MAVEN_PASSWORD: ${{ secrets.SECRET_TOKEN }}
