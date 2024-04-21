@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.util.Locale;
 import java.util.Properties;
 import static net.op.Client.logger;
+import net.op.logging.InternalLogger;
 
 /**
  * <h1>Config</h1>
@@ -23,7 +24,7 @@ public class Config {
     /**
      * The game's directory
      */
-    public static String DIRECTORY = "opcraft";
+    public static String GAME_DIRECTORY = "opcraft";
 
     /**
      * Maximum FPS that the game will consume.
@@ -38,7 +39,7 @@ public class Config {
     public static Properties toProperties() {
         Properties properties = new Properties();
 
-        properties.setProperty("gameDir", DIRECTORY);
+        properties.setProperty("gameDir", GAME_DIRECTORY);
         properties.setProperty("lang", LOCALE.toLanguageTag());
 
         return properties;
@@ -50,7 +51,7 @@ public class Config {
      * @param properties The object to read
      */
     public static void read(Properties properties) {
-        DIRECTORY = properties.getProperty("gameDir");
+        GAME_DIRECTORY = properties.getProperty("gameDir");
         LOCALE = Locales.get(properties.getProperty("lang"));
     }
 
@@ -59,14 +60,16 @@ public class Config {
      * it.
      */
     public static void read() {
-        File gameSettingsFile = new File(Config.DIRECTORY + "/settings.yml");
+        File gameSettingsFile = new File(Config.GAME_DIRECTORY + "/settings.yml");
         if (gameSettingsFile.exists()) {
             Properties gameSettings = new Properties();
             try {
                 gameSettings.load(new FileInputStream(gameSettingsFile));
-            } catch (Exception ignored) {
+            } catch (Exception ex) {
                 logger.warning("Failed to load game settings!");
-                // TODO Internal logger
+                InternalLogger.out.println(Config.class.getName() + " ->");
+                ex.printStackTrace(InternalLogger.out);
+                InternalLogger.out.println();
             }
             Config.read(gameSettings);
         }
@@ -78,10 +81,12 @@ public class Config {
     public static void save() {
         Properties gameSettings = Config.toProperties();
         try {
-            gameSettings.store(new FileOutputStream(Config.DIRECTORY + "/settings.yml"), "Game Settings");
-        } catch (Exception ignored) {
+            gameSettings.store(new FileOutputStream(Config.GAME_DIRECTORY + "/settings.yml"), "Game Settings");
+        } catch (Exception ex) {
             logger.warning("Failed to save game settings!");
-            // TODO Internal logger
+            InternalLogger.out.println(Config.class.getName() + " ->");
+            ex.printStackTrace(InternalLogger.out);
+            InternalLogger.out.println();
         }
     }
 
@@ -108,7 +113,7 @@ public class Config {
      * @param gameDir Game's directory
      */
     public static void setDirectory(String gameDir) {
-        Config.DIRECTORY = gameDir;
+        Config.GAME_DIRECTORY = gameDir;
     }
 
     /**
@@ -119,7 +124,7 @@ public class Config {
      * @see #setDirectory(String)
      */
     public static String getDirectory() {
-        return Config.DIRECTORY;
+        return Config.GAME_DIRECTORY;
     }
 
 }

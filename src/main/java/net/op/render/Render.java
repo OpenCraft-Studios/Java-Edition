@@ -55,6 +55,7 @@ public final class Render extends Canvas {
 
     /**
      * Creates a new instance of this class.
+     * @return That instance
      */
     public static Render create() {
         return new Render();

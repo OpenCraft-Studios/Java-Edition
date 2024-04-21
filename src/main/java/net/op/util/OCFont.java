@@ -9,6 +9,7 @@ import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.io.IOException;
 import java.io.InputStream;
+import net.op.logging.InternalLogger;
 
 public class OCFont {
 
@@ -56,12 +57,14 @@ public class OCFont {
     }
 
     public static OCFont getFont(String fontpath) {
-        InputStream in = ResourceGetter.getExternal(fontpath);
+        InputStream in = ResourceGetter.getInternal(fontpath);
         OCFont font = OCFont.monospace();
         try {
             font = read(in);
-        } catch (Exception ignored) {
-            // TODO Internal logger
+        } catch (Exception ex) {
+            InternalLogger.out.println(OCFont.class.getName() + " ->");
+            ex.printStackTrace(InternalLogger.out);
+            InternalLogger.out.println();
         }
 
         return font;

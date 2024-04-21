@@ -24,8 +24,6 @@ public class DisplayManager {
     }
 
     public static void destroyDisplay() {
-        hideDisplay();
-        display.dispose();
         display = null;
     }
 

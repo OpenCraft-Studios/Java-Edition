@@ -17,6 +17,7 @@ import net.op.performance.Perfine;
 import net.op.render.textures.GUITilesheet;
 import net.op.sound.SoundManager;
 import net.op.input.MouseUtils;
+import net.op.logging.InternalLogger;
 import net.op.util.OCFont;
 import net.op.util.Resource;
 
@@ -127,8 +128,10 @@ public class SettingsScreen extends Screen {
             SoundManager.ENABLED = !SoundManager.ENABLED;
             try {
                 Thread.sleep(90);
-            } catch (Exception ignored) {
-                // TODO Internal logger
+            } catch (Exception ex) {
+                InternalLogger.out.println(SettingsScreen.class.getName() + " ->");
+                ex.printStackTrace(InternalLogger.out);
+                InternalLogger.out.println();
             }
         });
 

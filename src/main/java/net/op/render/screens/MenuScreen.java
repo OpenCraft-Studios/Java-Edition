@@ -95,12 +95,13 @@ public class MenuScreen extends Screen {
         }
 
         // Draw credits
-        font.size(15).draw(g, "%s Indev %s".formatted(Client.NAME, Client.VERSION), 3, 15, 0x505050);
+        font.size(17)
+                .drawShadow(g, "%s %s".formatted(Client.NAME, Client.CODENAME), 3, 15, 0x808080);
 
         font.size(20);
         font.drawShadow(g, translate("menu.Quit"), quitgame_x, height / 2 + 20, quitsel ? 0xFFFFA0 : 0xFFFFFF);
         font.drawShadow(g, translate("menu.Options"), settings_x, height / 2 + 20, setsel ? 0xFFFFA0 : 0xFFFFFF);
-        font.drawShadow(g, translate("menu.singleplayer"), singlepy_x, height / 2 - 25, 0xFFFFFF);
+        font.drawShadow(g, translate("menu.singleplayer"), singlepy_x, height / 2 - 25, 0xA0A0A0);
 
         check(quitsel, setsel);
     }

@@ -1,18 +1,26 @@
 package net.op;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.op.logging.InternalLogger;
 import net.op.util.ResourceGetter;
 
 public class Locales {
 
-    private static final Locale[] complete_locales = new Locale[] { Locales.get("en-US"), Locales.get("es-AR"),
-        Locales.get("gl-ES") };
+    private static final Locale[] complete_locales = new Locale[]{Locales.get("en-US"), Locales.get("es-AR"),
+        Locales.get("gl-ES")};
 
     private static final Map<String, String> ENGLISH = new HashMap<>();
     private static final Map<String, String> GALICIAN = new HashMap<>();
@@ -22,12 +30,11 @@ public class Locales {
     private static final Map<String, String> CATALAN = new HashMap<>();
 
     static {
-        read(ResourceGetter.getExternal("/resources/opencraft/langsheet.csv"));
+        read(getCSVContent());
     }
 
-    public static void read(InputStream in) {
-
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+    public static void read(final String csvContent) {
+        try (BufferedReader reader = new BufferedReader(new StringReader(csvContent))) {
             reader.readLine(); // Skip first line
 
             String line;
@@ -48,9 +55,12 @@ public class Locales {
 
             }
 
-        } catch (Exception ignored) {
+        } catch (Exception ex) {
+            InternalLogger.out.println(Locales.class.getName() + " ->");
+            ex.printStackTrace(InternalLogger.out);
+            InternalLogger.out.println();
+
             System.err.println("WARNING: Error loading game languages!");
-            // TODO Internal logger
         }
 
     }
@@ -60,17 +70,17 @@ public class Locales {
     }
 
     private static String get(String[] snippets, int i, String key) {
-        String result = key;
+        String result = "???";
 
         try {
             result = snippets[i].trim();
 
             if (result == null) {
-                result = key;
+                result = "???";
             }
 
             if (result.isBlank() || result.isEmpty()) {
-                result = key;
+                result = "???";
             }
         } catch (Exception ignored) {
         }
@@ -94,7 +104,6 @@ public class Locales {
         } else {
             return ENGLISH.getOrDefault(property, property);
         }
-
     }
 
     public static String translate(String property) {
@@ -113,6 +122,36 @@ public class Locales {
     public static String getLanguageName(Locale language) {
         String text = language.getDisplayLanguage(language);
         return text.substring(0, 1).toUpperCase() + text.substring(1);
+    }
+
+    public static String getCSVContent() {
+        InputStream in = null;
+
+        try {
+            URL csvURL = new URL("https://raw.githubusercontent.com/OpenCraftMC/OnlineResources/main/langsheet.csv");
+            in = csvURL.openConnection().getInputStream();
+        } catch (Exception ex) {
+            InternalLogger.out.println(Locales.class.getName() + " ->");
+            ex.printStackTrace(InternalLogger.out);
+            InternalLogger.out.println();
+        }
+
+        if (in == null) {
+            in = ResourceGetter.getInternal("/lang/langsheet.csv");
+        }
+
+        String csvContent = "";
+        try {
+            csvContent = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException ex) {
+            InternalLogger.out.println(Locales.class.getName() + " ->");
+            ex.printStackTrace(InternalLogger.out);
+            InternalLogger.out.println();
+
+            System.err.println("WARNING: Could not read the 'langsheet.csv' file!");
+        }
+
+        return csvContent;
     }
 
 }

@@ -14,6 +14,7 @@ import net.op.Client;
 import net.op.input.InputManager;
 import net.op.render.Render;
 import net.op.render.textures.Texture;
+import static net.op.util.ResourceGetter.getExternal;
 import static net.op.util.ResourceGetter.getInternal;
 
 public final class Display extends JFrame {
@@ -44,11 +45,11 @@ public final class Display extends JFrame {
 
         // Set icons
         List<InputStream> texStrm = new ArrayList<>();
-        texStrm.add(getInternal("/icons/icon-1.png"));
-        texStrm.add(getInternal("/icons/icon-2.png"));
-        texStrm.add(getInternal("/icons/icon-3.png"));
-        texStrm.add(getInternal("/icons/icon-4.png"));
-        texStrm.add(getInternal("/icons/icon-5.png"));
+        texStrm.add(getExternal("/resources/icons/icon_16x16.png"));
+        texStrm.add(getExternal("/resources/icons/icon_24x24.png"));
+        texStrm.add(getExternal("/resources/icons/icon_32x32.png"));
+        texStrm.add(getExternal("/resources/icons/icon_64x64.png"));
+        texStrm.add(getExternal("/resources/icons/icon_256x256.png"));
         
         List<Image> icons = texStrm.stream().map(in -> (Image) Texture.read(in).getImage()).toList();
         if (icons.stream().anyMatch(icon -> icon == null))

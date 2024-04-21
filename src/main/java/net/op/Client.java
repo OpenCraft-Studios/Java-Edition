@@ -9,6 +9,8 @@ import java.awt.DisplayMode;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
+import java.util.Calendar;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
@@ -25,7 +27,7 @@ public final class Client implements Runnable {
 
     public static final String NAME = "OpenCraft";
     public static final String VERSION = "24r08";
-    public static final String CODENAME = "CODENAME STYLEFML";
+    public static final String CODENAME = "Codename StyleFML";
     public static final String DISPLAY_NAME = NAME + ' ' + VERSION;
 
     public static final int NANOSECONDS = 1000000000;
@@ -159,7 +161,7 @@ public final class Client implements Runnable {
      */
     private void init() {
         if (running) {
-            System.err.println("(!) This message shouldn't be displayed!");
+            System.err.println("(!) This message should not be displayed!");
             return;
         }
 
@@ -168,11 +170,10 @@ public final class Client implements Runnable {
 
         // Create basics resources
         GUITilesheet.create("/gui.png");
-        OCFont.create("/resources/opencraft/fonts");
+        OCFont.create("/fonts");
 
         // Initialize loggers & Render System
         LoggerConfig.init();
-        InternalLogger.init();
         this.render.init();
 
         InputManager.bindKeyboard();
@@ -206,13 +207,6 @@ public final class Client implements Runnable {
     }
 
     /**
-     * The {@code start()} method runs the game thread so the game starts.
-     */
-    public void start() {
-        this.thread.start();
-    }
-
-    /**
      * This method is used to stop the game. Normally this is executed at the
      * end of the game, but you can still use it for stop it whenever you want.
      *
@@ -234,11 +228,19 @@ public final class Client implements Runnable {
         SoundManager.stopSounds();
         destroyDisplay();
 
+        InternalLogger.stopLogging();
+
         // Finish the thread
         try {
-            thread().stop();
-        } catch (Exception ex) {
-            System.exit(0);
+            // InternalLogger.writeFile();
+            thread.stop();
+        } catch (Exception e1) {
+            try {
+                thread.interrupt();
+            } catch (Exception e2) {
+                e2.printStackTrace();
+                System.exit(0);
+            }
         }
     }
 
@@ -276,7 +278,9 @@ public final class Client implements Runnable {
     /**
      * <b>Main method</b><br>
      * Is the principal method that guides the: initialization, running and the
-     * stop of the game.
+     * stop of the game. If you want to create your own OpenCraft launcher, we
+     * recommend delete this method and compile this game without it because you
+     * can guide the executing and monitoring of the game.
      */
     public static void main(String[] args) {
         // Starting game
@@ -292,20 +296,18 @@ public final class Client implements Runnable {
             logger.severe("The game has ended with errors");
         }
 
-        // TODO: Implement this, but only if the game is played by first time
-        /*
-         * // System.out.println(); //
-         * System.out.println(" ===== Thanks for playing OpenCraft ====="); //
-	 * System.out.println("     We wish you a hopeful experience"); //
-	 * System.out.println("  With this game and we are pushing our"); //
-	 * System.out.println("   Efforts to make you play this game."); //
-	 * System.out.println(); //
-	 * System.out.println("  If you want, you can share this game"); //
-	 * System.out.println(" =========== You're WELCOME!! ==========="); //
-	 * System.out.println("  - OpenCraft's Developer Team " +
-	 * Calendar.getInstance().get(Calendar.YEAR));
-         */
-        
+        // TODO: Implement this if the game is played by first time
+        System.out.println();
+        System.out.println(" ===== Thanks for playing OpenCraft =====");
+        System.out.println("     We wish you a hopeful experience");
+        System.out.println("  With this game and we are pushing our");
+        System.out.println("   Efforts to make you play this game.");
+        System.out.println();
+        System.out.println("  If you want, you can share this game");
+        System.out.println(" =========== You're welcome!! ===========");
+        System.out.println("   - OpenCraft's Developer Team "
+                + Calendar.getInstance().get(Calendar.YEAR));
+
         // Stops the game
         System.exit(status);
     }

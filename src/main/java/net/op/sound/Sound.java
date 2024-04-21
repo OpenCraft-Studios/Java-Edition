@@ -3,7 +3,6 @@ package net.op.sound;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 
-import net.op.Config;
 import net.op.util.Resource;
 import net.op.util.ResourceGetter;
 
@@ -55,7 +54,7 @@ public class Sound {
 
     public InputStream inputStream() {
         InputStream in;
-        in = ResourceGetter.getExternal("/resources/opencraft/sounds" + path);
+        in = ResourceGetter.getExternal("/resources/music" + path);
 
         return new BufferedInputStream(in);
     }

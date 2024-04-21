@@ -39,7 +39,7 @@ public class LoggerConfig {
     }
 
     public static String getLogDir() {
-        return Config.DIRECTORY + "/logs";
+        return Config.GAME_DIRECTORY + "/logs";
     }
 
     public static FileHandler logFile(String filepath) throws SecurityException, IOException {

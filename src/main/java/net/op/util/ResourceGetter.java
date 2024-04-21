@@ -3,6 +3,7 @@ package net.op.util;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import net.op.Config;
+import net.op.logging.InternalLogger;
 
 public class ResourceGetter {
 
@@ -23,14 +24,16 @@ public class ResourceGetter {
             return in;
         }
 
-        if (Config.DIRECTORY.isBlank() || Config.DIRECTORY.isEmpty()) {
+        if (Config.GAME_DIRECTORY.isBlank() || Config.GAME_DIRECTORY.isEmpty()) {
             path = path.substring(1);
         }
 
         try {
-            in = new FileInputStream(Config.DIRECTORY + path);
-        } catch (Exception ignored) {
-            // TODO Internal logger
+            in = new FileInputStream(Config.GAME_DIRECTORY + path);
+        } catch (Exception ex) {
+            InternalLogger.out.println(ResourceGetter.class.getName() + " ->");
+            ex.printStackTrace(InternalLogger.out);
+            InternalLogger.out.println();
         }
 
         return in;
