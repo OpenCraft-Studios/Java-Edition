@@ -24,9 +24,9 @@ public class LoggerConfig {
         System.setProperty("java.util.logging.SimpleFormatter.format", LOG_FORMAT);
 
         // Handle external loggers
-        handle(Client.logger, "/game.log");
-        handle(Render.logger, "/renderdragon.log");
-        handle(SoundManager.logger, "/soundmanager.log");
+        // handle(Client.logger, "/game.log");
+        // handle(Render.logger, "/renderdragon.log");
+        // handle(SoundManager.logger, "/soundmanager.log");
     }
 
     public static void handle(Logger logger, String filepath) {
