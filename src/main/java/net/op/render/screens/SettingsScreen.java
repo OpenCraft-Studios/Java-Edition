@@ -39,8 +39,8 @@ public class SettingsScreen extends Screen {
     public void render(Graphics g) {
         GUITilesheet gts = GUITilesheet.getInstance();
 
-        int width = getDrawSize().width;
-        int height = getDrawSize().height;
+        int width = getDisplayWidth();
+        int height = getDisplayHeight();
 
         OCFont font = OCFont.mojangles();
 
@@ -143,7 +143,7 @@ public class SettingsScreen extends Screen {
 
     private void drawLocalesTab(Graphics g) {
         // Draw buttons
-        final int width = getDrawSize().width;
+        final int width = getDisplayWidth();
         final String strLang = Config.LOCALE.getDisplayLanguage(Locale.ENGLISH);
 
         OCFont font = OCFont.mojangles();
