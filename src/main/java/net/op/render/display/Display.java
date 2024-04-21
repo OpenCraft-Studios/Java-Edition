@@ -1,9 +1,5 @@
 package net.op.render.display;
 
-import static org.josl.openic.IC10.IC_TRUE;
-import static org.josl.openic.IC15.icBindDevice;
-import static org.josl.openic.IC15.icGenDeviceId;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -14,10 +10,6 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
-import org.josl.openic.input.ComponentMouse;
-import org.josl.openic.input.Mouse;
-
-import net.java.games.input.Controller;
 import net.op.Client;
 import net.op.input.InputManager;
 import net.op.render.Render;

@@ -35,31 +35,31 @@ public class Loadscreen extends Screen {
 
     @Override
     public void render(Graphics g) {
-        animatedLS(g, true);
+        animatedLS((Graphics2D) g, true);
     }
 
-    public void animatedLS(Graphics g, boolean slideUp) {
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, Display.WIDTH, Display.HEIGHT);
+    public void animatedLS(Graphics2D g2d, boolean slideUp) {
+        g2d.setColor(Color.BLACK);
+        g2d.fillRect(0, 0, Display.WIDTH, Display.HEIGHT);
 
         // Draw OpenCraft Text
-        g.setColor(Color.MAGENTA);
-        g.setFont(OCFont.getSystemFont("SF Transrobotics").deriveFont(Font.BOLD, 26));
-        g.drawString(Client.CODENAME.toUpperCase(), (Display.WIDTH - 333) / 2, (Display.HEIGHT + 135) / 2);
+        g2d.setColor(Color.MAGENTA);
+        g2d.setFont(OCFont.getSystemFont("SF Transrobotics").deriveFont(Font.BOLD, 26));
+        g2d.drawString(Client.CODENAME.toUpperCase(), (Display.WIDTH - 333) / 2, (Display.HEIGHT + 135) / 2);
 
         // Draw OpenCraft Text
-        g.setColor(Color.RED);
-        g.setFont(g.getFont().deriveFont(Font.ITALIC, 70));
-        g.drawString("OpenCraft", (Display.WIDTH - 376) / 2, (int) i);
+        g2d.setColor(Color.RED);
+        g2d.setFont(g2d.getFont().deriveFont(Font.ITALIC, 70));
+        g2d.drawString("OpenCraft", (Display.WIDTH - 376) / 2, (int) i);
 
         // Draw Rectangle
-        g.setColor(Color.GREEN);
-        g.drawRoundRect((Display.WIDTH - 451) / 2, (Display.HEIGHT - 164) / 2, 421, 112, 15, 15);
+        g2d.setColor(Color.GREEN);
+        g2d.drawRoundRect((Display.WIDTH - 451) / 2, (Display.HEIGHT - 164) / 2, 421, 112, 15, 15);
 
         /* OpenCraft Text Slide Up */
         if (slideUp) {
             if (i <= I_MAX) {
-                attemptToChange(g);
+                attemptToChange(g2d);
             } else {
                 i -= 2;
             }
@@ -84,7 +84,7 @@ public class Loadscreen extends Screen {
 
             AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) alpha);
             ((Graphics2D) gbi).setComposite(ac);
-            animatedLS(gbi, false);
+            animatedLS((Graphics2D) gbi, false);
 
             g.drawImage(bi, 0, 0, null);
             return;

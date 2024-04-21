@@ -38,17 +38,27 @@ public final class Client implements Runnable {
 
     private Render render;
 
+    /**
+     * Creates a instance of the game. This method must be executed once. If you
+     * execute it more times, the game could crash or being completely unusable.
+     */
     private Client() {
         this.render = Render.create();
         this.thread = new Thread(this);
         this.thread.setName("gameThread");
     }
-    
+
+    /**
+     * This method just executes the game. The game will not finish until you
+     * have closed the game's main display or an exception has occurred.
+     */
     @Override
     public void run() {
         try {
+            // Initialize the game
             init();
         } catch (Exception e) {
+            /* If any exception has been throwed, create a crash dump and try to report it */
             JOptionPane.showMessageDialog(null, "Failed to initialize OpenCraft!", "Initialization Error",
                     JOptionPane.ERROR_MESSAGE);
 
@@ -58,18 +68,21 @@ public final class Client implements Runnable {
             crash.report();
         }
 
+        // Game status info
         logger.info(String.format("Selected language: %s", Locales.getDisplayName(Config.LOCALE)));
         logger.info(Client.DISPLAY_NAME + " started!");
 
+        /* The FPS Limiter */
+        // (I could use a Timer class or something but is so difficult, I prefer doing this into the run method)
         long lastUpdate = System.nanoTime();
 
         double timePassed;
         double delta = 0;
 
+        // This is the "exception counter", if this reach 5, this will stop the game.
         byte exceptionCounter = 0;
-
-        try {
-            do {
+        do {
+            try {
                 final long loopStart = System.nanoTime();
 
                 timePassed = loopStart - lastUpdate;
@@ -83,40 +96,42 @@ public final class Client implements Runnable {
 
                     delta--;
                 }
-            } while (running);
-        } catch (OutOfMemoryError error) {
-            /*
-			 * If any OutOfMemoryError occurs while the game is in execution we can catch it
-			 * and run the Java Garbage Collector.
-			 * 
-			 * But if "that" overflows 2 times the memory the program will exit for safety.
-			 * Because is better to prevent the game crashing by anything, but if it's
-			 * repetitive is better to stop.
-			 * 
-			 * TODO Implement that
-             */
-            System.gc();
-        } catch (ArithmeticException ignored) {
-            /*
-			 * ATTENTION: This exception ignoring is probably not the best option. But it is
-			 * not a very very important error so we just ignore it. It could be likely
-			 * dangerous but we like to take risks.
-             */
-        } catch (Exception any) {
-            /*
-			 * We have a variable called exceptionCounter that counts the exceptions that
-			 * the game has at the moment, if it reaches 5 it will print the stack trace and
-			 * exit the game.
-			 * 
-			 * This is that way because we don't want the game crash for anything, just for
-			 * important. And it's considered important if the error repeats by five.
-             */
-            if (exceptionCounter++ >= 5) {
-                any.printStackTrace();
-                System.exit(1);
-            }
-        }
 
+            } catch (OutOfMemoryError error) {
+                /*
+                 * If any OutOfMemoryError occurs while the game is in execution we can catch it
+                 * and run the Java Garbage Collector.
+                 * 
+                 * But if "that" overflows 2 times the memory the program will exit for safety.
+                 * Because is better to prevent the game crashing by anything, but if it's
+                 * repetitive is better to stop.
+                 * 
+                 * TODO Implement that
+                 */
+                System.gc();
+            } catch (ArithmeticException ignored) {
+                /*
+                 * ATTENTION: This exception ignoring is probably not the best option. But it is
+                 * not a very very important error so we just ignore it. It could be likely
+                 * dangerous but we like to take risks.
+                 */
+            } catch (Exception any) {
+                /*
+                 * We have a variable called "exceptionCounter" that counts the exceptions that
+                 * the game has at the moment, if it reaches 5 it will print the stack trace and
+                 * exit the game.
+                 * 
+                 * This is that way because we don't want the game crash for anything, just for
+                 * important. And it's considered important if the error repeats by five.
+                 */
+                if (exceptionCounter++ >= 5) {
+                    any.printStackTrace();
+                    System.exit(1);
+                }
+            }
+        } while (running);
+
+        // Finally stops the game
         stop();
     }
 
@@ -147,7 +162,7 @@ public final class Client implements Runnable {
             System.err.println("(!) This message shouldn't be displayed!");
             return;
         }
-        
+
         // Read config
         Config.read();
 
@@ -198,11 +213,17 @@ public final class Client implements Runnable {
     }
 
     /**
-     * This method is used to stop the game. It could be a little bit dangerous
-     * because of some deprecated methods but it still the default.
+     * This method is used to stop the game. Normally this is executed at the
+     * end of the game, but you can still use it for stop it whenever you want.
+     *
+     * @param force This is used for stopping the game suddenly
      */
     @SuppressWarnings("deprecation")
-    public void stop() {
+    public void stop(boolean force) {
+        if (force) {
+            System.exit(0);
+        }
+
         // Stop
         this.running = false;
 
@@ -222,7 +243,18 @@ public final class Client implements Runnable {
     }
 
     /**
+     * This method is effectively the same as {@code stop(boolean force)} but it
+     * takes as default argument 'force' for value 'false': So the game ends
+     * correctly and it saves everything.
+     */
+    public void stop() {
+        this.stop(false);
+    }
+
+    /**
      * This method checks if the game is currently running.
+     *
+     * @return the game status
      */
     public boolean isRunning() {
         return this.running;
@@ -235,7 +267,7 @@ public final class Client implements Runnable {
      * The client is a <i>singleton</i> because is more easy to have a
      * non-static client and access it by a static method.
      *
-     * @return The client
+     * @return The current client instance
      */
     public static Client getClient() {
         return Client.instance;
@@ -262,20 +294,20 @@ public final class Client implements Runnable {
 
         // TODO: Implement this, but only if the game is played by first time
         /*
-		 * // System.out.println(); //
-		 * System.out.println(" ===== Thanks for playing OpenCraft ====="); //
-		 * System.out.println("     We wish you a hopeful experience"); //
-		 * System.out.println("  With this game and we are pushing our"); //
-		 * System.out.println("   Efforts to make you play this game."); //
-		 * System.out.println(); //
-		 * System.out.println("  If you want, you can share this game"); //
-		 * System.out.println(" =========== You're WELCOME!! ==========="); //
-		 * System.out.println("  - OpenCraft's Developer Team " +
-		 * Calendar.getInstance().get(Calendar.YEAR));
+         * // System.out.println(); //
+         * System.out.println(" ===== Thanks for playing OpenCraft ====="); //
+	 * System.out.println("     We wish you a hopeful experience"); //
+	 * System.out.println("  With this game and we are pushing our"); //
+	 * System.out.println("   Efforts to make you play this game."); //
+	 * System.out.println(); //
+	 * System.out.println("  If you want, you can share this game"); //
+	 * System.out.println(" =========== You're WELCOME!! ==========="); //
+	 * System.out.println("  - OpenCraft's Developer Team " +
+	 * Calendar.getInstance().get(Calendar.YEAR));
          */
+        
         // Stops the game
         System.exit(status);
-
     }
 
 }

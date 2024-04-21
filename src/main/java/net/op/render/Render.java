@@ -14,17 +14,17 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import net.op.Client;
 import net.op.Config;
-import net.op.render.display.Display;
 import net.op.render.screens.Screen;
 
 /**
- * <h1>Render</h1> This class is used to draw into the display.
- *
- * @see Display
+ * <h1>Render</h1><br>
+ * This class is used for manage drawing process and screen control. It can also
+ * determine the best fps configuration and guide the OpenGL usage.
  */
 public final class Render extends Canvas {
 
@@ -39,21 +39,34 @@ public final class Render extends Canvas {
     private static final boolean OPEN_GL;
 
     static {
-        if (System.getProperty("sun.java2d.opengl") != null) {
-            OPEN_GL = System.getProperty("sun.java2d.opengl").equalsIgnoreCase("true");
-        } else {
-            OPEN_GL = false;
-        }
+        // Checks if OpenGL-Based Pipeline is enabled
+        OPEN_GL = Optional
+                .ofNullable(System.getProperty("sun.java2d.opengl"))
+                .orElse("false")
+                .equalsIgnoreCase("true");
     }
 
+    /**
+     * Creates a new instance of this class.
+     */
     private Render() {
         setBackground(Color.BLACK);
     }
 
+    /**
+     * Creates a new instance of this class.
+     */
     public static Render create() {
         return new Render();
     }
 
+    /**
+     * Returns the preferred color model by your device. This possibly decrease
+     * the CPU using.
+     *
+     * @param image The original image
+     * @return The optimized image
+     */
     public static BufferedImage toCompatibleImage(final BufferedImage image) {
         if (image.getColorModel().equals(GFX_CONFIG.getColorModel())) {
             return image;
@@ -74,8 +87,11 @@ public final class Render extends Canvas {
         // Configure display
         createDisplay();
         showDisplay();
+
+        // Set this object as the default drawing context
         setDisplayGraphics(this);
 
+        // Show render details
         logger.info("Render system initialized!");
         logger.info("[OpenGL] Using OpenGL: %s".formatted(OPEN_GL ? "Yes" : "No"));
 
@@ -86,14 +102,21 @@ public final class Render extends Canvas {
             logger.warning(ex.getMessage());
         }
 
+        // Show FPS Rate
         logger.info("FPS Rate: %d".formatted(Config.FPS_CAP));
     }
 
+    /**
+     * Updates the display and renders the game.
+     */
     public void update() {
         render();
         updateDisplay();
     }
 
+    /**
+     * Renders the game.
+     */
     public void render() {
         BufferStrategy bs = getBufferStrategy();
         if (bs == null) {
@@ -109,6 +132,9 @@ public final class Render extends Canvas {
 
     }
 
+    /**
+     * @return true if you should renderize the game, otherwise false.
+     */
     public boolean shouldRender() {
         return getDisplay().isShowing() && !getDisplay().isMinimized();
     }
