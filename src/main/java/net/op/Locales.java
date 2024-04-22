@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.op.logging.InternalLogger;
@@ -70,22 +71,19 @@ public class Locales {
     }
 
     private static String get(String[] snippets, int i, String key) {
-        String result = "???";
-
+        Optional<String> translation = Optional.empty();
+        String rawTranslation;
+        
         try {
-            result = snippets[i].trim();
+            rawTranslation = snippets[i];
 
-            if (result == null) {
-                result = "???";
-            }
-
-            if (result.isBlank() || result.isEmpty()) {
-                result = "???";
+            if (!(rawTranslation.isBlank() || rawTranslation.isEmpty())) {
+                translation = Optional.of(rawTranslation);
             }
         } catch (Exception ignored) {
         }
 
-        return result;
+        return translation.orElse("???");
     }
 
     public static String translate(String property, Locale language) {

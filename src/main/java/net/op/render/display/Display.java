@@ -48,7 +48,7 @@ public final class Display extends JFrame {
         texStrm.add(getExternal("/resources/icons/icon_16x16.png"));
         texStrm.add(getExternal("/resources/icons/icon_24x24.png"));
         texStrm.add(getExternal("/resources/icons/icon_32x32.png"));
-        texStrm.add(getExternal("/resources/icons/icon_64x64.png"));
+        texStrm.add(getExternal("/resources/icons/icon_48x48.png"));
         texStrm.add(getExternal("/resources/icons/icon_256x256.png"));
         
         List<Image> icons = texStrm.stream().map(in -> (Image) Texture.read(in).getImage()).toList();

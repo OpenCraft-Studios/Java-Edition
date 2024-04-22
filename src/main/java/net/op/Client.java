@@ -211,11 +211,13 @@ public final class Client implements Runnable {
      *
      * @param force This is used for stopping the game suddenly
      */
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("removal")
     public void stop(boolean force) {
         if (force) {
             System.exit(0);
         }
+        
+        System.out.println(InternalLogger.getOutputData());
 
         // Stop
         this.running = false;

@@ -68,7 +68,12 @@ public class SettingsScreen extends Screen {
         g.drawImage(gts.getButton(ofcpage ? BUTTON_HIGHLIGHTED : BUTTON), 30, height - 90, 257, 40, null);
 
         font.drawShadow(g, translate("gui.Done"), (width - 175) / 2 + 62, height - 66, donesel ? 0xFFFFA0 : 0xFFFFFF);
-        font.drawShadow(g, translate("gui.gotoOfcPage"), 45, height - 66, ofcpage ? 0xFFFFA0 : 0xFFFFFF);
+        
+        String strGotoOfcPage = translate("gui.gotoOfcPage");
+        if (strGotoOfcPage.length() >= 24)
+            strGotoOfcPage = strGotoOfcPage.substring(0, 21) + "...";
+        
+        font.drawShadow(g, strGotoOfcPage, 45, height - 66, ofcpage ? 0xFFFFA0 : 0xFFFFFF);
 
         boolean arrow1 = MouseUtils.inRange((width - 400) / 2 + 100, 20, 21, 33);
         boolean arrow0 = MouseUtils.inRange((width - 400) / 2 + 273, 20, 21, 33);
@@ -98,7 +103,10 @@ public class SettingsScreen extends Screen {
             try {
                 Desktop.getDesktop().browse(new URI("https://opencraftmc.github.io"));
                 Thread.sleep(150);
-            } catch (Exception ignored) {
+            } catch (Exception ex) {
+                InternalLogger.out.println(SettingsScreen.class.getName() + " ->");
+                ex.printStackTrace(InternalLogger.out);
+                InternalLogger.out.println();
             }
         });
 

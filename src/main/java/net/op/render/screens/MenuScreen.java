@@ -23,7 +23,7 @@ import net.op.util.Resource;
 public class MenuScreen extends Screen {
 
     public static final Resource RESOURCE = Resource.format("opencraft:screens.menuscreen");
-    private static final MenuScreen instance = MenuScreen.create();
+    private static MenuScreen instance = null;
 
     private MenuScreen() {
         super(MenuScreen.RESOURCE);
@@ -120,7 +120,15 @@ public class MenuScreen extends Screen {
     }
 
     public static MenuScreen getInstance() {
+        if (instance == null) {
+            return instance = create();
+        }
+
         return instance;
+    }
+
+    public static void destroy() {
+        instance = null;
     }
 
 }
