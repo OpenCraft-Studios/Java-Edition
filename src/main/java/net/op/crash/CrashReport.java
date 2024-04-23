@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Optional;
 
-import net.op.logging.LoggerConfig;
+import net.op.LoggerConfig;
 
 public class CrashReport {
 

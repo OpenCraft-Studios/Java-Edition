@@ -3,7 +3,7 @@ package net.op.util;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import net.op.Config;
-import net.op.logging.InternalLogger;
+import net.op.InternalLogger;
 
 public class ResourceGetter {
 

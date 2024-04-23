@@ -8,8 +8,8 @@ import java.util.stream.Stream;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import net.op.Config;
-import net.op.logging.InternalLogger;
+
+import net.op.InternalLogger;
 
 public class SoundManager {
 

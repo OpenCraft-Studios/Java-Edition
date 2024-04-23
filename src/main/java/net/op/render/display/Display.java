@@ -1,5 +1,7 @@
 package net.op.render.display;
 
+import static net.op.util.ResourceGetter.getExternal;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -14,8 +16,6 @@ import net.op.Client;
 import net.op.input.InputManager;
 import net.op.render.Render;
 import net.op.render.textures.Texture;
-import static net.op.util.ResourceGetter.getExternal;
-import static net.op.util.ResourceGetter.getInternal;
 
 public final class Display extends JFrame {
 

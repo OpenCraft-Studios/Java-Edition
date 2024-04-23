@@ -9,7 +9,8 @@ import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.io.IOException;
 import java.io.InputStream;
-import net.op.logging.InternalLogger;
+
+import net.op.InternalLogger;
 
 public class OCFont {
 

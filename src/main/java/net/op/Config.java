@@ -1,12 +1,13 @@
 package net.op;
 
+import static net.op.Client.logger;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.Locale;
 import java.util.Properties;
-import static net.op.Client.logger;
-import net.op.logging.InternalLogger;
+
+import net.op.language.Locales;
 
 /**
  * <h1>Config</h1>
@@ -15,11 +16,6 @@ import net.op.logging.InternalLogger;
  * file.
  */
 public class Config {
-
-    /**
-     * The game's language
-     */
-    public static Locale LOCALE = Locale.ENGLISH;
 
     /**
      * The game's directory
@@ -40,7 +36,7 @@ public class Config {
         Properties properties = new Properties();
 
         properties.setProperty("gameDir", GAME_DIRECTORY);
-        properties.setProperty("lang", LOCALE.toLanguageTag());
+        properties.setProperty("lang", Locales.getLocale().toLanguageTag());
 
         return properties;
     }
@@ -52,7 +48,7 @@ public class Config {
      */
     public static void read(Properties properties) {
         GAME_DIRECTORY = properties.getProperty("gameDir");
-        LOCALE = Locales.get(properties.getProperty("lang"));
+        Locales.setLocale(Locales.of(properties.getProperty("lang")));
     }
 
     /**
@@ -88,23 +84,6 @@ public class Config {
             ex.printStackTrace(InternalLogger.out);
             InternalLogger.out.println();
         }
-    }
-
-    /**
-     * This method sets the language of the game to a defined one.
-     */
-    public static void setLocale(Locale locale) {
-        Config.LOCALE = locale;
-    }
-
-    /**
-     * The {@code getLanguage()} method is used to get the current language used
-     * by the game.
-     *
-     * @return Game's language
-     */
-    public static Locale getLocale() {
-        return Config.LOCALE;
     }
 
     /**

@@ -1,4 +1,4 @@
-package net.op.logging;
+package net.op;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,11 +6,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import net.op.Client;
-import net.op.Config;
 import net.op.crash.CrashReport;
-import net.op.render.Render;
-import net.op.sound.SoundManager;
 
 public class LoggerConfig {
 
