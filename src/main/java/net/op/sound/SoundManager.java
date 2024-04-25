@@ -40,7 +40,7 @@ public class SoundManager {
     }
 
     public static void update() {
-        if (!ENABLED || player != null) {
+        if (!ENABLED || player == null) {
             stopSounds();
             return;
         }
