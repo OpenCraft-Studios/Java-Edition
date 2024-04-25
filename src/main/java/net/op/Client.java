@@ -200,6 +200,7 @@ public final class Client implements Runnable {
 		fpsRate = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode()
 				.getRefreshRate();
 
+		
 		if (fpsRate != DisplayMode.REFRESH_RATE_UNKNOWN) {
 			Config.FPS_CAP = fpsRate;
 		} else {
