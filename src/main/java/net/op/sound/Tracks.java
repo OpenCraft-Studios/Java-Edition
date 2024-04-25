@@ -13,13 +13,13 @@ public class Tracks {
         menu_sounds.add(Sound.of()
                 .name("Menu 2")
                 .resource("opencraft.sound:menu_2")
-                .path("/menu2.wav")
+                .path("/newmusic/menu2.ogg")
                 .build());
 
         menu_sounds.add(Sound.of()
                 .name("Menu 3")
                 .resource("opencraft.sound:menu_3")
-                .path("/menu3.wav")
+                .path("/newmusic/menu3.ogg")
                 .build());
 
         menu = new Track("Menu Sounds", menu_sounds);
