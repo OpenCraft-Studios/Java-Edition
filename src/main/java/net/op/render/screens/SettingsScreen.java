@@ -126,7 +126,7 @@ public class SettingsScreen extends Screen {
 		font.size(20);
 		font.color(musicBtn ? 0xFFFFA0 : 0xFFFFFF);
 		font.drawShadow(g, Locales.CURRENT[OPTIONS_MUSIC] + ": "
-				+ Locales.CURRENT[SoundManager.ENABLED ? OPTIONS_ON : OPTIONS_OFF], 45, 105);
+				+ Locales.CURRENT[SoundManager.MUSIC ? OPTIONS_ON : OPTIONS_OFF], 45, 105);
 
 		font.color(optmBtn ? 0xFFFFA0 : 0xFFFFFF);
 		font.drawShadow(g, Locales.CURRENT[OPTIONS_OPTIMIZE], 275, 105);
@@ -134,7 +134,7 @@ public class SettingsScreen extends Screen {
 		font.color(Color.WHITE);
 
 		check(1, musicBtn, () -> {
-			SoundManager.ENABLED = !SoundManager.ENABLED;
+			SoundManager.MUSIC = !SoundManager.MUSIC;
 			try {
 				Thread.sleep(90);
 			} catch (Exception ex) {

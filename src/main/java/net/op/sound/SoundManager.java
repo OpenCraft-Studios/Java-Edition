@@ -5,92 +5,82 @@ import java.util.Random;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
-import net.op.InternalLogger;
-
 public class SoundManager {
 
-	private static final Clip player;
 	public static final Logger logger = Logger.getLogger(SoundManager.class.getName());
-	public static boolean ENABLED = false;
+	public static final int TIMEOUT = 10;
 
-	static {
-		// Create clip instance
-		Clip clip = null;
-		try {
-			clip = AudioSystem.getClip();
-		} catch (Exception ex) {
-			InternalLogger.out.println(SoundManager.class.getName() + " ->");
-			ex.printStackTrace(InternalLogger.out);
-			InternalLogger.out.println();
-
-			clip = null;
-			ENABLED = false;
-		}
-
-		player = clip;
-		logger.info("Sound manager started!");
-		logger.info("[SoundAPI] Sound API status: %s".formatted(ENABLED ? "Active" : "Passive"));
-	}
-
+	public static boolean MUSIC = false;
+	private static Thread currentSoundThread = null;
+	
 	private SoundManager() {
 	}
 
+	public void init() {
+		logger.info("Sound manager started!");
+		logger.info("[SoundAPI] Sound API status: %s".formatted(MUSIC ? "Active" : "Passive"));
+	}
+
 	public static void update() {
-		if (!ENABLED) {
-			stopSounds();
+		if (!MUSIC)
 			return;
+		
+		if (currentSoundThread != null) {
+			if (currentSoundThread.isAlive())
+				return;
 		}
 
-		if (player.isActive() || player == null)
-			return;
-
-		int r = (int) (System.currentTimeMillis() / 1000 % 10);
+		int r = (int) (System.currentTimeMillis() / 1000 % TIMEOUT);
 		if (r == 0) {
 			Stream<Sound> sounds = Tracks.get("Menu Sounds").getSounds().filter(sound -> !sound.isSynthwave());
 			List<Sound> soundList = sounds.toList();
 			int index = new Random().nextInt(soundList.size());
-			playSound(soundList.get(index), false);
+			playSound(soundList.get(index));
 		}
 
 	}
 
-	public static void playSound(Sound sound, boolean loop) {
-		if (player == null || sound == null) {
-			return;
-		}
-
+	private static boolean mt_PlaySound(Sound sound) {
 		try {
-			AudioInputStream audioStream = AudioSystem.getAudioInputStream(sound.inputStream());
-			player.open(audioStream);
-			player.loop(loop ? Clip.LOOP_CONTINUOUSLY : 0);
-		} catch (Exception ex) {
-			InternalLogger.out.println(SoundManager.class.getName() + " ->");
-			ex.printStackTrace(InternalLogger.out);
-			InternalLogger.out.println();
+			Runnable soundRunnable = () -> {
+				try {
+					SoundPlayer.play(sound.inputStream());
+				} catch (Exception ignored) {
+				}
+			};
+			currentSoundThread = new Thread(soundRunnable);
+			currentSoundThread.start();
+		} catch (Exception ignored) {
+			return false;
 		}
+
+		return true;
 	}
 
-	public static void stopSounds() {
-		try (player) {
-			player.loop(0);
-			player.stop();
+	public static boolean playSound(Sound sound, boolean multithreading) {
+		if (multithreading)
+			return mt_PlaySound(sound);
+
+		boolean state = true;
+		try {
+			state = SoundPlayer.play(sound.inputStream());
+		} catch (Exception ignored) {
+			state = false;
 		}
+
+		return state;
+	}
+	
+	public static boolean playSound(Sound sound) {
+		return playSound(sound, true);
 	}
 
 	public static void enable() {
-		ENABLED = true;
+		MUSIC = true;
 	}
 
 	public static void disable() {
-		ENABLED = false;
-	}
-
-	public static boolean isSupported() {
-		return ENABLED;
+		MUSIC = false;
 	}
 
 }

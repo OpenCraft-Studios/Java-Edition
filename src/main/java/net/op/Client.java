@@ -232,10 +232,10 @@ public final class Client implements Runnable {
 		// Save settings
 		Config.save();
 
-		// Stop all sounds and delete display
-		SoundManager.stopSounds();
+		// Destroy display
 		destroyDisplay();
 
+		// Stop logging and collect traces
 		InternalLogger.stopLogging();
 
 		// Finish the thread
