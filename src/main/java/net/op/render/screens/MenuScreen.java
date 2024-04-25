@@ -54,9 +54,14 @@ public class MenuScreen extends Screen {
 		}
 
 		boolean quitsel, setsel;
-		quitsel = MouseUtils.inRange(width / 2, height / 2 - 4, 200, 40);
-		setsel = MouseUtils.inRange((width - 400) / 2, height / 2 - 4, 198, 40);
-
+		quitsel = false;
+		setsel = false;
+		
+		if (getCurrent().equals(MenuScreen.getInstance())) {
+			quitsel = MouseUtils.inRange(width / 2, height / 2 - 4, 200, 40);
+			setsel = MouseUtils.inRange((width - 400) / 2, height / 2 - 4, 198, 40);
+		}
+		
 		// Draw buttons
 		g.drawImage(gts.getButton(BUTTON_DISABLED), (width - 400) / 2, height / 2 - 50, 400, 40, null);
 		g.drawImage(gts.getButton(setsel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 400) / 2, height / 2 - 4, 198, 40,
