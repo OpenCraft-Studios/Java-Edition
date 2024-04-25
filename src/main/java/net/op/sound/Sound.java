@@ -17,17 +17,15 @@ public class Sound {
 	private final Resource resource;
 	private final String name;
 	private final String path;
-	private final boolean synthwave;
 
-	public Sound(Resource resource, String name, String path, boolean synthwave) {
+	public Sound(Resource resource, String name, String path) {
 		this.resource = resource;
 		this.name = name;
 		this.path = path;
-		this.synthwave = synthwave;
 	}
 
-	public Sound(String resource, String name, String path, boolean synthwave) {
-		this(Resource.format(resource), name, path, synthwave);
+	public Sound(String resource, String name, String path) {
+		this(Resource.format(resource), name, path);
 	}
 
 	public static Sound.Builder of() {
@@ -46,10 +44,6 @@ public class Sound {
 		return path;
 	}
 
-	public boolean isSynthwave() {
-		return synthwave;
-	}
-
 	public void play() {
 		SoundManager.playSound(this);
 	}
@@ -66,7 +60,6 @@ public class Sound {
 		private Resource res = null;
 		private String name = null;
 		private String path = null;
-		private boolean synthwave = false;
 
 		public Builder resource(Resource res) {
 			this.res = res;
@@ -88,17 +81,12 @@ public class Sound {
 			return this;
 		}
 
-		public Builder synthwave(boolean synthwave) {
-			this.synthwave = synthwave;
-			return this;
-		}
-
 		public Sound build() {
 			if (res == null || name == null || path == null) {
 				throw new IllegalArgumentException("res or name or path can't be null!");
 			}
 
-			return new Sound(res, name, path, synthwave);
+			return new Sound(res, name, path);
 		}
 
 	}

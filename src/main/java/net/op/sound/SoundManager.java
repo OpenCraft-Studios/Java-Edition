@@ -3,7 +3,6 @@ package net.op.sound;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 public class SoundManager {
 
@@ -32,10 +31,9 @@ public class SoundManager {
 
 		int r = (int) (System.currentTimeMillis() / 1000 % TIMEOUT);
 		if (r == 0) {
-			Stream<Sound> sounds = Tracks.get("Menu Sounds").getSounds().filter(sound -> !sound.isSynthwave());
-			List<Sound> soundList = sounds.toList();
-			int index = new Random().nextInt(soundList.size());
-			playSound(soundList.get(index));
+			List<Sound> sounds = Tracks.get("Menu Sounds").getSounds().toList();
+			int index = new Random().nextInt(sounds.size());
+			playSound(sounds.get(index));
 		}
 
 	}

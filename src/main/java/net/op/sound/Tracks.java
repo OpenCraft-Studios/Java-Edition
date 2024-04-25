@@ -14,14 +14,12 @@ public class Tracks {
                 .name("Menu 2")
                 .resource("opencraft.sound:menu_2")
                 .path("/menu2.wav")
-                .synthwave(false)
                 .build());
 
         menu_sounds.add(Sound.of()
                 .name("Menu 3")
                 .resource("opencraft.sound:menu_3")
                 .path("/menu3.wav")
-                .synthwave(false)
                 .build());
 
         menu = new Track("Menu Sounds", menu_sounds);
