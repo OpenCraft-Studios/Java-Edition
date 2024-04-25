@@ -50,14 +50,14 @@ public class Loadscreen extends Screen {
 		g2d.drawString("CODENAME %s".formatted(Client.CODENAME.toUpperCase()), (Display.WIDTH - 333) / 2,
 				(Display.HEIGHT + 135) / 2);
 
+		// Draw Rectangle
+		g2d.setColor(Color.GREEN);
+		g2d.drawRoundRect((Display.WIDTH - 451) / 2, (Display.HEIGHT - 164) / 2, 421, 112, 15, 15);
+
 		// Draw OpenCraft Text
 		g2d.setColor(Color.RED);
 		g2d.setFont(g2d.getFont().deriveFont(Font.ITALIC, 70));
 		g2d.drawString("OpenCraft", (Display.WIDTH - 376) / 2, (int) i);
-
-		// Draw Rectangle
-		g2d.setColor(Color.GREEN);
-		g2d.drawRoundRect((Display.WIDTH - 451) / 2, (Display.HEIGHT - 164) / 2, 421, 112, 15, 15);
 
 		/* OpenCraft Text Slide Up */
 		if (slideUp) {
