@@ -15,7 +15,7 @@ public class SoundManager {
 	private SoundManager() {
 	}
 
-	public void init() {
+	public static void init() {
 		logger.info("Sound manager started!");
 		logger.info("[SoundAPI] Sound API status: %s".formatted(MUSIC ? "Active" : "Passive"));
 	}

@@ -50,7 +50,7 @@ public class Sound {
 
 	public AudioInputStream inputStream() throws UnsupportedAudioFileException, IOException {
 		InputStream in;
-		in = ResourceGetter.getExternal("/resources/music" + path);
+		in = ResourceGetter.getExternal("/resources" + path);
 
 		return getAudioInputStream(new BufferedInputStream(in));
 	}

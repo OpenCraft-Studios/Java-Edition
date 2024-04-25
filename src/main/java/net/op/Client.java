@@ -177,8 +177,11 @@ public final class Client implements Runnable {
 		GUITilesheet.create("/gui.png");
 		OCFont.create("/fonts");
 
-		// Initialize loggers & Render System
+		// Initialize loggers
 		LoggerConfig.init();
+		
+		// Initialize sound and render
+		SoundManager.init();
 		this.render.init();
 
 		InputManager.bindKeyboard();
