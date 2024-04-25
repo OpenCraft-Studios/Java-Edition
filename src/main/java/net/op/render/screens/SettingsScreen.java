@@ -15,7 +15,6 @@ import java.util.Locale;
 import net.op.InternalLogger;
 import net.op.input.MouseUtils;
 import net.op.language.Locales;
-import net.op.performance.Perfine;
 import net.op.render.textures.GUITilesheet;
 import net.op.sound.SoundManager;
 import net.op.util.OCFont;
@@ -146,7 +145,7 @@ public class SettingsScreen extends Screen {
 		});
 
 		check(1, optmBtn, () -> {
-			Perfine.optimizeGame();
+			System.gc();
 			try {
 				Thread.sleep(500);
 			} catch (Exception ignored) {
