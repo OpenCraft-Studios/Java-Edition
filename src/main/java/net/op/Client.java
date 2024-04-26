@@ -20,6 +20,7 @@ import net.op.language.LocalesLoader;
 import net.op.render.Render;
 import net.op.render.textures.GUITilesheet;
 import net.op.sound.SoundManager;
+import net.op.spectoland.SpectoError;
 import net.op.util.OCFont;
 
 public final class Client implements Runnable {
@@ -83,8 +84,6 @@ public final class Client implements Runnable {
 		double timePassed;
 		double delta = 0;
 
-		// This is the "exception counter", if this reach 5, this will stop the game.
-		byte exceptionCounter = 0;
 		do {
 			try {
 				final long loopStart = System.nanoTime();
@@ -101,37 +100,8 @@ public final class Client implements Runnable {
 					delta--;
 				}
 
-			} catch (OutOfMemoryError error) {
-				/*
-				 * If any OutOfMemoryError occurs while the game is in execution we can catch it
-				 * and run the Java Garbage Collector.
-				 * 
-				 * But if "that" overflows 2 times the memory the program will exit for safety.
-				 * Because is better to prevent the game crashing by anything, but if it's
-				 * repetitive is better to stop.
-				 * 
-				 * TODO Implement that
-				 */
-				System.gc();
-			} catch (ArithmeticException ignored) {
-				/*
-				 * ATTENTION: This exception ignoring is probably not the best option. But it is
-				 * not a very very important error so we just ignore it. It could be likely
-				 * dangerous but we like to take risks.
-				 */
-			} catch (Exception any) {
-				/*
-				 * We have a variable called "exceptionCounter" that counts the exceptions that
-				 * the game has at the moment, if it reaches 5 it will print the stack trace and
-				 * exit the game.
-				 * 
-				 * This is that way because we don't want the game crash for anything, just for
-				 * important. And it's considered important if the error repeats by five.
-				 */
-				if (exceptionCounter++ >= 5) {
-					any.printStackTrace();
-					System.exit(1);
-				}
+			} catch (Throwable tb) {
+				SpectoError.process(tb);
 			}
 		} while (running);
 
