@@ -1,64 +1,70 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>net.op</groupId>
-    <artifactId>OpenCraft</artifactId>
-    <version>XXrXX</version>
-    <name>OpenCraft</name>
-    <description>A very similar copy of Minecraft</description>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-                <configuration>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.3.1</version>
-                <configuration>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    
-    <dependencies>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.op</groupId>
+	<artifactId>OpenCraft</artifactId>
+	<version>XXrXX</version>
+	<name>OpenCraft</name>
+	<description>A very similar copy of Minecraft</description>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.11.0</version>
+				<configuration>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.3.1</version>
+				<configuration>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
-        <dependency>
-            <groupId>net.java.jinput</groupId>
-            <artifactId>jinput</artifactId>
-            <version>2.0.10</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.josl.openic</groupId>
-            <artifactId>openic</artifactId>
-            <version>1.1</version>
-        </dependency>
-        
-        <dependency>
+	<dependencies>
+
+		<dependency>
+			<groupId>net.java.jinput</groupId>
+			<artifactId>jinput</artifactId>
+			<version>2.0.10</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.josl.openic</groupId>
+			<artifactId>openic</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.guppy4j</groupId>
 			<artifactId>sound-impl</artifactId>
 			<version>0.0.3</version>
 		</dependency>
-        
-    </dependencies>
-    
-    <repositories>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/CiroZDP/OpenIC</url>
-        </repository>
-    </repositories>
-    
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>17</maven.compiler.release>
-    </properties>
+
+		<dependency>
+			<groupId>net.sf.jopt-simple</groupId>
+			<artifactId>jopt-simple</artifactId>
+			<version>5.0.4</version>
+		</dependency>
+
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>github</id>
+			<url>https://maven.pkg.github.com/CiroZDP/OpenIC</url>
+		</repository>
+	</repositories>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.release>17</maven.compiler.release>
+	</properties>
 </project>
