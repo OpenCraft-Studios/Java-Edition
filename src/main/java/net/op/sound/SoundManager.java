@@ -35,13 +35,17 @@ public class SoundManager {
 
 		int r = (int) (System.currentTimeMillis() / 1000 % TIMEOUT);
 		if (r == 0) {
-			List<Sound> sounds = Tracks.get("Menu Sounds").getSounds().toList();
-			int index = new Random().nextInt(sounds.size());
-			playSound(sounds.get(index));
+			playRandomSound();
 		}
 
 	}
 
+	public static void playRandomSound() {
+		List<Sound> sounds = Tracks.get("Menu Sounds").getSounds().toList();
+		int index = new Random().nextInt(sounds.size());
+		playSound(sounds.get(index));
+	}
+	
 	@SuppressWarnings("deprecation")
 	public static void stopSounds() {
 		if (currentSoundThread == null)
@@ -96,10 +100,12 @@ public class SoundManager {
 
 	public static void enable() {
 		MUSIC = true;
+		SoundManager.playRandomSound();
 	}
 
-	public static void disable() {
+	public static void shutdown() {
 		MUSIC = false;
+		SoundManager.stopSounds();
 	}
 
 }
