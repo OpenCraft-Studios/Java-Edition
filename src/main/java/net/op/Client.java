@@ -13,6 +13,9 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
 import net.op.crash.CrashReport;
 import net.op.input.InputManager;
 import net.op.language.Locales;
@@ -193,7 +196,7 @@ public final class Client implements Runnable {
 	 */
 	@SuppressWarnings("deprecation")
 	public void stop(boolean force) {
-		if (force) {
+		if (force || !running) {
 			System.exit(0);
 		}
 
@@ -265,6 +268,15 @@ public final class Client implements Runnable {
 	 * executing and monitoring of the game.
 	 */
 	public static void main(String[] args) {
+		// Parse arguments
+		OptionParser parser = new OptionParser();
+		OptionSpec<?> legacyFlag = parser.accepts("legacy");
+		OptionSpec<?> gameDirArgument = parser.accepts("gameDir").withRequiredArg().required();
+		
+		OptionSet argSet = parser.parse(args);
+		Config.LEGACY = argSet.has(legacyFlag);
+		Config.GAME_DIRECTORY = (String) argSet.valueOf(gameDirArgument);
+		
 		// Starting game
 		Client game = Client.getClient();
 		Thread gameThread = game.thread();
