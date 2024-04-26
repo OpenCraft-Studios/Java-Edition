@@ -1,5 +1,3 @@
-#Game Settings
-#Fri Apr 26 20:38:47 CEST 2024
-music=false
-language=en-US
-gameDir=opcraft
+music:true
+language:es-AR
+gameDir:opcraft
