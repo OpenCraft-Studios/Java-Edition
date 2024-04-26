@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 public class SoundManager {
 
 	public static final Logger logger = Logger.getLogger(SoundManager.class.getName());
-	public static final int TIMEOUT = 10;
+	public static final int TIMEOUT = 12;
 
 	public static boolean MUSIC = false;
 	private static Thread currentSoundThread = null;
