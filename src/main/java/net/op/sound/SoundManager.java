@@ -24,7 +24,7 @@ public class SoundManager {
 		if (!MUSIC) {
 			if (currentSoundThread != null)
 				stopSounds();
-			
+
 			return;
 		}
 
@@ -45,12 +45,12 @@ public class SoundManager {
 		int index = new Random().nextInt(sounds.size());
 		playSound(sounds.get(index));
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public static void stopSounds() {
 		if (currentSoundThread == null)
 			return;
-		
+
 		if (!currentSoundThread.isAlive()) {
 			currentSoundThread = null;
 			return;
@@ -64,7 +64,7 @@ public class SoundManager {
 			} catch (Exception ignored2) {
 			}
 		}
-		
+
 		currentSoundThread = null;
 	}
 
@@ -111,6 +111,17 @@ public class SoundManager {
 	public static void shutdown() {
 		MUSIC = false;
 		SoundManager.stopSounds();
+	}
+
+	public static double getVolume() {
+		return MUSIC ? 1.0 : 0.0;
+	}
+
+	public static void toggle() {
+		if (MUSIC)
+			shutdown();
+		else
+			enable();
 	}
 
 }
