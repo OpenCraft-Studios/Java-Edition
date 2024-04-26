@@ -58,7 +58,7 @@ public class CrashReport {
 	 */
 	public void save(File file) {
 		try {
-			System.out.println(file.getAbsolutePath());
+			System.err.println("[CRASH_INFO]: Saved report file to: " + file.getAbsolutePath());
 			if (!file.exists())
 				file.createNewFile();
 
