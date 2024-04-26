@@ -119,36 +119,23 @@ public class SettingsScreen extends Screen {
 		OCFont font = OCFont.mojangles();
 
 		boolean musicBtn = MouseUtils.inRange(30, 80, 200, 40);
-		boolean optmBtn = MouseUtils.inRange(250, 80, 200, 40);
 		g.drawImage(gts.getButton(musicBtn ? BUTTON_HIGHLIGHTED : BUTTON), 30, 80, 200, 40, null);
-		g.drawImage(gts.getButton(optmBtn ? BUTTON_HIGHLIGHTED : BUTTON), 250, 80, 200, 40, null);
 
 		font.size(20);
 		font.color(musicBtn ? 0xFFFFA0 : 0xFFFFFF);
 		font.drawShadow(g, Locales.CURRENT[OPTIONS_MUSIC] + ": "
 				+ Locales.CURRENT[SoundManager.MUSIC ? OPTIONS_ON : OPTIONS_OFF], 45, 105);
 
-		font.color(optmBtn ? 0xFFFFA0 : 0xFFFFFF);
-		font.drawShadow(g, Locales.CURRENT[OPTIONS_OPTIMIZE], 275, 105);
-
 		font.color(Color.WHITE);
 
 		check(1, musicBtn, () -> {
-			SoundManager.MUSIC = !SoundManager.MUSIC;
+			SoundManager.toggle();
 			try {
 				Thread.sleep(90);
 			} catch (Exception ex) {
 				InternalLogger.out.println(SettingsScreen.class.getName() + " ->");
 				ex.printStackTrace(InternalLogger.out);
 				InternalLogger.out.println();
-			}
-		});
-
-		check(1, optmBtn, () -> {
-			System.gc();
-			try {
-				Thread.sleep(500);
-			} catch (Exception ignored) {
 			}
 		});
 	}
