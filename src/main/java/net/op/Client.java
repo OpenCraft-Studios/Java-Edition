@@ -231,10 +231,14 @@ public final class Client implements Runnable {
 
 		// Stop
 		this.running = false;
-
+		
 		// Save settings
 		Config.save();
 
+		// Stop all the sounds
+		SoundManager.MUSIC = false;
+		SoundManager.stopSounds();
+		
 		// Destroy display
 		destroyDisplay();
 
