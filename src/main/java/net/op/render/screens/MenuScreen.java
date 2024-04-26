@@ -16,6 +16,7 @@ import org.josl.openic.IC;
 import org.josl.openic.input.ComponentMouse;
 
 import net.op.Client;
+import net.op.InternalLogger;
 import net.op.input.MouseUtils;
 import net.op.language.Locales;
 import net.op.render.display.Display;
@@ -111,6 +112,13 @@ public class MenuScreen extends Screen {
 		if (mouse.isButtonPressed(1)) {
 			if (quitsel) {
 				Client.getClient().stop();
+				try {
+					Thread.sleep(20);
+				} catch (Exception ex) {
+					InternalLogger.out.println(getClass().getName() + " ->");
+					ex.printStackTrace(InternalLogger.out);
+					InternalLogger.out.println();
+				}
 			}
 
 			if (setsel) {
