@@ -14,12 +14,14 @@ public class Tracks {
                 .name("Menu 2")
                 .resource("opencraft:sounds.menu_2")
                 .path("/newmusic/menu2.ogg")
+                .author("C418")
                 .build());
 
         menu_sounds.add(Sound.of()
                 .name("Menu 3")
                 .resource("opencraft:sounds.menu_3")
                 .path("/newmusic/menu3.ogg")
+                .author("C418")
                 .build());
         
         menu_sounds.add(Sound.of()

@@ -16,16 +16,18 @@ public class Sound {
 
 	private final Resource resource;
 	private final String name;
+	private final String author;
 	private final String path;
 
-	public Sound(Resource resource, String name, String path) {
+	Sound(Resource resource, String name, String author, String path) {
 		this.resource = resource;
 		this.name = name;
+		this.author = author;
 		this.path = path;
 	}
 
-	public Sound(String resource, String name, String path) {
-		this(Resource.format(resource), name, path);
+	Sound(String resource, String name, String author, String path) {
+		this(Resource.format(resource), name, author, path);
 	}
 
 	public static Sound.Builder of() {
@@ -38,6 +40,10 @@ public class Sound {
 
 	public String getName() {
 		return name;
+	}
+	
+	public String getAuthor() {
+		return author;
 	}
 
 	public String getPath() {
@@ -59,6 +65,7 @@ public class Sound {
 
 		private Resource res = null;
 		private String name = null;
+		private String author = "Unknown";
 		private String path = null;
 
 		public Builder resource(Resource res) {
@@ -67,12 +74,16 @@ public class Sound {
 		}
 
 		public Builder resource(String res) {
-			resource(Resource.format(res));
-			return this;
+			return resource(Resource.format(res));
 		}
 
 		public Builder name(String name) {
 			this.name = name;
+			return this;
+		}
+		
+		public Builder author(String author) {
+			this.author = author;
 			return this;
 		}
 
@@ -82,11 +93,11 @@ public class Sound {
 		}
 
 		public Sound build() {
-			if (res == null || name == null || path == null) {
-				throw new IllegalArgumentException("res or name or path can't be null!");
+			if (res == null || name == null || author == null || path == null) {
+				throw new IllegalArgumentException(String.format("Invalid %s constructor", Sound.class.getName()));
 			}
 
-			return new Sound(res, name, path);
+			return new Sound(res, name, author, path);
 		}
 
 	}
