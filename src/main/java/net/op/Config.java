@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.util.Properties;
 
 import net.op.language.Locales;
+import net.op.sound.SoundManager;
 
 /**
  * <h1>Config</h1>
@@ -36,8 +37,9 @@ public class Config {
         Properties properties = new Properties();
 
         properties.setProperty("gameDir", GAME_DIRECTORY);
-        properties.setProperty("lang", Locales.getLocale().toLanguageTag());
-
+        properties.setProperty("language", Locales.getLocale().toLanguageTag());
+        properties.setProperty("music", Boolean.toString(SoundManager.MUSIC));
+        
         return properties;
     }
 
