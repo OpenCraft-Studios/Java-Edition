@@ -12,15 +12,21 @@ public class Tracks {
         List<Sound> menu_sounds = new ArrayList<>();
         menu_sounds.add(Sound.of()
                 .name("Menu 2")
-                .resource("opencraft.sound:menu_2")
+                .resource("opencraft:sounds.menu_2")
                 .path("/newmusic/menu2.ogg")
                 .build());
 
         menu_sounds.add(Sound.of()
                 .name("Menu 3")
-                .resource("opencraft.sound:menu_3")
+                .resource("opencraft:sounds.menu_3")
                 .path("/newmusic/menu3.ogg")
                 .build());
+        
+        menu_sounds.add(Sound.of()
+        		.name("Mission")
+        		.resource("opencraft:sounds.mission")
+        		.path("/music/mission.ogg")
+        		.build());
 
         menu = new Track("Menu Sounds", menu_sounds);
     }

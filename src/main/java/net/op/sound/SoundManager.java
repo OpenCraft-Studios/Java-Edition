@@ -11,7 +11,7 @@ public class SoundManager {
 
 	public static boolean MUSIC = false;
 	private static Thread currentSoundThread = null;
-	
+
 	private SoundManager() {
 	}
 
@@ -21,9 +21,13 @@ public class SoundManager {
 	}
 
 	public static void update() {
-		if (!MUSIC)
+		if (!MUSIC) {
+			if (currentSoundThread != null)
+				stopSounds();
+			
 			return;
-		
+		}
+
 		if (currentSoundThread != null) {
 			if (currentSoundThread.isAlive())
 				return;
@@ -36,6 +40,23 @@ public class SoundManager {
 			playSound(sounds.get(index));
 		}
 
+	}
+
+	@SuppressWarnings("deprecation")
+	public static void stopSounds() {
+		if (currentSoundThread == null)
+			return;
+
+		try {
+			currentSoundThread.stop();
+		} catch (Exception ignored) {
+			try {
+				currentSoundThread.interrupt();
+			} catch (Exception ignored2) {
+			}
+		}
+		
+		currentSoundThread = null;
 	}
 
 	private static boolean mt_PlaySound(Sound sound) {
@@ -68,7 +89,7 @@ public class SoundManager {
 
 		return state;
 	}
-	
+
 	public static boolean playSound(Sound sound) {
 		return playSound(sound, true);
 	}
