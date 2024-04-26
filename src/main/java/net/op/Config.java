@@ -49,9 +49,9 @@ public class Config {
      * @param properties The object to read
      */
     public static void read(Properties properties) {
-        GAME_DIRECTORY = properties.getProperty("gameDir");
-        Locales.setLocale(Locales.of(properties.getProperty("language")));
-        SoundManager.MUSIC = Boolean.parseBoolean(properties.getProperty("music"));
+        GAME_DIRECTORY = (String) properties.getOrDefault("gameDir", "opcraft");
+        Locales.setLocale(Locales.of((String) properties.getOrDefault("language", "en-US")));
+        SoundManager.MUSIC = Boolean.parseBoolean((String) properties.getOrDefault("music", "false"));
     }
 
     /**
@@ -59,7 +59,7 @@ public class Config {
      * it.
      */
     public static void read() {
-        File gameSettingsFile = new File(Config.GAME_DIRECTORY + "/settings.yml");
+        File gameSettingsFile = new File(Config.GAME_DIRECTORY + "/options.txt");
         if (gameSettingsFile.exists()) {
             Properties gameSettings = new Properties();
             try {
@@ -80,7 +80,7 @@ public class Config {
     public static void save() {
         Properties gameSettings = Config.toProperties();
         try {
-            gameSettings.store(new FileOutputStream(Config.GAME_DIRECTORY + "/settings.yml"), "Game Settings");
+            gameSettings.store(new FileOutputStream(Config.GAME_DIRECTORY + "/options.txt"), "Game Settings");
         } catch (Exception ex) {
             logger.warning("Failed to save game settings!");
             InternalLogger.out.println(Config.class.getName() + " ->");
