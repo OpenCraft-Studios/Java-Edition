@@ -50,6 +50,11 @@ public class SoundManager {
 	public static void stopSounds() {
 		if (currentSoundThread == null)
 			return;
+		
+		if (!currentSoundThread.isAlive()) {
+			currentSoundThread = null;
+			return;
+		}
 
 		try {
 			currentSoundThread.stop();
