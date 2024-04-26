@@ -197,8 +197,6 @@ public final class Client implements Runnable {
 			System.exit(0);
 		}
 
-		System.out.println(InternalLogger.getOutputData());
-
 		// Stop
 		this.running = false;
 		
