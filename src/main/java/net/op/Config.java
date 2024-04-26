@@ -50,7 +50,8 @@ public class Config {
      */
     public static void read(Properties properties) {
         GAME_DIRECTORY = properties.getProperty("gameDir");
-        Locales.setLocale(Locales.of(properties.getProperty("lang")));
+        Locales.setLocale(Locales.of(properties.getProperty("language")));
+        SoundManager.MUSIC = Boolean.parseBoolean(properties.getProperty("music"));
     }
 
     /**
