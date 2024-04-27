@@ -35,5 +35,7 @@ Do you like to make **OpenCraft** great?. Excelent! just fork the repository and
 
 ## Downloads
 You can get a official copy on [*The releases section*](https://github.com/OpenCraftMC/Java-Edition/releases/latest)
+
 Or by:
+
 [![Download OpenCraft](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/opencraftmc/files/latest/download)
