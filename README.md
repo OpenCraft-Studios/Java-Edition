@@ -1,5 +1,5 @@
 <div align="center">
-	<img src="https://raw.githubusercontent.com/CiroZDP/OpenCraft/master/.github/assets/images/icon.png" alt="" height="128" width="128" />
+	<img src="https://github.com/OpenCraftMC/Java-Edition/blob/trunk/.github/assets/images/icon.png?raw=true" alt="" height="128" width="128" />
 	<h1>OpenCraft</h1>
 	<br>
 	<a href="https://sourceforge.net/projects/opencraftmc/files/latest/download"><img alt="Download OpenCraft" src="https://img.shields.io/sourceforge/dt/opencraftmc.svg" ></a>
