@@ -2,25 +2,113 @@ package net.op.spectoland;
 
 import static net.op.spectoland.SpectoUtils.ErrorTemplates.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.zip.GZIPOutputStream;
+
+import net.op.Config;
+import net.op.crash.CrashReport;
+
 public class SpectoError {
-	
+
 	private static int exception_counter = 0;
-	
+
+	public static class InternalLogger {
+
+		public static int ignoredExceptions = 0;
+
+		private static OutputStream os;
+		private static PrintStream out;
+
+		static {
+			os = new ByteArrayOutputStream();
+			out = new PrintStream(os);
+		}
+
+		private InternalLogger() {
+		}
+
+		public static void writeFile() throws IOException {
+			File internalFile = new File(Config.GAME_DIRECTORY + "/logs/internal.log");
+			if (!internalFile.getParentFile().exists()) {
+				internalFile.getParentFile().mkdirs();
+			}
+			if (!internalFile.exists()) {
+				internalFile.createNewFile();
+			}
+
+			FileOutputStream fos = new FileOutputStream(internalFile);
+			fos.write(getData());
+			fos.close();
+		}
+
+		private static byte[] getData() {
+			return ((ByteArrayOutputStream) os).toByteArray();
+		}
+
+		public static String stackTrace() {
+			return new String(getData());
+		}
+
+		public static void stopLogging() {
+			try {
+				os.close();
+			} catch (Exception ignored) {
+			}
+
+			out = new PrintStream(OutputStream.nullOutputStream());
+		}
+
+	}
+
 	private SpectoError() {
 	}
-	
+
 	public static String serverNotFound(String server_name) {
 		return String.format(SERVER_NOT_FOUND, server_name);
 	}
-	
+
 	public static String warn(final String message) {
 		return "WARNING: " + message;
 	}
-	
+
 	public static String error(final String message) {
 		return "ERROR: " + message;
 	}
-	
+
+	public static byte[] reportResult(CrashReport crash) {
+		var baos = new ByteArrayOutputStream();
+		
+		try {
+			var gzos = new GZIPOutputStream(baos);
+			PrintStream out = new PrintStream(gzos);
+			
+			crash.write(out);
+			out.println();
+			out.println(InternalLogger.stackTrace());
+			
+			out.close();
+			gzos.close();
+			baos.close();
+		} catch (Exception ex) {
+			// wTf
+			ignored(ex, SpectoError.class);
+		}
+		
+		return baos.toByteArray();
+	}
+
+	public static void ignored(Throwable tb, Class<?> clazz) {
+		InternalLogger.ignoredExceptions++;
+		InternalLogger.out.println(clazz.getName() + " ->");
+		tb.printStackTrace(InternalLogger.out);
+		InternalLogger.out.println();
+	}
+
 	public static void process(Throwable tb) {
 		try {
 			throw tb;

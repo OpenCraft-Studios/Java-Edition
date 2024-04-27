@@ -9,14 +9,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import net.op.InternalLogger;
+import net.op.spectoland.SpectoError;
 import net.op.util.ResourceGetter;
 
 public class LocalesLoader {
 
 	private LocalesLoader() {
 	}
-	
+
 	public static void load() {
 		final String csvContents = readOnlineCSV().orElse(readInternalCSV().get());
 		parseString(csvContents);
@@ -51,11 +51,8 @@ public class LocalesLoader {
 			}
 
 		} catch (Exception ex) {
-			InternalLogger.out.println(LocalesLoader.class.getName() + " ->");
-			ex.printStackTrace(InternalLogger.out);
-			InternalLogger.out.println();
-
 			System.err.println("WARNING: Error loading game languages!");
+			SpectoError.ignored(ex, LocalesLoader.class);
 		}
 
 		Locales.ENGLISH = english.toArray(new String[0]);
@@ -64,7 +61,7 @@ public class LocalesLoader {
 		Locales.FRENCH = french.toArray(new String[0]);
 		Locales.GALICIAN = galician.toArray(new String[0]);
 		Locales.CATALAN = catalan.toArray(new String[0]);
-		
+
 		Locales.CURRENT = Locales.ENGLISH;
 	}
 
@@ -91,9 +88,7 @@ public class LocalesLoader {
 			URL csvURL = new URL("https://raw.githubusercontent.com/OpenCraftMC/piston-data/main/langsheet.csv");
 			in = csvURL.openConnection().getInputStream();
 		} catch (Exception ex) {
-			InternalLogger.out.println(LocalesLoader.class.getName() + " ->");
-			ex.printStackTrace(InternalLogger.out);
-			InternalLogger.out.println();
+			SpectoError.ignored(ex, LocalesLoader.class);
 		}
 
 		return in;
@@ -109,9 +104,7 @@ public class LocalesLoader {
 		try {
 			contents = Optional.of(new String(in.readAllBytes(), StandardCharsets.UTF_8));
 		} catch (Exception ex) {
-			InternalLogger.out.println(Locales.class.getName() + " ->");
-			ex.printStackTrace(InternalLogger.out);
-			InternalLogger.out.println();
+			SpectoError.ignored(ex, LocalesLoader.class);
 		}
 
 		return contents;

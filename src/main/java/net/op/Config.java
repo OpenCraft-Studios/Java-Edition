@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import net.op.language.Locales;
 import net.op.sound.SoundManager;
+import net.op.spectoland.SpectoError;
 
 /**
  * <h1>Config</h1> The Config class contains every setting in the game. This
@@ -82,9 +83,7 @@ public class Config {
 			gameSettings.load(new FileInputStream(gameSettingsFile));
 		} catch (Exception ex) {
 			logger.warn("Failed to load game settings!");
-			InternalLogger.out.println(Config.class.getName() + " ->");
-			ex.printStackTrace(InternalLogger.out);
-			InternalLogger.out.println();
+			SpectoError.ignored(ex, Config.class);
 		}
 
 		Config.read(gameSettings);
@@ -126,9 +125,7 @@ public class Config {
 			save(new BufferedWriter(new FileWriter(file)));
 		} catch (Exception ex) {
 			logger.warn("Failed to save game settings!");
-			InternalLogger.out.println(Config.class.getName() + " ->");
-			ex.printStackTrace(InternalLogger.out);
-			InternalLogger.out.println();
+			SpectoError.ignored(ex, Config.class);
 		}
 	}
 

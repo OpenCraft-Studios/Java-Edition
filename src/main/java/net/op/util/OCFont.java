@@ -10,114 +10,112 @@ import java.awt.Graphics;
 import java.io.IOException;
 import java.io.InputStream;
 
-import net.op.InternalLogger;
+import net.op.spectoland.SpectoError;
 
 public class OCFont {
 
-    private static OCFont MONOSPACE;
-    private static OCFont MOJANGLES;
+	private static OCFont MONOSPACE;
+	private static OCFont MOJANGLES;
 
-    private int size = 12;
-    private int color = 0;
-    private Font font;
+	private int size = 12;
+	private int color = 0;
+	private Font font;
 
-    static {
-        MONOSPACE = new OCFont("Dialog");
-    }
+	static {
+		MONOSPACE = new OCFont("Dialog");
+	}
 
-    public OCFont(Font font) {
-        this.font = font;
-    }
+	public OCFont(Font font) {
+		this.font = font;
+	}
 
-    public OCFont(OCFont other) {
-        this(other.font);
-    }
+	public OCFont(OCFont other) {
+		this(other.font);
+	}
 
-    public OCFont(String fontname) {
-        this(getSystemFont(fontname));
-    }
+	public OCFont(String fontname) {
+		this(getSystemFont(fontname));
+	}
 
-    public static void create(String fontDir) {
-        MOJANGLES = getFont(fontDir + "/Mojangles.ttf");
-    }
+	public static void create(String fontDir) {
+		MOJANGLES = getFont(fontDir + "/Mojangles.ttf");
+	}
 
-    public static OCFont monospace() {
-        return MONOSPACE;
-    }
+	public static OCFont monospace() {
+		return MONOSPACE;
+	}
 
-    public static OCFont mojangles() {
-        return MOJANGLES;
-    }
+	public static OCFont mojangles() {
+		return MOJANGLES;
+	}
 
-    public static OCFont of(Font font) {
-        return new OCFont(font);
-    }
+	public static OCFont of(Font font) {
+		return new OCFont(font);
+	}
 
-    public static OCFont read(InputStream in) throws FontFormatException, IOException {
-        return OCFont.of(createFont(TRUETYPE_FONT, in));
-    }
+	public static OCFont read(InputStream in) throws FontFormatException, IOException {
+		return OCFont.of(createFont(TRUETYPE_FONT, in));
+	}
 
-    public static OCFont getFont(String fontpath) {
-        InputStream in = ResourceGetter.getInternal(fontpath);
-        OCFont font = OCFont.monospace();
-        try {
-            font = read(in);
-        } catch (Exception ex) {
-            InternalLogger.out.println(OCFont.class.getName() + " ->");
-            ex.printStackTrace(InternalLogger.out);
-            InternalLogger.out.println();
-        }
+	public static OCFont getFont(String fontpath) {
+		InputStream in = ResourceGetter.getInternal(fontpath);
+		OCFont font = OCFont.monospace();
+		try {
+			font = read(in);
+		} catch (Exception ex) {
+			SpectoError.ignored(ex, OCFont.class);
+		}
 
-        return font;
-    }
+		return font;
+	}
 
-    public static Font getSystemFont(String fontname) {
-        return new Font(fontname, Font.PLAIN, 12);
-    }
+	public static Font getSystemFont(String fontname) {
+		return new Font(fontname, Font.PLAIN, 12);
+	}
 
-    public OCFont size(int size) {
-        this.size = size;
-        return this;
-    }
+	public OCFont size(int size) {
+		this.size = size;
+		return this;
+	}
 
-    public OCFont color(int color) {
-        this.color = color;
-        return this;
-    }
+	public OCFont color(int color) {
+		this.color = color;
+		return this;
+	}
 
-    public OCFont color(Color c) {
-        return color(c.getRGB());
-    }
+	public OCFont color(Color c) {
+		return color(c.getRGB());
+	}
 
-    public int getColor() {
-        return this.color;
-    }
+	public int getColor() {
+		return this.color;
+	}
 
-    public int getSize() {
-        return this.size;
-    }
+	public int getSize() {
+		return this.size;
+	}
 
-    public void draw(Graphics g, String text, int x, int y, int color) {
-        g.setFont(this.font.deriveFont(Font.PLAIN, size));
-        g.setColor(new Color(color));
-        g.drawString(text, x, y);
-    }
+	public void draw(Graphics g, String text, int x, int y, int color) {
+		g.setFont(this.font.deriveFont(Font.PLAIN, size));
+		g.setColor(new Color(color));
+		g.drawString(text, x, y);
+	}
 
-    public void draw(Graphics g, String text, int x, int y) {
-        draw(g, text, x, y, this.color);
-    }
+	public void draw(Graphics g, String text, int x, int y) {
+		draw(g, text, x, y, this.color);
+	}
 
-    public void drawShadow(Graphics g, String text, int x, int y, int color) {
-        draw(g, text, x + 2, y + 2, (color & 0xFCFCFC) >> 2);
-        draw(g, text, x, y, color);
-    }
+	public void drawShadow(Graphics g, String text, int x, int y, int color) {
+		draw(g, text, x + 2, y + 2, (color & 0xFCFCFC) >> 2);
+		draw(g, text, x, y, color);
+	}
 
-    public void drawShadow(Graphics g, String text, int x, int y) {
-        drawShadow(g, text, x, y, this.color);
-    }
+	public void drawShadow(Graphics g, String text, int x, int y) {
+		drawShadow(g, text, x, y, this.color);
+	}
 
-    public Font getFont() {
-        return this.font;
-    }
+	public Font getFont() {
+		return this.font;
+	}
 
 }

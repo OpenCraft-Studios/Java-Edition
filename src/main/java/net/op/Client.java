@@ -27,6 +27,7 @@ import net.op.render.Render;
 import net.op.render.textures.GUITilesheet;
 import net.op.sound.SoundManager;
 import net.op.spectoland.SpectoError;
+import net.op.spectoland.SpectoError.InternalLogger;
 import net.op.util.OCFont;
 
 public final class Client implements Runnable {
@@ -194,9 +195,10 @@ public final class Client implements Runnable {
 	 */
 	@SuppressWarnings("deprecation")
 	public void stop(boolean force) {
-		if (force) {
+		if (force)
 			System.exit(0);
-		}
+		if (!running)
+			return;
 
 		// Stop
 		this.running = false;
@@ -207,7 +209,12 @@ public final class Client implements Runnable {
 		// Destroy display
 		destroyDisplay();
 
-		// Stop logging and collect traces
+		// Stop logging and collect exceptions
+		if (InternalLogger.ignoredExceptions == 0)
+			System.out.println("OK: No ignored exceptions are detected!");
+		else
+			System.err.printf("(!): %d ignored exceptions were throwed!\n", InternalLogger.ignoredExceptions);
+		
 		InternalLogger.stopLogging();
 
 		// Finish the thread

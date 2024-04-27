@@ -16,11 +16,11 @@ import org.josl.openic.IC;
 import org.josl.openic.input.ComponentMouse;
 
 import net.op.Client;
-import net.op.InternalLogger;
 import net.op.input.MouseUtils;
 import net.op.language.Locales;
 import net.op.render.display.Display;
 import net.op.render.textures.GUITilesheet;
+import net.op.spectoland.SpectoError;
 import net.op.util.OCFont;
 import net.op.util.Resource;
 
@@ -57,12 +57,12 @@ public class MenuScreen extends Screen {
 		boolean quitsel, setsel;
 		quitsel = false;
 		setsel = false;
-		
+
 		if (getCurrent().equals(MenuScreen.getInstance())) {
 			quitsel = MouseUtils.inRange(width / 2, height / 2 - 4, 200, 40);
 			setsel = MouseUtils.inRange((width - 400) / 2, height / 2 - 4, 198, 40);
 		}
-		
+
 		// Draw buttons
 		g.drawImage(gts.getButton(BUTTON_DISABLED), (width - 400) / 2, height / 2 - 50, 400, 40, null);
 		g.drawImage(gts.getButton(setsel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 400) / 2, height / 2 - 4, 198, 40,
@@ -115,9 +115,7 @@ public class MenuScreen extends Screen {
 				try {
 					Thread.sleep(20);
 				} catch (Exception ex) {
-					InternalLogger.out.println(getClass().getName() + " ->");
-					ex.printStackTrace(InternalLogger.out);
-					InternalLogger.out.println();
+					SpectoError.ignored(ex, MenuScreen.class);
 				}
 			}
 

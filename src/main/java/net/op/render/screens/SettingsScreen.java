@@ -22,11 +22,11 @@ import java.net.URI;
 import java.util.Locale;
 
 import net.op.Config;
-import net.op.InternalLogger;
 import net.op.input.MouseUtils;
 import net.op.language.Locales;
 import net.op.render.textures.GUITilesheet;
 import net.op.sound.SoundManager;
+import net.op.spectoland.SpectoError;
 import net.op.util.OCFont;
 import net.op.util.Resource;
 
@@ -129,9 +129,7 @@ public class SettingsScreen extends Screen {
 				Desktop.getDesktop().browse(new URI("https://opencraftmc.github.io"));
 				Thread.sleep(150);
 			} catch (Exception ex) {
-				InternalLogger.out.println(SettingsScreen.class.getName() + " ->");
-				ex.printStackTrace(InternalLogger.out);
-				InternalLogger.out.println();
+				SpectoError.ignored(ex, SettingsScreen.class);
 			}
 		});
 
@@ -157,9 +155,7 @@ public class SettingsScreen extends Screen {
 			try {
 				Thread.sleep(90);
 			} catch (Exception ex) {
-				InternalLogger.out.println(SettingsScreen.class.getName() + " ->");
-				ex.printStackTrace(InternalLogger.out);
-				InternalLogger.out.println();
+				SpectoError.ignored(ex, SettingsScreen.class);
 			}
 		});
 	}
