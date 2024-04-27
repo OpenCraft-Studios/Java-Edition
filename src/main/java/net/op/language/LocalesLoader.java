@@ -19,10 +19,10 @@ public class LocalesLoader {
 	
 	public static void load() {
 		final String csvContents = readOnlineCSV().orElse(readInternalCSV().get());
-		loadFromString(csvContents);
+		parseString(csvContents);
 	}
 
-	public static void loadFromString(final String csvContent) {
+	public static void parseString(final String csvContent) {
 		List<String> english = new LinkedList<>();
 		List<String> spanish = new LinkedList<>();
 		List<String> italian = new LinkedList<>();
@@ -88,7 +88,7 @@ public class LocalesLoader {
 		InputStream in = null;
 
 		try {
-			URL csvURL = new URL("https://raw.githubusercontent.com/OpenCraftMC/OnlineResources/main/langsheet.csv");
+			URL csvURL = new URL("https://raw.githubusercontent.com/OpenCraftMC/piston-data/main/langsheet.csv");
 			in = csvURL.openConnection().getInputStream();
 		} catch (Exception ex) {
 			InternalLogger.out.println(LocalesLoader.class.getName() + " ->");
