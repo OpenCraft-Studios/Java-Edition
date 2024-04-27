@@ -104,7 +104,7 @@ public class Loadscreen extends Screen {
 		if (start == -1) {
 			start = current;
 		}
-
+		
 		if (current - start <= TIMEOUT) {
 			double alpha = 1 - (current - start) / (double) TIMEOUT;
 
@@ -120,7 +120,7 @@ public class Loadscreen extends Screen {
 			g.drawImage(bi, 0, 0, null);
 			return;
 		}
-
+		
 		instance = null;
 		System.gc();
 		getDisplay().setResizable(true);

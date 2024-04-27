@@ -7,10 +7,10 @@ import java.util.logging.Logger;
 public class SoundManager {
 
 	public static final Logger logger = Logger.getLogger(SoundManager.class.getName());
-	public static final int TIMEOUT = 12;
+	public static final int TIMEOUT = (int) (60 * 1.5);
 
 	public static boolean MUSIC = false;
-	private static Thread currentSoundThread = null;
+	public static Thread cst = null;
 
 	private SoundManager() {
 	}
@@ -22,14 +22,14 @@ public class SoundManager {
 
 	public static void update() {
 		if (!MUSIC) {
-			if (currentSoundThread != null)
+			if (cst != null)
 				stopSounds();
 
 			return;
 		}
 
-		if (currentSoundThread != null) {
-			if (currentSoundThread.isAlive())
+		if (cst != null) {
+			if (cst.isAlive())
 				return;
 		}
 
@@ -48,24 +48,24 @@ public class SoundManager {
 
 	@SuppressWarnings("deprecation")
 	public static void stopSounds() {
-		if (currentSoundThread == null)
+		if (cst == null)
 			return;
 
-		if (!currentSoundThread.isAlive()) {
-			currentSoundThread = null;
+		if (!cst.isAlive()) {
+			cst = null;
 			return;
 		}
 
 		try {
-			currentSoundThread.stop();
+			cst.stop();
 		} catch (Exception ignored) {
 			try {
-				currentSoundThread.interrupt();
+				cst.interrupt();
 			} catch (Exception ignored2) {
 			}
 		}
 
-		currentSoundThread = null;
+		cst = null;
 	}
 
 	private static boolean mt_PlaySound(Sound sound) {
@@ -76,8 +76,8 @@ public class SoundManager {
 				} catch (Exception ignored) {
 				}
 			};
-			currentSoundThread = new Thread(soundRunnable);
-			currentSoundThread.start();
+			cst = new Thread(soundRunnable);
+			cst.start();
 		} catch (Exception ignored) {
 			return false;
 		}
@@ -105,12 +105,12 @@ public class SoundManager {
 
 	public static void enable() {
 		MUSIC = true;
-		SoundManager.playRandomSound();
+		playRandomSound();
 	}
 
 	public static void shutdown() {
 		MUSIC = false;
-		SoundManager.stopSounds();
+		stopSounds();
 	}
 
 	public static double getVolume() {
