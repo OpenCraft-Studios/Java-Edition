@@ -11,7 +11,9 @@ import java.awt.Color;
 import java.awt.DisplayMode;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
@@ -19,7 +21,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.op.Client;
 import net.op.Config;
 import net.op.render.screens.Screen;
 
@@ -30,10 +31,11 @@ import net.op.render.screens.Screen;
  */
 public final class Render extends Canvas {
 
-    public static final GraphicsConfiguration GFX_CONFIG = GraphicsEnvironment.getLocalGraphicsEnvironment()
-            .getDefaultScreenDevice().getDefaultConfiguration();
+	public static final GraphicsDevice DEF_GRAPHICS_DEVICE = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+	
+    public static final GraphicsConfiguration GFX_CONFIG = DEF_GRAPHICS_DEVICE.getDefaultConfiguration();
 
-    public static final DisplayMode GFX_DISPLAY_MODE = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
+    public static final DisplayMode GFX_DISPLAY_MODE = DEF_GRAPHICS_DEVICE.getDisplayMode();
 
     public static final Logger logger = LoggerFactory.getLogger(Render.class);
     private static final long serialVersionUID = 1L;
@@ -94,17 +96,34 @@ public final class Render extends Canvas {
         // Set this object as the default drawing context
         setDisplayGraphics(this);
 
+        // Get the DPI info
+        final int DPI = Toolkit.getDefaultToolkit().getScreenResolution();
+
         // Show render details
         logger.info("Render system initialized!");
         logger.info("[OpenGL] Using OpenGL: %s".formatted(OPEN_GL ? "Yes" : "No"));
+        
+        logger.info("DPI is set to {}", DPI);
+        if (DPI != 96)
+        	logger.info(" \u2514\u2500 (Recommended 96)", DPI);
 
         // Do "VSync"
-        if (!Client.getClient().vsync())
+        if (!vsync())
         	logger.warn("[VSync] Imposible to determinate the refresh rate!");
 
         // Show FPS Rate
         logger.info("FPS Rate: %d".formatted(Config.FPS_CAP));
     }
+    
+    public boolean vsync() {
+		int fpsRate;
+		fpsRate = Render.GFX_DISPLAY_MODE.getRefreshRate();
+		
+		if (fpsRate != DisplayMode.REFRESH_RATE_UNKNOWN)
+			Config.FPS_CAP = fpsRate;
+
+		return fpsRate != DisplayMode.REFRESH_RATE_UNKNOWN;
+	}
 
     /**
      * Updates the display and renders the game.

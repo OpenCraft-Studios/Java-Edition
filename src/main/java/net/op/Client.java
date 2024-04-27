@@ -4,8 +4,6 @@ import static net.op.render.display.DisplayManager.destroyDisplay;
 import static net.op.render.display.DisplayManager.isDisplayAlive;
 import static org.josl.openic.IC13.icIsKeyPressed;
 
-import java.awt.DisplayMode;
-import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.Arrays;
@@ -170,17 +168,6 @@ public final class Client implements Runnable {
 	 */
 	public Thread thread() {
 		return this.thread;
-	}
-
-	public boolean vsync() {
-		int fpsRate;
-		fpsRate = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode()
-				.getRefreshRate();
-
-		if (fpsRate != DisplayMode.REFRESH_RATE_UNKNOWN)
-			Config.FPS_CAP = fpsRate;
-
-		return fpsRate != DisplayMode.REFRESH_RATE_UNKNOWN;
 	}
 
 	public double getNanoPerTick() {
