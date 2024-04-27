@@ -1,6 +1,8 @@
 <div align="center">
-	<img src="https://raw.githubusercontent.com/CiroDOS/OpenCraft/master/.github/assets/images/ultraminecraft_icon.png" alt="" height="128" width="128" />
+	<img src="https://raw.githubusercontent.com/CiroZDP/OpenCraft/master/.github/assets/images/icon.png" alt="" height="128" width="128" />
 	<h1>OpenCraft</h1>
+	<br>
+	<a href="https://sourceforge.net/projects/opencraftmc/files/latest/download"><img alt="Download OpenCraft" src="https://img.shields.io/sourceforge/dt/opencraftmc.svg" ></a>
 </div>
 
 ## About ℹ️
@@ -33,3 +35,5 @@ Do you like to make **OpenCraft** great?. Excelent! just fork the repository and
 
 ## Downloads
 You can get a official copy on [*The releases section*](https://github.com/OpenCraftMC/Java-Edition/releases/latest)
+Or by:
+[![Download OpenCraft](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/opencraftmc/files/latest/download)
