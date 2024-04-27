@@ -211,15 +211,15 @@ public final class Client implements Runnable {
 
 		// Stop logging and collect exceptions
 		if (InternalLogger.ignoredExceptions == 0)
-			System.out.println("OK: No ignored exceptions are detected!");
+			logger.info("No ignored exceptions are detected!");
 		else
-			System.err.printf("(!): %d ignored exceptions were throwed!\n", InternalLogger.ignoredExceptions);
+			logger.error("{} ignored exceptions were throwed!\n", InternalLogger.ignoredExceptions);
 		
 		InternalLogger.stopLogging();
 
 		// Finish the thread
 		try {
-			// InternalLogger.writeFile();
+			InternalLogger.writeFile();
 			thread.stop();
 		} catch (Exception e1) {
 			try {
