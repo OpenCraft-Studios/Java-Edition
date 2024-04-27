@@ -3,14 +3,17 @@ package net.op;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import net.op.crash.CrashReport;
+import net.op.render.Render;
+import net.op.sound.SoundManager;
 
 public class LoggerConfig {
 
-    public static final String LOG_FORMAT = "[%1$tH:%1$tM:%1$tS] [%3$s/%4$-4s]: %5$s%n";
+    public static final String LOG_FORMAT = "[%1$tH:%1$tM:%1$tS] [%2$s] [%3$s/%4$-4s]: %5$s%n";
 
     public static void init() {
         // Clear logs folder
@@ -62,5 +65,11 @@ public class LoggerConfig {
 
     private LoggerConfig() {
     }
+
+	public static void debugAll() {
+		Client.logger.setLevel(Level.FINEST);
+        Render.logger.setLevel(Level.FINEST);
+        SoundManager.logger.setLevel(Level.FINEST);
+	}
 
 }

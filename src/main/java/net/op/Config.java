@@ -36,6 +36,11 @@ public class Config {
 	public static boolean LEGACY = false;
 
 	/**
+	 * The {@code options.txt} file to save configurations
+	 */
+	public static String DEFAULT_CONFIG_FILE;
+
+	/**
 	 * This method converts the settings to a {@code Properties} object.
 	 *
 	 * @return A properties object
@@ -96,7 +101,7 @@ public class Config {
 	 * This method reads the configuration written in the default file to apply it.
 	 */
 	public static void read() {
-		read(GAME_DIRECTORY + "/options.txt");
+		read(DEFAULT_CONFIG_FILE);
 	}
 
 	/**
@@ -138,7 +143,7 @@ public class Config {
 	 * This method saves the actual configuration to the default file.
 	 */
 	public static void save() {
-		save(GAME_DIRECTORY + "/options.txt");
+		save(DEFAULT_CONFIG_FILE);
 	}
 
 	/**

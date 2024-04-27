@@ -8,6 +8,7 @@ import java.awt.DisplayMode;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.logging.Logger;
 
@@ -142,7 +143,7 @@ public final class Client implements Runnable {
 
 		// Load languages
 		LocalesLoader.load();
-		
+
 		// Read config
 		Config.read();
 
@@ -152,7 +153,7 @@ public final class Client implements Runnable {
 
 		// Initialize loggers
 		LoggerConfig.init();
-		
+
 		// Initialize sound and render
 		SoundManager.init();
 		this.render.init();
@@ -176,7 +177,6 @@ public final class Client implements Runnable {
 		fpsRate = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode()
 				.getRefreshRate();
 
-		
 		if (fpsRate != DisplayMode.REFRESH_RATE_UNKNOWN) {
 			Config.FPS_CAP = fpsRate;
 		} else {
@@ -202,13 +202,10 @@ public final class Client implements Runnable {
 
 		// Stop
 		this.running = false;
-		
-		// Save settings
-		Config.save();
 
 		// Disable soundManager
 		SoundManager.shutdown();
-		
+
 		// Destroy display
 		destroyDisplay();
 
@@ -270,12 +267,28 @@ public final class Client implements Runnable {
 	public static void main(String[] args) {
 		// Parse arguments
 		OptionParser parser = new OptionParser();
+
+		/* Support for Minecraft launchers. I will not convert this into a pay game */
+		parser.accepts("demo");
+
 		OptionSpec<?> legacyFlag = parser.accepts("legacy");
-		OptionSpec<?> gameDirArgument = parser.accepts("gameDir").withRequiredArg().required();
+		OptionSpec<?> debugFlag = parser.accepts("debug");
+		OptionSpec<?> gameDirArgument = parser.accepts("gameDir").withRequiredArg();
+		OptionSpec<?> configFileArgument = parser.acceptsAll(Arrays.asList("cnf", "conf", "config")).withRequiredArg();
 		
 		OptionSet argSet = parser.parse(args);
 		Config.LEGACY = argSet.has(legacyFlag);
-		Config.GAME_DIRECTORY = (String) argSet.valueOf(gameDirArgument);
+		
+		if (argSet.has(debugFlag))
+			LoggerConfig.debugAll();
+
+		if (argSet.has(gameDirArgument))
+			Config.GAME_DIRECTORY = (String) argSet.valueOf(gameDirArgument);
+
+		Config.DEFAULT_CONFIG_FILE = Config.GAME_DIRECTORY + "/options.txt";
+		
+		if (argSet.has(configFileArgument))
+			Config.DEFAULT_CONFIG_FILE = (String) argSet.valueOf(configFileArgument);
 		
 		// Starting game
 		Client game = Client.getClient();

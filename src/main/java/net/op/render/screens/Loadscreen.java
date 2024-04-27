@@ -42,7 +42,7 @@ public class Loadscreen extends Screen {
 	}
 
 	public void animatedLS(Graphics2D g2d, boolean slideUp) {
-		drawStars(g2d, 100);
+		drawStars(g2d, 101);
 
 		// Draw OpenCraft Text
 		g2d.setColor(Color.MAGENTA);

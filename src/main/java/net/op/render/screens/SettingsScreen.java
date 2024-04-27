@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 import java.net.URI;
 import java.util.Locale;
 
+import net.op.Config;
 import net.op.InternalLogger;
 import net.op.input.MouseUtils;
 import net.op.language.Locales;
@@ -111,6 +112,7 @@ public class SettingsScreen extends Screen {
 
 		check(1, donesel, () -> {
 			currentTab = "options.generalTab";
+			Config.save();
 			Screen.setCurrent(MenuScreen.getInstance());
 		});
 
