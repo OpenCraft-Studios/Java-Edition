@@ -179,7 +179,7 @@ public final class Client implements Runnable {
 
 		if (fpsRate != DisplayMode.REFRESH_RATE_UNKNOWN)
 			Config.FPS_CAP = fpsRate;
-		
+
 		return fpsRate != DisplayMode.REFRESH_RATE_UNKNOWN;
 	}
 
@@ -210,21 +210,25 @@ public final class Client implements Runnable {
 		destroyDisplay();
 
 		// Stop logging and collect exceptions
-		if (InternalLogger.ignoredExceptions == 0)
-			logger.info("No ignored exceptions are detected!");
-		else
-			logger.error("{} ignored exceptions were throwed!\n", InternalLogger.ignoredExceptions);
-		
+		if (InternalLogger.ignoredExceptions > 0) {
+			System.err.printf("(!): %d ignored exceptions were throwed!\n", InternalLogger.ignoredExceptions);
+			try {
+				InternalLogger.writeFile();
+			} catch (Exception ignored) {
+			}
+		} else
+			System.out.println("OK: No ignored exceptions are detected!");
+
 		InternalLogger.stopLogging();
 
 		// Finish the thread
 		try {
-			InternalLogger.writeFile();
 			thread.stop();
 		} catch (Exception e1) {
 			try {
 				thread.interrupt();
 			} catch (Exception e2) {
+				e1.printStackTrace();
 				e2.printStackTrace();
 				System.exit(0);
 			}
