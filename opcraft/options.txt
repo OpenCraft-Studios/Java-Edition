@@ -1,2 +1,2 @@
 lang:en-US
-soundCategory_music:0.0
+soundCategory_music:1.0

@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Optional;
 
-import net.op.LoggerConfig;
+import net.op.Config;
 
 public class CrashReport {
 
@@ -47,7 +47,7 @@ public class CrashReport {
 				+ "-" + cInstance.get(Calendar.DAY_OF_MONTH) + "_" + cInstance.get(Calendar.HOUR) + "-"
 				+ cInstance.get(Calendar.MINUTE) + "-" + cInstance.get(Calendar.SECOND);
 
-		return LoggerConfig.getLogDir() + "/crashes/crash-" + filepath + ".log";
+		return Config.GAME_DIRECTORY + "/logs/crashes/crash-" + filepath + ".log";
 	}
 
 	/**

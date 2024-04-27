@@ -2,11 +2,13 @@ package net.op.sound;
 
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SoundManager {
 
-	public static final Logger logger = Logger.getLogger(SoundManager.class.getName());
+	public static final Logger logger = LoggerFactory.getLogger(SoundManager.class.getName());
 	public static final int TIMEOUT = (int) (60 * 1.5);
 
 	public static boolean MUSIC = false;

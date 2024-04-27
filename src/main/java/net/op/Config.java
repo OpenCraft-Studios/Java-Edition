@@ -81,7 +81,7 @@ public class Config {
 		try {
 			gameSettings.load(new FileInputStream(gameSettingsFile));
 		} catch (Exception ex) {
-			logger.warning("Failed to load game settings!");
+			logger.warn("Failed to load game settings!");
 			InternalLogger.out.println(Config.class.getName() + " ->");
 			ex.printStackTrace(InternalLogger.out);
 			InternalLogger.out.println();
@@ -125,7 +125,7 @@ public class Config {
 		try {
 			save(new BufferedWriter(new FileWriter(file)));
 		} catch (Exception ex) {
-			logger.warning("Failed to save game settings!");
+			logger.warn("Failed to save game settings!");
 			InternalLogger.out.println(Config.class.getName() + " ->");
 			ex.printStackTrace(InternalLogger.out);
 			InternalLogger.out.println();

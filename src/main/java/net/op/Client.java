@@ -10,9 +10,11 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -37,7 +39,7 @@ public final class Client implements Runnable {
 	public static final int NANOSECONDS = 1000000000;
 
 	private static final Client instance = new Client();
-	public static final Logger logger = Logger.getLogger(Client.class.getName());
+	public static final Logger logger = LoggerFactory.getLogger(Client.class);
 
 	private final Thread thread;
 	private boolean running = false;
@@ -51,7 +53,7 @@ public final class Client implements Runnable {
 	private Client() {
 		this.render = Render.create();
 		this.thread = new Thread(this);
-		this.thread.setName("gameThread");
+		this.thread.setName("main");
 	}
 
 	/**
@@ -151,9 +153,6 @@ public final class Client implements Runnable {
 		GUITilesheet.create("/gui.png");
 		OCFont.create("/fonts");
 
-		// Initialize loggers
-		LoggerConfig.init();
-
 		// Initialize sound and render
 		SoundManager.init();
 		this.render.init();
@@ -172,16 +171,15 @@ public final class Client implements Runnable {
 		return this.thread;
 	}
 
-	public void vsync() throws Exception {
+	public boolean vsync() {
 		int fpsRate;
 		fpsRate = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode()
 				.getRefreshRate();
 
-		if (fpsRate != DisplayMode.REFRESH_RATE_UNKNOWN) {
+		if (fpsRate != DisplayMode.REFRESH_RATE_UNKNOWN)
 			Config.FPS_CAP = fpsRate;
-		} else {
-			throw new Exception("Imposible to determinate the refresh rate!");
-		}
+		
+		return fpsRate != DisplayMode.REFRESH_RATE_UNKNOWN;
 	}
 
 	public double getNanoPerTick() {
@@ -196,7 +194,7 @@ public final class Client implements Runnable {
 	 */
 	@SuppressWarnings("deprecation")
 	public void stop(boolean force) {
-		if (force || !running) {
+		if (force) {
 			System.exit(0);
 		}
 
@@ -272,24 +270,20 @@ public final class Client implements Runnable {
 		parser.accepts("demo");
 
 		OptionSpec<?> legacyFlag = parser.accepts("legacy");
-		OptionSpec<?> debugFlag = parser.accepts("debug");
 		OptionSpec<?> gameDirArgument = parser.accepts("gameDir").withRequiredArg();
 		OptionSpec<?> configFileArgument = parser.acceptsAll(Arrays.asList("cnf", "conf", "config")).withRequiredArg();
-		
+
 		OptionSet argSet = parser.parse(args);
 		Config.LEGACY = argSet.has(legacyFlag);
-		
-		if (argSet.has(debugFlag))
-			LoggerConfig.debugAll();
 
 		if (argSet.has(gameDirArgument))
 			Config.GAME_DIRECTORY = (String) argSet.valueOf(gameDirArgument);
 
 		Config.DEFAULT_CONFIG_FILE = Config.GAME_DIRECTORY + "/options.txt";
-		
+
 		if (argSet.has(configFileArgument))
 			Config.DEFAULT_CONFIG_FILE = (String) argSet.valueOf(configFileArgument);
-		
+
 		// Starting game
 		Client game = Client.getClient();
 		Thread gameThread = game.thread();
@@ -300,7 +294,7 @@ public final class Client implements Runnable {
 			gameThread.join();
 		} catch (Exception ignored) {
 			status = 3;
-			logger.severe("The game ended with errors!");
+			logger.error("The game ended with errors!");
 		}
 
 		// TODO: Implement this if the game is played by first time

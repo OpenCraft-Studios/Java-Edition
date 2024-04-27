@@ -1,0 +1,7 @@
+[13:59:07] [main/INFO] [net.op.sound.SoundManager/]: Sound manager started!
+[13:59:07] [main/INFO] [net.op.sound.SoundManager/]: [SoundAPI] Sound API status: Active
+[13:59:07] [main/INFO] [net.op.render.Render/]: Render system initialized!
+[13:59:07] [main/INFO] [net.op.render.Render/]: [OpenGL] Using OpenGL: No
+[13:59:07] [main/INFO] [net.op.render.Render/]: FPS Rate: 60
+[13:59:07] [main/INFO] [net.op.Client/]: Selected language: English (United States)
+[13:59:07] [main/INFO] [net.op.Client/]: OpenCraft 24r09 started!

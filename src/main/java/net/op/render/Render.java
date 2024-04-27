@@ -15,7 +15,9 @@ import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.op.Client;
 import net.op.Config;
@@ -33,7 +35,7 @@ public final class Render extends Canvas {
 
     public static final DisplayMode GFX_DISPLAY_MODE = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
 
-    public static final Logger logger = Logger.getLogger(Render.class.getName());
+    public static final Logger logger = LoggerFactory.getLogger(Render.class);
     private static final long serialVersionUID = 1L;
 
     private static final boolean OPEN_GL;
@@ -97,11 +99,8 @@ public final class Render extends Canvas {
         logger.info("[OpenGL] Using OpenGL: %s".formatted(OPEN_GL ? "Yes" : "No"));
 
         // Do "VSync"
-        try {
-            Client.getClient().vsync();
-        } catch (Exception ex) {
-            logger.warning(ex.getMessage());
-        }
+        if (!Client.getClient().vsync())
+        	logger.warn("[VSync] Imposible to determinate the refresh rate!");
 
         // Show FPS Rate
         logger.info("FPS Rate: %d".formatted(Config.FPS_CAP));
