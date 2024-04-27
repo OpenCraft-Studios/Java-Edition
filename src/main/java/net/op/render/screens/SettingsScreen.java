@@ -61,12 +61,10 @@ public class SettingsScreen extends Screen {
 		Composite defcomposite = g2d.getComposite();
 		for (int x = 0; x < width; x += 64) {
 			for (int y = 0; y < height; y += 64) {
-				boolean maximumY = (y / 64) >= Math.floor(height / 64) - 1.5;
-
-				if (y == 0 || maximumY)
-					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-				else
+				if (y <= 60 || y >= (height - 100))
 					g2d.setComposite(defcomposite);
+				else
+					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 				g2d.setColor(Color.BLACK);
 				g2d.fillRect(x, y, 64, 64);
