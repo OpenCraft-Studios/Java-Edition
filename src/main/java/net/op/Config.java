@@ -43,7 +43,7 @@ public class Config {
 	public static Properties toProperties() {
 		Properties properties = new Properties();
 
-		properties.setProperty("language", Locales.getLocale().toLanguageTag());
+		properties.setProperty("lang", Locales.getLocale().toLanguageTag());
 		if (LEGACY)
 			properties.setProperty("music", Boolean.toString(SoundManager.MUSIC));
 		else
@@ -58,7 +58,7 @@ public class Config {
 	 * @param properties The object to read
 	 */
 	public static void read(Properties properties) {
-		Locales.setLocale(Locales.of((String) properties.getOrDefault("language", "en-US")));
+		Locales.setLocale(Locales.of((String) properties.getOrDefault("lang", "en-US")));
 		if (LEGACY)
 			SoundManager.MUSIC = Boolean.parseBoolean((String) properties.getOrDefault("music", "false"));
 		else

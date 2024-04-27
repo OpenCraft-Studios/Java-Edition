@@ -1,3 +1,2 @@
 music:true
-language:es-AR
-gameDir:opcraft
+lang:en-US
