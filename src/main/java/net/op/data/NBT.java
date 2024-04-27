@@ -11,7 +11,6 @@ public class NBT {
     }
 
     public static NBT format(String nbt) {
-
         NBT objNBT = new NBT();
 
         int cbrackets = 0;
@@ -21,7 +20,7 @@ public class NBT {
         boolean apostrophe = false;
 
         if (!(nbt.startsWith("[") && nbt.endsWith("]"))) {
-            throw new NBTFormatException();
+            throw new NBTFormatException("Invalid NBT");
         }
 
         nbt = nbt.substring(1, nbt.length() - 1) + ',';
@@ -33,6 +32,24 @@ public class NBT {
         boolean keyIterated = false;
         
         for (char c : charArray) {
+        	if (c == '"') {
+        		qmarks = !qmarks;
+        		continue;
+        	} else if (c == '\'') {
+        		apostrophe = !apostrophe;
+        		continue;
+        	}
+        	
+        	if (keyIterated) {
+                value += c;
+            } else {
+                key += c;
+            }
+        	
+        	if (brackets > 0 || cbrackets > 0 || parenthesis > 0 || apostrophe || qmarks) {
+                continue;
+            }
+        	
             switch (c) {
                 case '=' -> {
                     if (keyIterated) {
@@ -42,10 +59,6 @@ public class NBT {
                     continue;
                 }
                 case ',' -> {
-                    if (brackets > 0 || cbrackets > 0 || parenthesis > 0 || apostrophe || qmarks) {
-                        break;
-                    }
-
                     objNBT.properties.put(key.trim(), value.trim());
 
                     key = "";
@@ -60,18 +73,11 @@ public class NBT {
                 case ']' -> brackets--;
                 case '{' -> cbrackets++;
                 case '}' -> cbrackets--;
-                case '"' -> qmarks = !qmarks;
-                case '\'' -> apostrophe = !apostrophe;
             }
             
-            if (keyIterated) {
-                value += c;
-            } else {
-                key += c;
-            }
         }
 
-        if (!(cbrackets == 0 && brackets == 0 && parenthesis == 0 && !qmarks && !apostrophe)) {
+        if (!(cbrackets == 0 && brackets == 0 && parenthesis == 0) || qmarks || apostrophe) {
             throw new NBTFormatException();
         }
 
