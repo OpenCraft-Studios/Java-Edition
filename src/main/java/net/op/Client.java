@@ -282,6 +282,10 @@ public final class Client implements Runnable {
 		if (argSet.has(configFileArgument))
 			Config.DEFAULT_CONFIG_FILE = (String) argSet.valueOf(configFileArgument);
 
+		boolean playedForFirstTime = false;
+		if (!new File(Config.DEFAULT_CONFIG_FILE).exists())
+			playedForFirstTime = true;
+
 		// Starting game
 		Client game = Client.getClient();
 		Thread gameThread = game.thread();
@@ -295,17 +299,18 @@ public final class Client implements Runnable {
 			logger.error("The game ended with errors!");
 		}
 
-		// TODO: Implement this if the game is played by first time
-		System.out.println();
-		System.out.println(" ===== Thanks for playing OpenCraft =====");
-		System.out.println("   We wish you the best experience with");
-		System.out.println("  this game because we are putting all");
-		System.out.println("     our efforts to make this game.");
-		System.out.println();
-		System.out.println("   If you want, you can share this game!");
-		System.out.println(" =========== You're welcome!! ===========");
-		System.out.println("   - OpenCraft's Developer Team " + Calendar.getInstance().get(Calendar.YEAR));
-
+		if (playedForFirstTime) {
+			System.out.println();
+			System.out.println(" ===== Thanks for playing OpenCraft =====");
+			System.out.println("   We wish you the best experience with");
+			System.out.println("  this game because we are putting all");
+			System.out.println("     our efforts to make this game.");
+			System.out.println();
+			System.out.println("   If you want, you can share this game!");
+			System.out.println(" =========== You're welcome!! ===========");
+			System.out.println("   - OpenCraft's Developer Team " + Calendar.getInstance().get(Calendar.YEAR));
+		}
+		
 		// Stops the game
 		System.exit(status);
 	}
