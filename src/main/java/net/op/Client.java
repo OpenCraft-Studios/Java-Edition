@@ -1,5 +1,6 @@
 package net.op;
 
+import static javax.swing.UIManager.*;
 import static net.op.render.display.DisplayManager.destroyDisplay;
 import static net.op.render.display.DisplayManager.isDisplayAlive;
 import static org.josl.openic.IC13.icIsKeyPressed;
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 
 import javax.swing.JOptionPane;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +42,7 @@ public final class Client implements Runnable {
 	private static final Client instance = new Client();
 	public static final Logger logger = LoggerFactory.getLogger(Client.class);
 
-	private final Thread thread;
+	public final Thread thread;
 	private boolean running = false;
 
 	private Render render;
@@ -61,13 +63,12 @@ public final class Client implements Runnable {
 	 */
 	@Override
 	public void run() {
+		/* Initialize the game */
 		try {
-			// Initialize the game
 			init();
 		} catch (Exception e) {
-			/*
-			 * If any exception has been throwed, create a crash dump and try to report it
-			 */
+			// If any exception has been throwed, create a crash dump and try to report it
+
 			JOptionPane.showMessageDialog(null, "Failed to initialize OpenCraft!", "Initialization Error",
 					JOptionPane.ERROR_MESSAGE);
 
@@ -142,6 +143,34 @@ public final class Client implements Runnable {
 			return;
 		}
 
+		// Accept very very thorough debug messages
+		boolean windowsOS = false;
+		
+		String os_name = System.getProperty("os.name");
+		if (os_name != null) {
+			os_name = os_name.toLowerCase();
+			if (os_name.contains("windows")) {
+				windowsOS = true;
+				logger.info("Detected OS Windows!");
+			} else if (os_name.contains("linux"))
+				logger.info("Detected Linux!");
+			else if (os_name.contains("macos"))
+				logger.info("Detected MacOS!");
+		}
+		
+		if (windowsOS) {
+			try {
+				for (LookAndFeelInfo info : getInstalledLookAndFeels()) {
+					if ("Windows".equals(info.getName())) {
+						setLookAndFeel(info.getClassName());
+						break;
+					}
+				}
+			} catch (Exception ex) {
+				SpectoError.ignored(ex, getClass());
+			}
+		}
+
 		// Load languages
 		LocalesLoader.load();
 
@@ -154,20 +183,12 @@ public final class Client implements Runnable {
 
 		// Initialize sound and render
 		SoundManager.init();
+
 		this.render.init();
 
 		InputManager.bindKeyboard();
 
 		this.running = true;
-	}
-
-	/**
-	 * This method is used to get the game's current thread.
-	 *
-	 * @return The thread
-	 */
-	public Thread thread() {
-		return this.thread;
 	}
 
 	public double getNanoPerTick() {
@@ -286,10 +307,13 @@ public final class Client implements Runnable {
 		if (!new File(Config.DEFAULT_CONFIG_FILE).exists())
 			playedForFirstTime = true;
 
-		// Starting game
+		/* Start the game */
+
 		Client game = Client.getClient();
-		Thread gameThread = game.thread();
+		Thread gameThread = game.thread;
 		gameThread.start();
+
+		/* Wait the game to end */
 
 		int status = 0;
 		try {
@@ -310,7 +334,7 @@ public final class Client implements Runnable {
 			System.out.println(" =========== You're welcome!! ===========");
 			System.out.println("   - OpenCraft's Developer Team " + Calendar.getInstance().get(Calendar.YEAR));
 		}
-		
+
 		// Stops the game
 		System.exit(status);
 	}

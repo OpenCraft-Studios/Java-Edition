@@ -109,10 +109,15 @@ public class SoundManager {
 		MUSIC = true;
 		playRandomSound();
 	}
-
-	public static void shutdown() {
+	
+	public static void disable() {
 		MUSIC = false;
 		stopSounds();
+	}
+
+	public static void shutdown() {
+		disable();
+		logger.info("Shutdown sound system!");
 	}
 
 	public static double getVolume() {
@@ -121,9 +126,8 @@ public class SoundManager {
 
 	public static void toggle() {
 		if (MUSIC)
-			shutdown();
+			disable();
 		else
 			enable();
 	}
-
 }
