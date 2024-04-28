@@ -1,7 +1,5 @@
 package net.op.spectoland;
 
-import static net.op.spectoland.SpectoUtils.ErrorTemplates.*;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -66,10 +64,6 @@ public class SpectoError {
 	}
 
 	private SpectoError() {
-	}
-
-	public static String serverNotFound(String server_name) {
-		return String.format(SERVER_NOT_FOUND, server_name);
 	}
 
 	public static String warn(final String message) {
