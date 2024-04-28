@@ -1,12 +1,10 @@
 <div align="center">
-	<img src="https://github.com/OpenCraftMC/Java-Edition/blob/trunk/.github/assets/images/icon.png?raw=true" alt="" height="128" width="128" />
+	<img src="https://github.com/OpenCraftMC/Java-Edition/blob/dev/.github/assets/images/icon.png?raw=true" alt="" height="128" width="128" />
 	<h1>OpenCraft</h1>
 	<br>
 	<a href="https://sourceforge.net/projects/opencraftmc/files/latest/download"><img alt="Download OpenCraft" src="https://img.shields.io/sourceforge/dt/opencraftmc.svg" ></a>
 </div>
 
-## Downloads
-You can get a official copy on [*The releases section*](https://github.com/OpenCraftMC/Java-Edition/releases/latest)
 [![Download OpenCraft](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/opencraftmc/files/latest/download)
 
 ## About ℹ️
@@ -34,6 +32,5 @@ please have a look at the [issues section](https://github.com/OpenCraftMC/Java-E
 
 ## How to contribute 📝
 Do you like to make **OpenCraft** great?. Excelent! just fork the repository and submit a pull request on the *dev* branch.
-If we decide that your commit is allright, we'll pull request the *release* branch.
 
 - Related: [**How i make a fork?**](https://docs.github.com/articles/fork-a-repo)
