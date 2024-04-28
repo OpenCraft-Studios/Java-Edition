@@ -5,6 +5,8 @@
 	<a href="https://sourceforge.net/projects/opencraftmc/files/latest/download"><img alt="Download OpenCraft" src="https://img.shields.io/sourceforge/dt/opencraftmc.svg" ></a>
 </div>
 
+## Downloads
+You can get a official copy on [*The releases section*](https://github.com/OpenCraftMC/Java-Edition/releases/latest)
 [![Download OpenCraft](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/opencraftmc/files/latest/download)
 
 ## About ℹ️
