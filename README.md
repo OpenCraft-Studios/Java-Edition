@@ -31,6 +31,7 @@ We are always looking for motivated people to contribute. If you feel like it co
 please have a look at the [issues section](https://github.com/OpenCraftMC/Java-Edition/issues) :)
 
 ## How to contribute 📝
-Do you like to make **OpenCraft** great?. Excelent! just fork the repository and submit a pull request on the *trunk* branch.
+Do you like to make **OpenCraft** great?. Excelent! just fork the repository and submit a pull request on the *dev* branch.
+If we decide that your commit is allright, we'll pull request the *release* branch.
 
 - Related: [**How i make a fork?**](https://docs.github.com/articles/fork-a-repo)
