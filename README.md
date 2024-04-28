@@ -37,7 +37,6 @@ We are a small community so we need help to implement upgrades for new OpenCraft
 We are always looking for motivated people to contribute. If you feel like it could be you,
 please have a look at the [issues section](https://github.com/OpenCraftMC/Java-Edition/issues) :)
 
-## How to contribute 📝
-Do you like to make **OpenCraft** great?. Excelent! just fork the repository and submit a pull request on the *dev* branch.
+![Alt](https://repobeats.axiom.co/api/embed/b0abd013f1f54ae6ce4cd429e2ebdd5a5bbe5589.svg "Repobeats analytics image")
 
 - Related: [**How i make a fork?**](https://docs.github.com/articles/fork-a-repo)
