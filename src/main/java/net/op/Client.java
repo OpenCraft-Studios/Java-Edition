@@ -1,6 +1,7 @@
 package net.op;
 
-import static javax.swing.UIManager.*;
+import static javax.swing.UIManager.getInstalledLookAndFeels;
+import static javax.swing.UIManager.setLookAndFeel;
 import static net.op.render.display.DisplayManager.destroyDisplay;
 import static net.op.render.display.DisplayManager.isDisplayAlive;
 import static org.josl.openic.IC13.icIsKeyPressed;
@@ -13,6 +14,8 @@ import java.util.Calendar;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import org.guppy4j.run.Startable;
+import org.guppy4j.run.Stoppable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +33,7 @@ import net.op.spectoland.SpectoError;
 import net.op.spectoland.SpectoError.InternalLogger;
 import net.op.util.OCFont;
 
-public final class Client implements Runnable {
+public final class Client implements Runnable, Startable, Stoppable {
 
 	public static final String NAME = "OpenCraft";
 	public static final String VERSION = "24r10";
@@ -147,6 +150,7 @@ public final class Client implements Runnable {
 		boolean windowsOS = false;
 		
 		String os_name = System.getProperty("os.name");
+		
 		if (os_name != null) {
 			os_name = os_name.toLowerCase();
 			if (os_name.contains("windows")) {
@@ -170,7 +174,7 @@ public final class Client implements Runnable {
 				SpectoError.ignored(ex, getClass());
 			}
 		}
-
+		
 		// Load languages
 		LocalesLoader.load();
 
@@ -183,16 +187,20 @@ public final class Client implements Runnable {
 
 		// Initialize sound and render
 		SoundManager.init();
-
 		this.render.init();
 
+		// Bind keyboard
 		InputManager.bindKeyboard();
-
 		this.running = true;
 	}
 
 	public double getNanoPerTick() {
 		return (double) NANOSECONDS / Config.FPS_CAP;
+	}
+	
+	@Override
+	public void start() {
+		thread.start();
 	}
 
 	/**
@@ -248,6 +256,7 @@ public final class Client implements Runnable {
 	 * takes as default argument 'force' for value 'false': So the game ends
 	 * correctly and it saves everything.
 	 */
+	@Override
 	public void stop() {
 		this.stop(false);
 	}

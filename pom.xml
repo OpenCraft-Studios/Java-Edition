@@ -39,7 +39,7 @@
 		<dependency>
 			<groupId>org.guppy4j</groupId>
 			<artifactId>sound-impl</artifactId>
-			<version>0.0.3</version>
+			<version>0.0.7</version>
 		</dependency>
 
 		<dependency>

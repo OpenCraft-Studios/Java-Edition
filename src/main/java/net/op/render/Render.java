@@ -103,7 +103,7 @@ public final class Render extends Canvas {
         logger.info("Render system initialized!");
         logger.info("[OpenGL] Using OpenGL: %s".formatted(OPEN_GL ? "Yes" : "No"));
         
-        logger.info("DPI is set to {}", DPI);
+        logger.info("DPI is set to {} ({})", DPI, Math.round(DPI * 1.0417d) + "%");
         if (DPI != 96)
         	logger.info(" \u2514\u2500 (Recommended 96)", DPI);
 
