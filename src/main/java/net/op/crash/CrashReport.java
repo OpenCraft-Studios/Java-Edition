@@ -38,7 +38,7 @@ public class CrashReport {
 	 * This method generates a random path to save
 	 * the crash report using {@code Calendar} info.
 	 * 
-	 * @return The file path
+	 * @return A random file path
 	 */
 	public static String generatePath() {
 		Calendar cInstance = Calendar.getInstance();
@@ -67,6 +67,16 @@ public class CrashReport {
 			ignored.printStackTrace();
 			System.err.println("FATAL ERROR: Cannot save Report Info to file!");
 		}
+	}
+	
+	/**
+	 * This method attempts to save crash information
+	 * to a {@code File}
+	 * 
+	 * @param filepath The file path to save
+	 */
+	public void save(String filepath) {
+		this.save(new File(filepath));
 	}
 
 	/**

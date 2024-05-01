@@ -1,5 +1,8 @@
 package net.op;
 
+import static org.josl.openic.IC15.*;
+import static org.josl.openic.IC13.*;
+
 import static javax.swing.UIManager.getInstalledLookAndFeels;
 import static javax.swing.UIManager.setLookAndFeel;
 import static net.op.render.display.DisplayManager.destroyDisplay;
@@ -93,7 +96,7 @@ public final class Client implements Runnable, Startable, Stoppable {
 		double timePassed;
 		double delta = 0;
 
-		do {
+		while (running) {
 			try {
 				final long loopStart = System.nanoTime();
 
@@ -112,7 +115,7 @@ public final class Client implements Runnable, Startable, Stoppable {
 			} catch (Throwable tb) {
 				SpectoError.process(tb);
 			}
-		} while (running);
+		}
 
 		// Finally stops the game
 		stop();
@@ -129,9 +132,8 @@ public final class Client implements Runnable, Startable, Stoppable {
 	}
 
 	public void render() {
-		if (this.render.shouldRender()) {
+		if (render.shouldRender())
 			this.render.update();
-		}
 	}
 
 	/**
@@ -145,6 +147,9 @@ public final class Client implements Runnable, Startable, Stoppable {
 			System.err.println("(!) This message should not be displayed!");
 			return;
 		}
+		
+		if (!icInit())
+			System.err.println(SpectoError.error("Error initializing OpenIC"));
 
 		// Accept very very thorough debug messages
 		boolean windowsOS = false;
@@ -200,7 +205,7 @@ public final class Client implements Runnable, Startable, Stoppable {
 	
 	@Override
 	public void start() {
-		thread.start();
+		this.thread.start();
 	}
 
 	/**
@@ -227,13 +232,12 @@ public final class Client implements Runnable, Startable, Stoppable {
 
 		// Stop logging and collect exceptions
 		if (InternalLogger.ignoredExceptions > 0) {
-			System.err.printf("(!): %d ignored exceptions were throwed!\n", InternalLogger.ignoredExceptions);
+			System.err.printf("\n(!): %d ignored exceptions were throwed!\n", InternalLogger.ignoredExceptions);
 			try {
 				InternalLogger.writeFile();
 			} catch (Exception ignored) {
 			}
-		} else
-			System.out.println("OK: No ignored exceptions are detected!");
+		}
 
 		InternalLogger.stopLogging();
 

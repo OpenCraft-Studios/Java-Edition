@@ -2,6 +2,7 @@ package net.op.render.textures;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+
 import net.op.util.ResourceGetter;
 
 public class Tilesheet {
