@@ -11,6 +11,7 @@ import java.util.Random;
 import org.scgi.Display;
 
 import net.op.Client;
+import net.op.render.textures.Assets;
 import net.op.util.OCFont;
 import net.op.util.Resource;
 
@@ -36,11 +37,11 @@ public class Loadscreen extends Screen {
 	}
 
 	@Override
-	public void render(Graphics g) {
-		animatedLS((Graphics2D) g, true);
+	public void render(Graphics g, Assets assets) {
+		animatedLS((Graphics2D) g, true, assets);
 	}
 
-	public void animatedLS(Graphics2D g2d, boolean slideUp) {
+	public void animatedLS(Graphics2D g2d, boolean slideUp, Assets assets) {
 		drawStars(g2d, 101);
 
 		// Draw OpenCraft Text
@@ -61,7 +62,7 @@ public class Loadscreen extends Screen {
 		/* OpenCraft Text Slide Up */
 		if (slideUp) {
 			if (i <= I_MAX) {
-				attemptToChange(g2d);
+				attemptToChange(g2d, assets);
 			} else {
 				i -= 2;
 			}
@@ -97,7 +98,7 @@ public class Loadscreen extends Screen {
 		g2d.drawImage(star_background, 0, 0, null);
 	}
 
-	private void attemptToChange(Graphics g) {
+	private void attemptToChange(Graphics g, Assets assets) {
 		final long current = System.currentTimeMillis();
 
 		if (start == -1) {
@@ -110,11 +111,11 @@ public class Loadscreen extends Screen {
 			BufferedImage bi = new BufferedImage(854, 480, BufferedImage.TYPE_INT_ARGB);
 
 			Graphics gbi = bi.getGraphics();
-			MenuScreen.getInstance().render(g);
+			MenuScreen.getInstance().render(g, assets);
 
 			AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) alpha);
 			((Graphics2D) gbi).setComposite(ac);
-			animatedLS((Graphics2D) gbi, false);
+			animatedLS((Graphics2D) gbi, false, null);
 
 			g.drawImage(bi, 0, 0, null);
 			return;

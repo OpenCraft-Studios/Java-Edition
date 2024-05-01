@@ -7,8 +7,7 @@ import static net.op.language.Translations.OPTIONS_LOCALESTAB;
 import static net.op.language.Translations.OPTIONS_MUSIC;
 import static net.op.language.Translations.OPTIONS_OFF;
 import static net.op.language.Translations.OPTIONS_ON;
-import static net.op.render.textures.GUITilesheet.BUTTON;
-import static net.op.render.textures.GUITilesheet.BUTTON_HIGHLIGHTED;
+import static net.op.render.textures.Assets.*;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -24,7 +23,7 @@ import org.scgi.Display;
 import net.op.Config;
 import net.op.input.MouseUtils;
 import net.op.language.Locales;
-import net.op.render.textures.GUITilesheet;
+import net.op.render.textures.Assets;
 import net.op.sound.SoundManager;
 import net.op.spectoland.SpectoError;
 import net.op.util.OCFont;
@@ -46,9 +45,8 @@ public class SettingsScreen extends Screen {
 	}
 
 	@Override
-	public void render(Graphics g) {
+	public void render(Graphics g, Assets assets) {
 		Graphics2D g2d = (Graphics2D) g;
-		GUITilesheet gts = GUITilesheet.getInstance();
 
 		int width = Display.width();
 		int height = Display.height();
@@ -68,13 +66,13 @@ public class SettingsScreen extends Screen {
 
 				g2d.setColor(Color.BLACK);
 				g2d.fillRect(x, y, 64, 64);
-				g2d.drawImage(gts.getBackground(), x, y, 64, 64, null);
+				g2d.drawImage(assets.getBackground(), x, y, 64, 64, null);
 			}
 		}
 		g2d.setComposite(defcomposite);
 
 		if (currentTab.equalsIgnoreCase("options.generalTab")) {
-			drawGeneralTab(g);
+			drawGeneralTab(g, assets);
 		} else if (currentTab.equalsIgnoreCase("options.localesTab")) {
 			drawLocalesTab(g);
 		}
@@ -82,9 +80,9 @@ public class SettingsScreen extends Screen {
 		/*-------------------------------*/
 		boolean donesel = MouseUtils.inRange((width - 175) / 2, height - 90, 175, 40);
 		boolean ofcpage = MouseUtils.inRange(30, height - 90, 257, 40);
-		g.drawImage(gts.getButton(donesel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 175) / 2, height - 90, 175, 40,
+		g.drawImage(assets.getButton(donesel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 175) / 2, height - 90, 175, 40,
 				null);
-		g.drawImage(gts.getButton(ofcpage ? BUTTON_HIGHLIGHTED : BUTTON), 30, height - 90, 257, 40, null);
+		g.drawImage(assets.getButton(ofcpage ? BUTTON_HIGHLIGHTED : BUTTON), 30, height - 90, 257, 40, null);
 
 		font.drawShadow(g, Locales.CURRENT[GUI_DONE], (width - 175) / 2 + 62, height - 66,
 				donesel ? 0xFFFFA0 : 0xFFFFFF);
@@ -98,8 +96,8 @@ public class SettingsScreen extends Screen {
 		boolean arrow1 = MouseUtils.inRange((width - 400) / 2 + 100, 20, 21, 33);
 		boolean arrow0 = MouseUtils.inRange((width - 400) / 2 + 273, 20, 21, 33);
 
-		g.drawImage(gts.getArrow(arrow1 ? 3 : 1), (width - 400) / 2 + 100, 15, 21, 33, null);
-		g.drawImage(gts.getArrow(arrow0 ? 2 : 0), (width - 400) / 2 + 273, 15, 21, 33, null);
+		g.drawImage(assets.getArrow(arrow1 ? 3 : 1), (width - 400) / 2 + 100, 15, 21, 33, null);
+		g.drawImage(assets.getArrow(arrow0 ? 2 : 0), (width - 400) / 2 + 273, 15, 21, 33, null);
 
 		font.drawShadow(g, Locales.CURRENT[currentTab.equalsIgnoreCase("options.generalTab") ? OPTIONS_GENERALTAB
 				: OPTIONS_LOCALESTAB], (width - 400) / 2 + 155, 37, 0xFFFFFF);
@@ -133,12 +131,11 @@ public class SettingsScreen extends Screen {
 
 	}
 
-	private void drawGeneralTab(Graphics g) {
-		GUITilesheet gts = GUITilesheet.getInstance();
+	private void drawGeneralTab(Graphics g, Assets assets) {
 		OCFont font = OCFont.mojangles();
 
 		boolean musicBtn = MouseUtils.inRange(30, 80, 200, 40);
-		g.drawImage(gts.getButton(musicBtn ? BUTTON_HIGHLIGHTED : BUTTON), 30, 80, 200, 40, null);
+		g.drawImage(assets.getButton(musicBtn ? BUTTON_HIGHLIGHTED : BUTTON), 30, 80, 200, 40, null);
 
 		font.size(20);
 		font.color(musicBtn ? 0xFFFFA0 : 0xFFFFFF);

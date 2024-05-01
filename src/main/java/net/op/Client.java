@@ -20,7 +20,7 @@ import net.op.input.InputManager;
 import net.op.language.Locales;
 import net.op.language.LocalesLoader;
 import net.op.render.Render;
-import net.op.render.textures.GUITilesheet;
+import net.op.render.textures.Assets;
 import net.op.sound.SoundManager;
 import net.op.spectoland.SpectoError;
 import net.op.spectoland.SpectoError.InternalLogger;
@@ -38,14 +38,17 @@ public final class Client implements Runnable, Startable, Stoppable {
 
 	public final Thread thread;
 
+	private boolean running = true;
 	private Render render;
+	private Assets assets;
 
 	/**
 	 * Creates a instance of the game. This method must be executed once. If you
 	 * execute it more times, the game could crash or being completely unusable.
 	 */
 	Client() {
-		this.render = Render.create();
+		this.assets = Assets.create("/gui.png");
+		this.render = Render.create(this.assets);
 		this.thread = new Thread(this);
 		this.thread.setName("main");
 	}
@@ -83,7 +86,7 @@ public final class Client implements Runnable, Startable, Stoppable {
 		double timePassed;
 		double delta = 0;
 
-		while (!Display.shouldClose()) {
+		while (running && !Display.shouldClose()) {
 			try {
 				final long loopStart = System.nanoTime();
 
@@ -160,7 +163,6 @@ public final class Client implements Runnable, Startable, Stoppable {
 		Config.read();
 
 		// Create basics resources
-		GUITilesheet.create("/gui.png");
 		OCFont.create("/fonts");
 
 		// Initialize sound and render
@@ -190,6 +192,10 @@ public final class Client implements Runnable, Startable, Stoppable {
 	public void stop(boolean force) {
 		if (force)
 			System.exit(0);
+		if (!running)
+			return;
+		
+		this.running = false;
 
 		// Disable soundManager
 		SoundManager.shutdown();

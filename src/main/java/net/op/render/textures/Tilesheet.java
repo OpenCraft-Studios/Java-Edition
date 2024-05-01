@@ -1,6 +1,5 @@
 package net.op.render.textures;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import net.op.util.ResourceGetter;
@@ -25,7 +24,11 @@ public class Tilesheet {
         return new Tilesheet(tilesheet);
     }
     
-    public static Tilesheet forImage(Image image) {
+    public static Tilesheet read(String path) {
+    	return new Tilesheet(path);
+    }
+    
+    public static Tilesheet forImage(BufferedImage image) {
         return Tilesheet.forTexture(Texture.of(image));
     }
 

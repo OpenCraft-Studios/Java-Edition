@@ -18,6 +18,7 @@ import net.op.Client;
 import net.op.Config;
 import net.op.input.InputManager;
 import net.op.render.screens.Screen;
+import net.op.render.textures.Assets;
 
 /**
  * <h1>Render</h1><br>
@@ -34,16 +35,19 @@ public final class Render {
 	public static final Logger logger = LoggerFactory.getLogger(Render.class);
 
 	private static final boolean OPEN_GL;
+	private final Assets assets;
 
 	static {
 		// Checks if OpenGL-Based Pipeline is enabled
 		OPEN_GL = Boolean.parseBoolean(Optional.ofNullable(System.getProperty("sun.java2d.opengl")).orElse("false"));
 	}
 
+
 	/**
 	 * Creates a new instance of this class.
 	 */
-	private Render() {
+	private Render(Assets assets) {
+		this.assets = assets;
 	}
 
 	/**
@@ -51,8 +55,8 @@ public final class Render {
 	 * 
 	 * @return That instance
 	 */
-	public static Render create() {
-		return new Render();
+	public static Render create(Assets assets) {
+		return new Render(assets);
 	}
 
 	/**
@@ -125,7 +129,7 @@ public final class Render {
 			return;
 
 		Graphics2D g2d = (Graphics2D) Context.getGraphics();
-		Screen.renderCurrent(g2d);
+		Screen.renderCurrent(g2d, this.assets);
 		g2d.dispose();
 
 		Context.draw();

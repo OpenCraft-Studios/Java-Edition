@@ -3,22 +3,18 @@ package net.op.render.screens;
 import static net.op.language.Translations.MENU_OPTIONS;
 import static net.op.language.Translations.MENU_QUIT;
 import static net.op.language.Translations.MENU_SINGLEPLAYER;
-import static net.op.render.textures.GUITilesheet.BUTTON;
-import static net.op.render.textures.GUITilesheet.BUTTON_DISABLED;
-import static net.op.render.textures.GUITilesheet.BUTTON_HIGHLIGHTED;
+import static net.op.render.textures.Assets.*;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
-import org.josl.openic.IC;
-import org.josl.openic.input.ComponentMouse;
 import org.scgi.Display;
 
 import net.op.Client;
 import net.op.OpenCraft;
 import net.op.input.MouseUtils;
 import net.op.language.Locales;
-import net.op.render.textures.GUITilesheet;
+import net.op.render.textures.Assets;
 import net.op.spectoland.SpectoError;
 import net.op.util.OCFont;
 import net.op.util.Resource;
@@ -37,9 +33,7 @@ public class MenuScreen extends Screen {
 	}
 
 	@Override
-	public void render(Graphics g) {
-		GUITilesheet gts = GUITilesheet.getInstance();
-
+	public void render(Graphics g, Assets assets) {
 		int width = Display.width();
 		int height = Display.height();
 		OCFont font = OCFont.mojangles();
@@ -49,7 +43,7 @@ public class MenuScreen extends Screen {
 
 		for (int x = 0; x < width; x += 64) {
 			for (int y = 0; y < height; y += 64) {
-				g.drawImage(gts.getBackground(), x, y, 64, 64, null);
+				g.drawImage(assets.getBackground(), x, y, 64, 64, null);
 			}
 		}
 
@@ -63,13 +57,13 @@ public class MenuScreen extends Screen {
 		}
 
 		// Draw buttons
-		g.drawImage(gts.getButton(BUTTON_DISABLED), (width - 400) / 2, height / 2 - 50, 400, 40, null);
-		g.drawImage(gts.getButton(setsel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 400) / 2, height / 2 - 4, 198, 40,
+		g.drawImage(assets.getButton(BUTTON_DISABLED), (width - 400) / 2, height / 2 - 50, 400, 40, null);
+		g.drawImage(assets.getButton(setsel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 400) / 2, height / 2 - 4, 198, 40,
 				null);
-		g.drawImage(gts.getButton(quitsel ? BUTTON_HIGHLIGHTED : BUTTON), width / 2, height / 2 - 4, 200, 40, null);
+		g.drawImage(assets.getButton(quitsel ? BUTTON_HIGHLIGHTED : BUTTON), width / 2, height / 2 - 4, 200, 40, null);
 
 		// Logo
-		g.drawImage(gts.getLogo(), (width - 500) / 2, (480 > height) ? 10 : 30, 500, 87, null);
+		g.drawImage(assets.getLogo(), (width - 500) / 2, (480 > height) ? 10 : 30, 500, 87, null);
 		g.setColor(Color.WHITE);
 
 		int singlepy_x = width / 2 - 59;
@@ -107,17 +101,17 @@ public class MenuScreen extends Screen {
 	}
 
 	public void check(boolean quitsel, boolean setsel) {
-		ComponentMouse mouse = (ComponentMouse) IC.getDefaultMouse();
-		if (!mouse.isButtonPressed(1))
+		if (!MouseUtils.isButtonPressed(1))
 			return;
 		
 		if (quitsel) {
 			OpenCraft.getClient().stop();
 			try {
-				Thread.sleep(500);
+				Thread.sleep(20);
 			} catch (Exception ex) {
 				SpectoError.ignored(ex, MenuScreen.class);
 			}
+			
 		} else if (setsel) {
 			Screen.setCurrent(SettingsScreen.class);
 		}

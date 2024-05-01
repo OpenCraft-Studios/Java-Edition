@@ -2,6 +2,7 @@ package net.op.render.screens;
 
 import java.awt.Graphics;
 
+import net.op.render.textures.Assets;
 import net.op.util.Resource;
 
 public abstract class Screen {
@@ -13,7 +14,7 @@ public abstract class Screen {
 		this.resource = resource;
 	}
 
-	public abstract void render(Graphics g);
+	public abstract void render(Graphics g, Assets assets);
 
 	public static void setCurrent(Class<? extends Screen> screenClass) {
 		if (MenuScreen.class.equals(screenClass))
@@ -32,12 +33,12 @@ public abstract class Screen {
 		return current;
 	}
 
-	public static void renderCurrent(Graphics g) {
+	public static void renderCurrent(Graphics g, Assets assets) {
 		if (current == null) {
 			return;
 		}
 
-		current.render(g);
+		current.render(g, assets);
 	}
 
 	public final Resource getResource() {

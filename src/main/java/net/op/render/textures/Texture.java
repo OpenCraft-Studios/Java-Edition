@@ -13,17 +13,17 @@ public class Texture {
 
     private Optional<Image> opImg;
 
-    public Texture(Image img) {
+    public Texture(BufferedImage img) {
         Image img1 = null;
         
         if (img != null) {
-            img1 = toCompatibleImage((BufferedImage) img);
+            img1 = toCompatibleImage(img);
         }
         
         this.opImg = Optional.ofNullable(img1);
     }
 
-    public static Texture of(Image img) {
+    public static Texture of(BufferedImage img) {
         return new Texture(img);
     }
 
