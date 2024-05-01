@@ -1,7 +1,5 @@
 package net.op.render.screens;
 
-import static net.op.render.display.DisplayManager.getDisplay;
-
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
@@ -10,8 +8,9 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+import org.scgi.Display;
+
 import net.op.Client;
-import net.op.render.display.Display;
 import net.op.util.OCFont;
 import net.op.util.Resource;
 
@@ -20,12 +19,12 @@ public class Loadscreen extends Screen {
 	public static final Resource RESOURCE = Resource.format("opencraft:screens.loadscreen");
 
 	private static final int TIMEOUT = 3250;
-	private static int I_MAX = Display.HEIGHT / 2;
+	private static int I_MAX = 480 / 2;
 	private static BufferedImage star_background = null;
 
 	public static Loadscreen instance = create();
 
-	private float i = Display.HEIGHT - 1;
+	private float i = 480 - 1;
 	private long start = -1;
 
 	private Loadscreen() {
@@ -47,17 +46,17 @@ public class Loadscreen extends Screen {
 		// Draw OpenCraft Text
 		g2d.setColor(Color.MAGENTA);
 		g2d.setFont(OCFont.getSystemFont("SF Transrobotics").deriveFont(Font.BOLD, 26));
-		g2d.drawString("CODENAME %s".formatted(Client.CODENAME.toUpperCase()), (Display.WIDTH - 333) / 2,
-				(Display.HEIGHT + 135) / 2);
+		g2d.drawString("CODENAME %s".formatted(Client.CODENAME.toUpperCase()), (854 - 333) / 2,
+				(480 + 135) / 2);
 
 		// Draw Rectangle
 		g2d.setColor(Color.GREEN);
-		g2d.drawRoundRect((Display.WIDTH - 451) / 2, (Display.HEIGHT - 164) / 2, 421, 112, 15, 15);
+		g2d.drawRoundRect((854 - 451) / 2, (480 - 164) / 2, 421, 112, 15, 15);
 
 		// Draw OpenCraft Text
 		g2d.setColor(Color.RED);
 		g2d.setFont(g2d.getFont().deriveFont(Font.ITALIC, 70));
-		g2d.drawString("OpenCraft", (Display.WIDTH - 376) / 2, (int) i);
+		g2d.drawString("OpenCraft", (854 - 376) / 2, (int) i);
 
 		/* OpenCraft Text Slide Up */
 		if (slideUp) {
@@ -72,11 +71,11 @@ public class Loadscreen extends Screen {
 
 	private void drawStars(Graphics2D g2d, int stars) {
 		BufferedImage oldStar_background = star_background;
-		star_background = new BufferedImage(Display.WIDTH, Display.HEIGHT, BufferedImage.TYPE_INT_RGB);
+		star_background = new BufferedImage(854, 480, BufferedImage.TYPE_INT_RGB);
 		Graphics g = star_background.getGraphics();
 
 		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, Display.WIDTH, Display.HEIGHT);
+		g.fillRect(0, 0, 854, 480);
 
 		if (oldStar_background != null) {
 			g.drawImage(oldStar_background, 0, (int) (System.currentTimeMillis() / 1000 % 100) * -1, null);
@@ -89,8 +88,8 @@ public class Loadscreen extends Screen {
 				continue;
 			}
 
-			int star_x = random.nextInt(Display.WIDTH);
-			int star_y = random.nextInt(Display.HEIGHT);
+			int star_x = random.nextInt(854);
+			int star_y = random.nextInt(480);
 
 			star_background.setRGB(star_x, star_y, 0xFFFFFF);
 		}
@@ -108,7 +107,7 @@ public class Loadscreen extends Screen {
 		if (current - start <= TIMEOUT) {
 			double alpha = 1 - (current - start) / (double) TIMEOUT;
 
-			BufferedImage bi = new BufferedImage(Display.WIDTH, Display.HEIGHT, BufferedImage.TYPE_INT_ARGB);
+			BufferedImage bi = new BufferedImage(854, 480, BufferedImage.TYPE_INT_ARGB);
 
 			Graphics gbi = bi.getGraphics();
 			MenuScreen.getInstance().render(g);
@@ -123,8 +122,8 @@ public class Loadscreen extends Screen {
 		
 		instance = null;
 		System.gc();
-		getDisplay().setResizable(true);
-		Screen.setCurrent(MenuScreen.getInstance());
+		Display.setResizable(true);
+		Screen.setCurrent(MenuScreen.class);
 	}
 
 	public static Loadscreen getInstance() {

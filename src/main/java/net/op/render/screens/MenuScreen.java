@@ -3,8 +3,6 @@ package net.op.render.screens;
 import static net.op.language.Translations.MENU_OPTIONS;
 import static net.op.language.Translations.MENU_QUIT;
 import static net.op.language.Translations.MENU_SINGLEPLAYER;
-import static net.op.render.display.DisplayManager.getDisplayHeight;
-import static net.op.render.display.DisplayManager.getDisplayWidth;
 import static net.op.render.textures.GUITilesheet.BUTTON;
 import static net.op.render.textures.GUITilesheet.BUTTON_DISABLED;
 import static net.op.render.textures.GUITilesheet.BUTTON_HIGHLIGHTED;
@@ -14,11 +12,12 @@ import java.awt.Graphics;
 
 import org.josl.openic.IC;
 import org.josl.openic.input.ComponentMouse;
+import org.scgi.Display;
 
 import net.op.Client;
+import net.op.OpenCraft;
 import net.op.input.MouseUtils;
 import net.op.language.Locales;
-import net.op.render.display.Display;
 import net.op.render.textures.GUITilesheet;
 import net.op.spectoland.SpectoError;
 import net.op.util.OCFont;
@@ -41,8 +40,8 @@ public class MenuScreen extends Screen {
 	public void render(Graphics g) {
 		GUITilesheet gts = GUITilesheet.getInstance();
 
-		int width = getDisplayWidth();
-		int height = getDisplayHeight();
+		int width = Display.width();
+		int height = Display.height();
 		OCFont font = OCFont.mojangles();
 
 		g.setPaintMode();
@@ -70,7 +69,7 @@ public class MenuScreen extends Screen {
 		g.drawImage(gts.getButton(quitsel ? BUTTON_HIGHLIGHTED : BUTTON), width / 2, height / 2 - 4, 200, 40, null);
 
 		// Logo
-		g.drawImage(gts.getLogo(), (width - 500) / 2, (Display.HEIGHT > height) ? 10 : 30, 500, 87, null);
+		g.drawImage(gts.getLogo(), (width - 500) / 2, (480 > height) ? 10 : 30, 500, 87, null);
 		g.setColor(Color.WHITE);
 
 		int singlepy_x = width / 2 - 59;
@@ -109,19 +108,18 @@ public class MenuScreen extends Screen {
 
 	public void check(boolean quitsel, boolean setsel) {
 		ComponentMouse mouse = (ComponentMouse) IC.getDefaultMouse();
-		if (mouse.isButtonPressed(1)) {
-			if (quitsel) {
-				Client.getClient().stop();
-				try {
-					Thread.sleep(20);
-				} catch (Exception ex) {
-					SpectoError.ignored(ex, MenuScreen.class);
-				}
+		if (!mouse.isButtonPressed(1))
+			return;
+		
+		if (quitsel) {
+			OpenCraft.getClient().stop();
+			try {
+				Thread.sleep(500);
+			} catch (Exception ex) {
+				SpectoError.ignored(ex, MenuScreen.class);
 			}
-
-			if (setsel) {
-				Screen.setCurrent(SettingsScreen.getInstance());
-			}
+		} else if (setsel) {
+			Screen.setCurrent(SettingsScreen.class);
 		}
 	}
 

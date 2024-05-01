@@ -1,13 +1,13 @@
 package net.op.input;
 
 import net.java.games.input.Controller;
-import net.op.render.Render;
 import static org.josl.openic.IC10.IC_TRUE;
 import static org.josl.openic.IC15.icBindDevice;
 import static org.josl.openic.IC15.icGenDeviceId;
 import org.josl.openic.input.ComponentMouse;
 import org.josl.openic.input.Keyboard;
 import org.josl.openic.input.Mouse;
+import org.scgi.Context;
 
 public class InputManager {
 
@@ -20,9 +20,9 @@ public class InputManager {
         icBindDevice(Controller.Type.KEYBOARD, keyboard, IC_TRUE, id);
     }
 
-    public static void bindMouse(Render renderSystem) {
+    public static void bindMouse() {
         long id = icGenDeviceId();
-        Mouse mouse = new ComponentMouse(renderSystem);
+        Mouse mouse = new ComponentMouse(Context.cv);
         icBindDevice(Controller.Type.MOUSE, mouse, IC_TRUE, id);
     }
 

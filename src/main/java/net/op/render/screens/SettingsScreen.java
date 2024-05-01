@@ -7,8 +7,6 @@ import static net.op.language.Translations.OPTIONS_LOCALESTAB;
 import static net.op.language.Translations.OPTIONS_MUSIC;
 import static net.op.language.Translations.OPTIONS_OFF;
 import static net.op.language.Translations.OPTIONS_ON;
-import static net.op.render.display.DisplayManager.getDisplayHeight;
-import static net.op.render.display.DisplayManager.getDisplayWidth;
 import static net.op.render.textures.GUITilesheet.BUTTON;
 import static net.op.render.textures.GUITilesheet.BUTTON_HIGHLIGHTED;
 
@@ -20,6 +18,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.net.URI;
 import java.util.Locale;
+
+import org.scgi.Display;
 
 import net.op.Config;
 import net.op.input.MouseUtils;
@@ -50,8 +50,8 @@ public class SettingsScreen extends Screen {
 		Graphics2D g2d = (Graphics2D) g;
 		GUITilesheet gts = GUITilesheet.getInstance();
 
-		int width = getDisplayWidth();
-		int height = getDisplayHeight();
+		int width = Display.width();
+		int height = Display.height();
 
 		OCFont font = OCFont.mojangles();
 
@@ -111,7 +111,7 @@ public class SettingsScreen extends Screen {
 		check(1, donesel, () -> {
 			currentTab = "options.generalTab";
 			Config.save();
-			Screen.setCurrent(MenuScreen.getInstance());
+			Screen.setCurrent(MenuScreen.class);
 		});
 
 		check(1, arrow0, () -> {
@@ -160,7 +160,7 @@ public class SettingsScreen extends Screen {
 
 	private void drawLocalesTab(Graphics g) {
 		// Draw buttons
-		final int width = getDisplayWidth();
+		final int width = Display.width();
 		final String strLang = Locales.getGenericName(Locales.getLocale());
 
 		OCFont font = OCFont.mojangles();

@@ -1,30 +1,20 @@
 package net.op;
 
-import static org.josl.openic.IC15.*;
-import static org.josl.openic.IC13.*;
-
 import static javax.swing.UIManager.getInstalledLookAndFeels;
 import static javax.swing.UIManager.setLookAndFeel;
-import static net.op.render.display.DisplayManager.destroyDisplay;
-import static net.op.render.display.DisplayManager.isDisplayAlive;
-import static org.josl.openic.IC13.icIsKeyPressed;
+import static org.josl.openic.IC15.icInit;
 
-import java.awt.event.KeyEvent;
 import java.io.File;
-import java.util.Arrays;
-import java.util.Calendar;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.guppy4j.run.Startable;
 import org.guppy4j.run.Stoppable;
+import org.scgi.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import joptsimple.OptionParser;
-import joptsimple.OptionSet;
-import joptsimple.OptionSpec;
 import net.op.crash.CrashReport;
 import net.op.input.InputManager;
 import net.op.language.Locales;
@@ -44,12 +34,9 @@ public final class Client implements Runnable, Startable, Stoppable {
 	public static final String DISPLAY_NAME = NAME + ' ' + VERSION;
 
 	public static final int NANOSECONDS = 1000000000;
-
-	private static final Client instance = new Client();
 	public static final Logger logger = LoggerFactory.getLogger(Client.class);
 
 	public final Thread thread;
-	private boolean running = false;
 
 	private Render render;
 
@@ -57,7 +44,7 @@ public final class Client implements Runnable, Startable, Stoppable {
 	 * Creates a instance of the game. This method must be executed once. If you
 	 * execute it more times, the game could crash or being completely unusable.
 	 */
-	private Client() {
+	Client() {
 		this.render = Render.create();
 		this.thread = new Thread(this);
 		this.thread.setName("main");
@@ -96,7 +83,7 @@ public final class Client implements Runnable, Startable, Stoppable {
 		double timePassed;
 		double delta = 0;
 
-		while (running) {
+		while (!Display.shouldClose()) {
 			try {
 				final long loopStart = System.nanoTime();
 
@@ -107,8 +94,7 @@ public final class Client implements Runnable, Startable, Stoppable {
 
 				while (delta >= 1) {
 					tick();
-					render();
-
+					this.render.render();
 					delta--;
 				}
 
@@ -126,32 +112,19 @@ public final class Client implements Runnable, Startable, Stoppable {
 	 * anywhere, just in case that the game is not updating properly.
 	 */
 	public void tick() {
-		this.running = !(icIsKeyPressed(KeyEvent.VK_F3) && icIsKeyPressed(KeyEvent.VK_C)) && isDisplayAlive()
-				&& running;
 		SoundManager.update();
-	}
-
-	public void render() {
-		if (render.shouldRender())
-			this.render.update();
 	}
 
 	/**
 	 * The method {@code init()} is used to initialize the game and its
 	 * dependencies.
 	 *
-	 * Is private because it shouldn't be executed twice.
+	 * Is private because it must not be executed twice.
 	 */
 	private void init() {
-		if (running) {
-			System.err.println("(!) This message should not be displayed!");
-			return;
-		}
-		
 		if (!icInit())
-			System.err.println(SpectoError.error("Error initializing OpenIC"));
+			System.err.println(SpectoError.error("Failed to start OpenIC"));
 
-		// Accept very very thorough debug messages
 		boolean windowsOS = false;
 		
 		String os_name = System.getProperty("os.name");
@@ -196,7 +169,6 @@ public final class Client implements Runnable, Startable, Stoppable {
 
 		// Bind keyboard
 		InputManager.bindKeyboard();
-		this.running = true;
 	}
 
 	public double getNanoPerTick() {
@@ -218,17 +190,12 @@ public final class Client implements Runnable, Startable, Stoppable {
 	public void stop(boolean force) {
 		if (force)
 			System.exit(0);
-		if (!running)
-			return;
-
-		// Stop
-		this.running = false;
 
 		// Disable soundManager
 		SoundManager.shutdown();
 
 		// Destroy display
-		destroyDisplay();
+		Display.destroy();
 
 		// Stop logging and collect exceptions
 		if (InternalLogger.ignoredExceptions > 0) {
@@ -263,93 +230,6 @@ public final class Client implements Runnable, Startable, Stoppable {
 	@Override
 	public void stop() {
 		this.stop(false);
-	}
-
-	/**
-	 * This method checks if the game is currently running.
-	 *
-	 * @return the game status
-	 */
-	public boolean isRunning() {
-		return this.running;
-	}
-
-	/**
-	 * The {@code getClient()} method is often used for getting the current client
-	 * instance.
-	 *
-	 * The client is a <i>singleton</i> because is more easy to have a non-static
-	 * client and access it by a static method.
-	 *
-	 * @return The current client instance
-	 */
-	public static Client getClient() {
-		return Client.instance;
-	}
-
-	/**
-	 * <b>Main method</b><br>
-	 * Is the principal method that guides the: initialization, running and the stop
-	 * of the game. If you want to create your own OpenCraft launcher, we recommend
-	 * delete this method and compile this game without it because you can guide the
-	 * executing and monitoring of the game.
-	 */
-	public static void main(String[] args) {
-		// Parse arguments
-		OptionParser parser = new OptionParser();
-
-		/* Support for Minecraft launchers. I will not convert this into a pay game */
-		parser.accepts("demo");
-
-		OptionSpec<?> legacyFlag = parser.accepts("legacy");
-		OptionSpec<?> gameDirArgument = parser.accepts("gameDir").withRequiredArg();
-		OptionSpec<?> configFileArgument = parser.acceptsAll(Arrays.asList("cnf", "conf", "config")).withRequiredArg();
-
-		OptionSet argSet = parser.parse(args);
-		Config.LEGACY = argSet.has(legacyFlag);
-
-		if (argSet.has(gameDirArgument))
-			Config.GAME_DIRECTORY = (String) argSet.valueOf(gameDirArgument);
-
-		Config.DEFAULT_CONFIG_FILE = Config.GAME_DIRECTORY + "/options.txt";
-
-		if (argSet.has(configFileArgument))
-			Config.DEFAULT_CONFIG_FILE = (String) argSet.valueOf(configFileArgument);
-
-		boolean playedForFirstTime = false;
-		if (!new File(Config.DEFAULT_CONFIG_FILE).exists())
-			playedForFirstTime = true;
-
-		/* Start the game */
-
-		Client game = Client.getClient();
-		Thread gameThread = game.thread;
-		gameThread.start();
-
-		/* Wait the game to end */
-
-		int status = 0;
-		try {
-			gameThread.join();
-		} catch (Exception ignored) {
-			status = 3;
-			logger.error("The game ended with errors!");
-		}
-
-		if (playedForFirstTime) {
-			System.out.println();
-			System.out.println(" ===== Thanks for playing OpenCraft =====");
-			System.out.println("   We wish you the best experience with");
-			System.out.println("  this game because we are putting all");
-			System.out.println("     our efforts to make this game.");
-			System.out.println();
-			System.out.println("   If you want, you can share this game!");
-			System.out.println(" =========== You're welcome!! ===========");
-			System.out.println("   - OpenCraft's Developer Team " + Calendar.getInstance().get(Calendar.YEAR));
-		}
-
-		// Stops the game
-		System.exit(status);
 	}
 
 }
