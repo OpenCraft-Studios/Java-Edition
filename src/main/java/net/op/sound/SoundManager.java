@@ -2,6 +2,7 @@ package net.op.sound;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ public class SoundManager {
 
 	public static void init() {
 		logger.info("Sound manager started!");
-		logger.info("[SoundAPI] Sound API status: %s".formatted(MUSIC ? "Active" : "Passive"));
+		logger.info("[SoundAPI] Sound API status: " + (MUSIC ? "Active" : "Passive"));
 	}
 
 	public static void update() {
@@ -43,7 +44,7 @@ public class SoundManager {
 	}
 
 	public static void playRandomSound() {
-		List<Sound> sounds = Tracks.get("Menu Sounds").getSounds().toList();
+		List<Sound> sounds = Tracks.get("Menu Sounds").getSounds().collect(Collectors.toList());
 		int index = new Random().nextInt(sounds.size());
 		playSound(sounds.get(index));
 	}

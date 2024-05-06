@@ -25,7 +25,7 @@ public class ResourceGetter {
 			return in;
 		}
 
-		if (Config.GAME_DIRECTORY.isBlank() || Config.GAME_DIRECTORY.isEmpty()) {
+		if (Config.GAME_DIRECTORY.isEmpty()) {
 			path = path.substring(1);
 		}
 

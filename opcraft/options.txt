@@ -1,2 +1,2 @@
 music:false
-lang:en-US
+lang:fr-FR

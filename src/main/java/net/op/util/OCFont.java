@@ -5,27 +5,29 @@ import static java.awt.Font.createFont;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Graphics;
-import java.io.IOException;
+import java.io.BufferedInputStream;
 import java.io.InputStream;
 
 import net.op.spectoland.SpectoError;
 
 public class OCFont {
 
-	private static OCFont MONOSPACE;
-	private static OCFont MOJANGLES;
+	private static Font MONOSPACE;
+	private static Font UNICODE;
+	private static Font MINECRAFT;
+	private static Font TLRENDER = getSystemFont("consolas");
 
 	private int size = 12;
 	private int color = 0;
 	private Font font;
 
 	static {
-		MONOSPACE = new OCFont("Dialog");
+		MONOSPACE = getSystemFont("Consolas");
+		UNICODE = getSystemFont("Dialog");
 	}
 
-	public OCFont(Font font) {
+	private OCFont(Font font) {
 		this.font = font;
 	}
 
@@ -33,35 +35,36 @@ public class OCFont {
 		this(other.font);
 	}
 
-	public OCFont(String fontname) {
-		this(getSystemFont(fontname));
-	}
-
 	public static void create(String fontDir) {
-		MOJANGLES = getFont(fontDir + "/Mojangles.ttf");
+		MINECRAFT = getFont(fontDir + "/minecraft.ttf", TRUETYPE_FONT);
+		TLRENDER = getFont(fontDir + "/tlrender.ttf", TRUETYPE_FONT);
 	}
 
 	public static OCFont monospace() {
-		return MONOSPACE;
+		return new OCFont(MONOSPACE);
 	}
 
-	public static OCFont mojangles() {
-		return MOJANGLES;
+	public static OCFont unicode() {
+		return new OCFont(UNICODE);
+	}
+
+	public static OCFont minecraft() {
+		return new OCFont(MINECRAFT);
+	}
+
+	public static OCFont tlrender() {
+		return new OCFont(TLRENDER);
 	}
 
 	public static OCFont of(Font font) {
 		return new OCFont(font);
 	}
 
-	public static OCFont read(InputStream in) throws FontFormatException, IOException {
-		return OCFont.of(createFont(TRUETYPE_FONT, in));
-	}
-
-	public static OCFont getFont(String fontpath) {
-		InputStream in = ResourceGetter.getInternal(fontpath);
-		OCFont font = OCFont.monospace();
+	public static Font getFont(String fontpath, int type) {
+		Font font = MONOSPACE;
 		try {
-			font = read(in);
+			InputStream in = new BufferedInputStream(ResourceGetter.getInternal(fontpath));
+			font = createFont(type, in);
 		} catch (Exception ex) {
 			SpectoError.ignored(ex, OCFont.class);
 		}
@@ -114,7 +117,11 @@ public class OCFont {
 		drawShadow(g, text, x, y, this.color);
 	}
 
-	public Font getFont() {
+	public String getName() {
+		return toFont().getName();
+	}
+
+	public Font toFont() {
 		return this.font;
 	}
 

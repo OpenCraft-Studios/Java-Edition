@@ -1,7 +1,9 @@
 package net.op.render.screens;
 
 import java.awt.Graphics;
+import java.awt.event.MouseListener;
 
+import net.op.input.MouseUtils;
 import net.op.render.textures.Assets;
 import net.op.util.Resource;
 
@@ -34,15 +36,21 @@ public abstract class Screen {
 	}
 
 	public static void renderCurrent(Graphics g, Assets assets) {
-		if (current == null) {
+		if (current == null)
 			return;
-		}
-
+		if (current instanceof MouseListener)
+			MouseUtils.makeCurrentListener((MouseListener) current);
+		
 		current.render(g, assets);
 	}
 
 	public final Resource getResource() {
 		return this.resource;
+	}
+	
+	@Override
+	public String toString() {
+		return "Screen(" + getResource().toString() + ")";
 	}
 
 }

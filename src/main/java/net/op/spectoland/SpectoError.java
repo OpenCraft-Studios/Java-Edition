@@ -1,84 +1,47 @@
 package net.op.spectoland;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.zip.GZIPOutputStream;
 
-import net.op.Config;
 import net.op.crash.CrashReport;
 
 public class SpectoError {
 
 	private static int exception_counter = 0;
 
-	public static class InternalLogger {
-
-		public static int ignoredExceptions = 0;
-
-		private static OutputStream os;
-		private static PrintStream out;
-
-		static {
-			os = new ByteArrayOutputStream();
-			out = new PrintStream(os);
-		}
-
-		private InternalLogger() {
-		}
-
-		public static void writeFile() throws IOException {
-			File internalFile = new File(Config.GAME_DIRECTORY + "/logs/internal.log");
-			if (!internalFile.getParentFile().exists()) {
-				internalFile.getParentFile().mkdirs();
-			}
-			if (!internalFile.exists()) {
-				internalFile.createNewFile();
-			}
-
-			FileOutputStream fos = new FileOutputStream(internalFile);
-			fos.write(getData());
-			fos.close();
-		}
-
-		private static byte[] getData() {
-			return ((ByteArrayOutputStream) os).toByteArray();
-		}
-
-		public static String stackTrace() {
-			return new String(getData());
-		}
-
-		public static void stopLogging() {
-			try {
-				os.close();
-			} catch (Exception ignored) {
-			}
-
-			out = new PrintStream(OutputStream.nullOutputStream());
-		}
-
-	}
-
 	private SpectoError() {
 	}
 
-	public static String warn(final String message) {
-		return "WARNING: " + message;
+	public static void warn(final String message, Class<?> clazz) {
+		InternalLogger.out.println();
+		InternalLogger.out.println("WARNING: Caused from class " + clazz.getName() + ":");
+		InternalLogger.out.println(" | Message: " + message);
+		InternalLogger.out.println(" +");
+		InternalLogger.out.println();
 	}
 
-	public static String error(final String message) {
-		return "ERROR: " + message;
+	public static void error(final String message, Class<?> clazz) {
+		InternalLogger.out.println();
+		InternalLogger.out.println("ERROR: Caused from class " + clazz.getName() + ":");
+		InternalLogger.out.println(" | Error Message: " + message);
+		InternalLogger.out.println(" +");
+		InternalLogger.out.println();
+	}
+	
+	public static void info(final String message) {
+		InternalLogger.out.printf("\n INFO: %s\n", message);
+	}
+	
+	public static void thisIsStrange(Throwable tb, Class<?> clazz) {
+		InternalLogger.out.println();
 	}
 
 	public static byte[] reportResult(CrashReport crash) {
-		var baos = new ByteArrayOutputStream();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		
 		try {
-			var gzos = new GZIPOutputStream(baos);
+			GZIPOutputStream gzos = new GZIPOutputStream(baos);
 			PrintStream out = new PrintStream(gzos);
 			
 			crash.write(out);
@@ -98,7 +61,7 @@ public class SpectoError {
 
 	public static void ignored(Throwable tb, Class<?> clazz) {
 		InternalLogger.ignoredExceptions++;
-		InternalLogger.out.println(clazz.getName() + " ->");
+		InternalLogger.out.println("[IGNORED EXCEPTION] " + clazz.getName() + " ->");
 		tb.printStackTrace(InternalLogger.out);
 		InternalLogger.out.println();
 	}
@@ -106,7 +69,7 @@ public class SpectoError {
 	public static void process(Throwable tb) {
 		try {
 			throw tb;
-		} catch (OutOfMemoryError error) {
+		} catch (OutOfMemoryError ignored) {
 			/*
 			 * If any OutOfMemoryError occurs while the game is in execution we can catch it
 			 * and run the Java Garbage Collector.

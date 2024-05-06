@@ -64,8 +64,7 @@ public class CrashReport {
 
 			this.write(new FileOutputStream(file));
 		} catch (Exception ignored) {
-			ignored.printStackTrace();
-			System.err.println("FATAL ERROR: Cannot save Report Info to file!");
+			System.err.println("FATAL ERROR: Cannot save crash report to file!");
 		}
 	}
 	
@@ -89,10 +88,10 @@ public class CrashReport {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("------ BEGIN CRASH REPORT ------");
-		sb.append("\n  Exception %s\n".formatted(error.getClass().getCanonicalName()));
-		sb.append("\n  Cause: %s\n".formatted(causeMsg));
-		sb.append("\n  Message: %s\n".formatted(error.getMessage()));
-		sb.append("\n  Exception Pointer: 0x%h".formatted(error));
+		sb.append(String.format("\n  Exception %s\n", error.getClass().getCanonicalName()));
+		sb.append(String.format("\n  Cause: %s\n", causeMsg));
+		sb.append(String.format("\n  Message: %s\n",error.getMessage()));
+		sb.append(String.format("\n  Exception Pointer: 0x%h", error));
 		sb.append("\n");
 		sb.append("\n(Not allowed to show stack trace)");
 		sb.append("\n");

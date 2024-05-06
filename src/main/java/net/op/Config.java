@@ -1,6 +1,6 @@
 package net.op;
 
-import static net.op.Client.logger;
+import static net.op.OpenCraft.logger;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,8 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
-import net.op.language.Locales;
 import net.op.sound.SoundManager;
 import net.op.spectoland.SpectoError;
 
@@ -107,7 +107,7 @@ public class Config {
 	 * This method saves the actual configuration to the default file.
 	 */
 	public static void save(BufferedWriter writer) throws IOException {
-		var entries = Config.toProperties().entrySet();
+		Set<Entry<Object, Object>> entries = Config.toProperties().entrySet();
 
 		for (Entry<Object, Object> entry : entries) {
 			writer.write((String) entry.getKey() + ":" + (String) entry.getValue());

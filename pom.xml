@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.op</groupId>
 	<artifactId>OpenCraft</artifactId>
-	<version>XXrXX</version>
+	<version>24r11</version>
 	<name>OpenCraft</name>
-	<description>A very similar copy of Minecraft</description>
+	<description>An exact copy of Minecraft.</description>
 	<build>
 		<plugins>
 			<plugin>
@@ -33,7 +33,7 @@
 		<dependency>
 			<groupId>org.josl.openic</groupId>
 			<artifactId>openic</artifactId>
-			<version>1.1</version>
+			<version>1.2.1</version>
 		</dependency>
 
 		<dependency>

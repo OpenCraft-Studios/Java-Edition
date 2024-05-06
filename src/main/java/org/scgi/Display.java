@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.image.MultiResolutionImage;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -111,10 +110,6 @@ public class Display {
 	public static void setIcons(List<Image> icons) {
 		ensureCreated();
 		window.setIconImages(icons);
-	}
-	
-	public static void setIcons(MultiResolutionImage mri) {
-		setIcons(mri.getResolutionVariants());
 	}
 	
 	public static boolean isMinimized() {

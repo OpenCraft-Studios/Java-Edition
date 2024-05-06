@@ -46,7 +46,7 @@ public class Texture {
     }
 
     public boolean isNull() {
-        return opImg.isEmpty();
+        return !opImg.isPresent();
     }
 
     public BufferedImage getImage() {

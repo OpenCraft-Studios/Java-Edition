@@ -1,28 +1,31 @@
 package net.op.render.screens;
 
-import static net.op.language.Translations.MENU_OPTIONS;
-import static net.op.language.Translations.MENU_QUIT;
-import static net.op.language.Translations.MENU_SINGLEPLAYER;
-import static net.op.render.textures.Assets.*;
+import static net.op.Locales.translate;
+import static net.op.render.textures.Assets.BUTTON;
+import static net.op.render.textures.Assets.BUTTON_DISABLED;
+import static net.op.render.textures.Assets.BUTTON_HIGHLIGHTED;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import org.scgi.Display;
 
-import net.op.Client;
 import net.op.OpenCraft;
+import net.op.Locales;
 import net.op.input.MouseUtils;
-import net.op.language.Locales;
 import net.op.render.textures.Assets;
-import net.op.spectoland.SpectoError;
 import net.op.util.OCFont;
 import net.op.util.Resource;
 
-public class MenuScreen extends Screen {
+public class MenuScreen extends Screen implements MouseListener {
 
 	public static final Resource RESOURCE = Resource.format("opencraft:screens.menuscreen");
 	private static MenuScreen instance = null;
+
+	private boolean quitsel = false;
+	private boolean setsel = false;
 
 	private MenuScreen() {
 		super(MenuScreen.RESOURCE);
@@ -36,9 +39,7 @@ public class MenuScreen extends Screen {
 	public void render(Graphics g, Assets assets) {
 		int width = Display.width();
 		int height = Display.height();
-		OCFont font = OCFont.mojangles();
 
-		g.setPaintMode();
 		g.setColor(Color.BLACK);
 
 		for (int x = 0; x < width; x += 64) {
@@ -47,13 +48,12 @@ public class MenuScreen extends Screen {
 			}
 		}
 
-		boolean quitsel, setsel;
-		quitsel = false;
-		setsel = false;
-
 		if (getCurrent().equals(MenuScreen.getInstance())) {
 			quitsel = MouseUtils.inRange(width / 2, height / 2 - 4, 200, 40);
 			setsel = MouseUtils.inRange((width - 400) / 2, height / 2 - 4, 198, 40);
+		} else {
+			quitsel = false;
+			setsel = false;
 		}
 
 		// Draw buttons
@@ -75,7 +75,7 @@ public class MenuScreen extends Screen {
 		{
 			if (langName.equalsIgnoreCase("French")) {
 				quitgame_x = width / 2 + 30;
-			} else if (langName.equalsIgnoreCase("Galician")) {
+			} else if (langName.equalsIgnoreCase("Galician") || langName.equalsIgnoreCase("Portuguese")) {
 				quitgame_x = width / 2 + 34;
 			} else if (langName.equalsIgnoreCase("Catalan")) {
 				quitgame_x = width / 2 + 27;
@@ -89,32 +89,16 @@ public class MenuScreen extends Screen {
 			}
 		}
 
-		// Draw credits
-		font.size(17).drawShadow(g, "%s Codename %s".formatted(Client.NAME, Client.CODENAME), 3, 15, 0x808080);
+		OCFont font = OCFont.minecraft();
 
 		font.size(20);
-		font.drawShadow(g, Locales.CURRENT[MENU_QUIT], quitgame_x, height / 2 + 20, quitsel ? 0xFFFFA0 : 0xFFFFFF);
-		font.drawShadow(g, Locales.CURRENT[MENU_OPTIONS], settings_x, height / 2 + 20, setsel ? 0xFFFFA0 : 0xFFFFFF);
-		font.drawShadow(g, Locales.CURRENT[MENU_SINGLEPLAYER], singlepy_x, height / 2 - 25, 0xA0A0A0);
+		font.drawShadow(g, translate("menu.Quit"), quitgame_x, height / 2 + 20, quitsel ? 0xFFFFA0 : 0xFFFFFF);
+		font.drawShadow(g, translate("menu.Options"), settings_x, height / 2 + 20, setsel ? 0xFFFFA0 : 0xFFFFFF);
+		font.drawShadow(g, translate("menu.singleplayer"), singlepy_x, height / 2 - 25, 0xA0A0A0);
 
-		check(quitsel, setsel);
-	}
-
-	public void check(boolean quitsel, boolean setsel) {
-		if (!MouseUtils.isButtonPressed(1))
-			return;
-		
-		if (quitsel) {
-			OpenCraft.getClient().stop();
-			try {
-				Thread.sleep(20);
-			} catch (Exception ex) {
-				SpectoError.ignored(ex, MenuScreen.class);
-			}
-			
-		} else if (setsel) {
-			Screen.setCurrent(SettingsScreen.class);
-		}
+		// Draw game name
+		font = OCFont.tlrender().size(14);
+		font.drawShadow(g, OpenCraft.NAME + " " + OpenCraft.TECHNICAL_NAME, 3, 15, 0x808080);
 	}
 
 	public static MenuScreen getInstance() {
@@ -127,6 +111,30 @@ public class MenuScreen extends Screen {
 
 	public static void destroy() {
 		instance = null;
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		if (setsel)
+			Screen.setCurrent(SettingsScreen.class);
+		else if (quitsel)
+			OpenCraft.getClient().running = false;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
 	}
 
 }

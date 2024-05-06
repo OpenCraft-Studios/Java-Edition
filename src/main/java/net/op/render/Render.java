@@ -5,20 +5,25 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.scgi.Context;
 import org.scgi.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.op.Client;
+import net.op.OpenCraft;
 import net.op.Config;
 import net.op.input.InputManager;
 import net.op.render.screens.Screen;
 import net.op.render.textures.Assets;
+import net.op.render.textures.Texture;
+import net.op.util.ResourceGetter;
 
 /**
  * <h1>Render</h1><br>
@@ -34,13 +39,7 @@ public final class Render {
 	public static final DisplayMode GFX_DISPLAY_MODE = DEF_GRAPHICS_DEVICE.getDisplayMode();
 	public static final Logger logger = LoggerFactory.getLogger(Render.class);
 
-	private static final boolean OPEN_GL;
 	private final Assets assets;
-
-	static {
-		// Checks if OpenGL-Based Pipeline is enabled
-		OPEN_GL = Boolean.parseBoolean(Optional.ofNullable(System.getProperty("sun.java2d.opengl")).orElse("false"));
-	}
 
 
 	/**
@@ -83,9 +82,8 @@ public final class Render {
 	}
 
 	public void init() {
-		Display.create(854, 480, Client.DISPLAY_NAME);
-		Display.setResizable(false);
-		Display.show();
+		// Config display
+		configDisplay();
 
 		Context.create();
 		InputManager.bindMouse();
@@ -95,7 +93,7 @@ public final class Render {
 
 		// Show render details
 		logger.info("Render system initialized!");
-		logger.info("[OpenGL] Using OpenGL: %s".formatted(OPEN_GL ? "Yes" : "No"));
+		logger.info("[OpenGL] Using OpenGL: " + (Context.usesOpenGL() ? "Yes" : "No"));
 
 		logger.info("DPI is set to {} ({})", DPI, Math.round(DPI * 1.0417d) + "%");
 		if (DPI != 96)
@@ -106,7 +104,30 @@ public final class Render {
 			logger.warn("[VSync] Imposible to determinate the refresh rate!");
 
 		// Show FPS Rate
-		logger.info("FPS Rate: %d".formatted(Config.FPS_CAP));
+		logger.info("FPS Rate: " + Config.FPS_CAP);
+	}
+
+	private void configDisplay() {
+		Display.create(854, 480, OpenCraft.DISPLAY_NAME);
+		Display.setResizable(false);
+		
+		List<String> iconsPath = new ArrayList<>();
+		iconsPath.add("/resources/icons/icon_16x16.png");
+		iconsPath.add("/resources/icons/icon_24x24.png");
+		iconsPath.add("/resources/icons/icon_32x32.png");
+		iconsPath.add("/resources/icons/icon_48x48.png");
+		iconsPath.add("/resources/icons/icon_256x256.png");
+		
+		List<Texture> icons = iconsPath.stream()
+				.map(path -> ResourceGetter.getExternal(path))
+				.map(in -> Texture.read(in))
+				.collect(Collectors.toList());
+		
+		boolean someNull = icons.stream().anyMatch(tex -> tex.isNull());
+		if (!someNull)
+			Display.setIcons(icons.stream().map(tex -> (Image) tex.getImage()).collect(Collectors.toList()));	
+		
+		Display.show();
 	}
 
 	public boolean vsync() {

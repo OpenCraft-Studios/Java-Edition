@@ -10,7 +10,7 @@ import java.util.Random;
 
 import org.scgi.Display;
 
-import net.op.Client;
+import net.op.OpenCraft;
 import net.op.render.textures.Assets;
 import net.op.util.OCFont;
 import net.op.util.Resource;
@@ -42,12 +42,12 @@ public class Loadscreen extends Screen {
 	}
 
 	public void animatedLS(Graphics2D g2d, boolean slideUp, Assets assets) {
-		drawStars(g2d, 101);
+		drawStars(g2d, 100);
 
 		// Draw OpenCraft Text
 		g2d.setColor(Color.MAGENTA);
 		g2d.setFont(OCFont.getSystemFont("SF Transrobotics").deriveFont(Font.BOLD, 26));
-		g2d.drawString("CODENAME %s".formatted(Client.CODENAME.toUpperCase()), (854 - 333) / 2,
+		g2d.drawString(OpenCraft.TECHNICAL_NAME.toUpperCase(), (854 - 350) / 2,
 				(480 + 135) / 2);
 
 		// Draw Rectangle

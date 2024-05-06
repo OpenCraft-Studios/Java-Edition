@@ -2,6 +2,7 @@ package net.op.render.textures;
 
 import java.awt.Image;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Assets {
@@ -27,7 +28,7 @@ public class Assets {
 	public static Assets create(String... tss) {
 		Stream<String> tilesheetsPath = Arrays.stream(tss);
 		Stream<Tilesheet> tilesheets = tilesheetsPath.map(path -> Tilesheet.read(path));
-		return create(tilesheets.toList().toArray(new Tilesheet[0]));
+		return create(tilesheets.collect(Collectors.toList()).toArray(new Tilesheet[0]));
 	}
 
 	public Image getButton(int button_id) {
@@ -35,16 +36,7 @@ public class Assets {
 	}
 
 	public Image getArrow(int arrow) {
-		int x = switch (arrow) {
-			case 0 -> 200;
-			case 1 -> 215;
-			case 2 -> 229;
-			case 3 -> 244;
-
-			default -> 0;
-		};
-
-		return gui.get(x, 20, 14, 22);
+		return gui.get(200 + 15 * arrow, 20, 14, 22);
 	}
 
 	public Image getLogo() {
