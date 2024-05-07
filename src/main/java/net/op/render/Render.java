@@ -1,5 +1,7 @@
 package net.op.render;
 
+import static net.op.OpenCraft.oc;
+
 import java.awt.DisplayMode;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -18,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.op.OpenCraft;
-import net.op.Config;
 import net.op.input.InputManager;
 import net.op.render.screens.Screen;
 import net.op.render.textures.Assets;
@@ -41,7 +42,6 @@ public final class Render {
 
 	private final Assets assets;
 
-
 	/**
 	 * Creates a new instance of this class.
 	 */
@@ -50,9 +50,7 @@ public final class Render {
 	}
 
 	/**
-	 * Creates a new instance of this class.
-	 * 
-	 * @return That instance
+	 * @return a new instance of this class.
 	 */
 	public static Render create(Assets assets) {
 		return new Render(assets);
@@ -104,29 +102,27 @@ public final class Render {
 			logger.warn("[VSync] Imposible to determinate the refresh rate!");
 
 		// Show FPS Rate
-		logger.info("FPS Rate: " + Config.FPS_CAP);
+		logger.info("FPS Rate: " + OpenCraft.getClient().fpsCap);
 	}
 
 	private void configDisplay() {
 		Display.create(854, 480, OpenCraft.DISPLAY_NAME);
 		Display.setResizable(false);
-		
+
 		List<String> iconsPath = new ArrayList<>();
 		iconsPath.add("/resources/icons/icon_16x16.png");
 		iconsPath.add("/resources/icons/icon_24x24.png");
 		iconsPath.add("/resources/icons/icon_32x32.png");
 		iconsPath.add("/resources/icons/icon_48x48.png");
 		iconsPath.add("/resources/icons/icon_256x256.png");
-		
-		List<Texture> icons = iconsPath.stream()
-				.map(path -> ResourceGetter.getExternal(path))
-				.map(in -> Texture.read(in))
-				.collect(Collectors.toList());
-		
+
+		List<Texture> icons = iconsPath.stream().map(path -> ResourceGetter.getExternal(path))
+				.map(in -> Texture.read(in)).collect(Collectors.toList());
+
 		boolean someNull = icons.stream().anyMatch(tex -> tex.isNull());
 		if (!someNull)
-			Display.setIcons(icons.stream().map(tex -> (Image) tex.getImage()).collect(Collectors.toList()));	
-		
+			Display.setIcons(icons.stream().map(tex -> (Image) tex.getImage()).collect(Collectors.toList()));
+
 		Display.show();
 	}
 
@@ -135,7 +131,7 @@ public final class Render {
 		fpsRate = Render.GFX_DISPLAY_MODE.getRefreshRate();
 
 		if (fpsRate != DisplayMode.REFRESH_RATE_UNKNOWN) {
-			Config.FPS_CAP = fpsRate;
+			oc.fpsCap = fpsRate;
 			return true;
 		}
 

@@ -1,9 +1,10 @@
 package net.op.util;
 
+import static net.op.Config.getDirectory;
+
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-import net.op.Config;
 import net.op.spectoland.SpectoError;
 
 public class ResourceGetter {
@@ -25,12 +26,12 @@ public class ResourceGetter {
 			return in;
 		}
 
-		if (Config.GAME_DIRECTORY.isEmpty()) {
+		if (getDirectory().isEmpty()) {
 			path = path.substring(1);
 		}
 
 		try {
-			in = new FileInputStream(Config.GAME_DIRECTORY + path);
+			in = new FileInputStream(getDirectory() + path);
 		} catch (Exception ex) {
 			SpectoError.ignored(ex, ResourceGetter.class);
 		}

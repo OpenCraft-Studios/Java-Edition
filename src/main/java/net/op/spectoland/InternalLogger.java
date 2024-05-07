@@ -1,13 +1,13 @@
 package net.op.spectoland;
 
+import static net.op.Config.getDirectory;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-
-import net.op.Config;
 
 public class InternalLogger {
 
@@ -25,7 +25,7 @@ public class InternalLogger {
 	}
 
 	public static void writeFile() throws IOException {
-		File internalFile = new File(Config.GAME_DIRECTORY + "/logs/internal.log");
+		File internalFile = new File(getDirectory() + "/logs/internal.log");
 		if (!internalFile.getParentFile().exists()) {
 			internalFile.getParentFile().mkdirs();
 		}

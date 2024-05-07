@@ -1,6 +1,7 @@
 package net.op.render.screens;
 
 import static net.op.Locales.translate;
+import static net.op.OpenCraft.oc;
 import static net.op.render.textures.Assets.BUTTON;
 import static net.op.render.textures.Assets.BUTTON_DISABLED;
 import static net.op.render.textures.Assets.BUTTON_HIGHLIGHTED;
@@ -12,8 +13,8 @@ import java.awt.event.MouseListener;
 
 import org.scgi.Display;
 
-import net.op.OpenCraft;
 import net.op.Locales;
+import net.op.OpenCraft;
 import net.op.input.MouseUtils;
 import net.op.render.textures.Assets;
 import net.op.util.OCFont;
@@ -118,7 +119,7 @@ public class MenuScreen extends Screen implements MouseListener {
 		if (setsel)
 			Screen.setCurrent(SettingsScreen.class);
 		else if (quitsel)
-			OpenCraft.getClient().running = false;
+			oc.running = false;
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package net.op.crash;
 
+import static net.op.Config.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,8 +10,6 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Optional;
-
-import net.op.Config;
 
 public class CrashReport {
 
@@ -47,7 +47,7 @@ public class CrashReport {
 				+ "-" + cInstance.get(Calendar.DAY_OF_MONTH) + "_" + cInstance.get(Calendar.HOUR) + "-"
 				+ cInstance.get(Calendar.MINUTE) + "-" + cInstance.get(Calendar.SECOND);
 
-		return Config.GAME_DIRECTORY + "/logs/crashes/crash-" + filepath + ".log";
+		return getDirectory() + "/logs/crashes/crash-" + filepath + ".log";
 	}
 
 	/**

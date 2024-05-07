@@ -1,6 +1,7 @@
 package net.op;
 
 import static net.op.OpenCraft.logger;
+import static net.op.OpenCraft.oc;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,24 +22,6 @@ import net.op.spectoland.SpectoError;
  */
 public class Config {
 
-	/**
-	 * The game's directory
-	 */
-	public static String GAME_DIRECTORY = "opcraft";
-
-	/**
-	 * Maximum FPS that the game will consume.
-	 */
-	public static int FPS_CAP = 70;
-
-	/**
-	 * Indicates whether or not save config files with the legacy format.
-	 */
-	public static boolean LEGACY = false;
-
-	/**
-	 * The {@code options.txt} file to save configurations
-	 */
 	public static String DEFAULT_CONFIG_FILE;
 
 	/**
@@ -50,7 +33,7 @@ public class Config {
 		Properties properties = new Properties();
 
 		properties.setProperty("lang", Locales.getLocale().toLanguageTag());
-		if (LEGACY)
+		if (oc.legacyCnf)
 			properties.setProperty("music", Boolean.toString(SoundManager.MUSIC));
 		else
 			properties.setProperty("soundCategory_music", Double.toString(SoundManager.getVolume()));
@@ -65,7 +48,7 @@ public class Config {
 	 */
 	public static void read(Properties properties) {
 		Locales.setLocale(Locales.of((String) properties.getOrDefault("lang", "en-US")));
-		if (LEGACY)
+		if (oc.legacyCnf)
 			SoundManager.MUSIC = Boolean.parseBoolean((String) properties.getOrDefault("music", "false"));
 		else
 			SoundManager.MUSIC = Double.parseDouble((String) properties.getOrDefault("soundCategory_music", "0.0")) > 0;
@@ -149,7 +132,7 @@ public class Config {
 	 * @param gameDir Game's directory
 	 */
 	public static void setDirectory(String gameDir) {
-		Config.GAME_DIRECTORY = gameDir;
+		oc.directory = gameDir;
 	}
 
 	/**
@@ -160,7 +143,7 @@ public class Config {
 	 * @see #setDirectory(String)
 	 */
 	public static String getDirectory() {
-		return Config.GAME_DIRECTORY;
+		return oc.directory;
 	}
 
 }

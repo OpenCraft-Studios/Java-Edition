@@ -1,17 +1,12 @@
 package net.op;
 
-import static javax.swing.UIManager.getInstalledLookAndFeels;
-import static javax.swing.UIManager.setLookAndFeel;
 import static org.josl.openic.IC15.icInit;
-import static org.josl.openic.IC13.*;
 
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;
 
 import javax.swing.JOptionPane;
-import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.guppy4j.run.Startable;
 import org.guppy4j.run.Stoppable;
@@ -33,30 +28,38 @@ import net.op.util.OCFont;
 
 public final class OpenCraft implements Runnable, Startable, Stoppable {
 
+	/* Static variables... */
+
 	public static final String NAME = "OpenCraft";
 	public static final String VERSION = "24r11";
-	public static final String TECHNICAL_NAME = "System Update 1";
+	public static final String TECHNICAL_NAME = "System Update 2";
 	public static final String DISPLAY_NAME = NAME + ' ' + VERSION;
 
 	public static final int NANOSECONDS = 1000000000;
 	public static final Logger logger = LoggerFactory.getLogger(OpenCraft.class);
-	private static OpenCraft client;
+	public static OpenCraft oc;
 
 	public final Thread thread;
 
-	public boolean running = false;
+	// Objects
 	public Render render;
 	public Assets assets;
+
+	// Settings
+	public boolean running = false;
+	public boolean legacyCnf = false;
+	public int fpsCap = 70;
+	public String directory;
 
 	/**
 	 * Creates a instance of the game. This method must be executed once. If you
 	 * execute it more times, the game could crash or being completely unusable.
 	 */
-	OpenCraft() {
-		this.assets = Assets.create("/gui.png");
-		this.render = Render.create(this.assets);
+	OpenCraft(String thread_name, String directory, boolean legacyCnf) {
+		this.directory = directory;
+
 		this.thread = new Thread(this);
-		this.thread.setName("main");
+		this.thread.setName(thread_name);
 	}
 
 	/**
@@ -114,12 +117,12 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 		// Finally stops the game
 		stop();
 	}
-	
+
 	public void runStep() {
 		boolean properlySize = Display.width() > 136 || Display.height() > 39;
 		if (!properlySize)
 			return;
-		
+
 		tick();
 		this.render.render();
 	}
@@ -130,8 +133,6 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 	 */
 	public void tick() {
 		SoundManager.update();
-		if (icIsKeyPressed(KeyEvent.VK_Q))
-			System.out.println("W: " + Display.width() + "; H: " + Display.height());
 	}
 
 	/**
@@ -147,57 +148,33 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 		}
 
 		if (!icInit())
-			System.err.println("ERROR: Failed to start OpenIC");
-		
-		boolean windowsOS = false;
-		String os_name = System.getProperty("os.name");
-		
-		if (os_name != null) {
-			os_name = os_name.toLowerCase();
-			if (os_name.contains("windows")) {
-				windowsOS = true;
-				logger.info("Detected OS Windows!");
-			} else if (os_name.contains("linux"))
-				logger.info("Detected Linux!");
-			else if (os_name.contains("macos"))
-				logger.info("Detected MacOS!");
-		}
-		
-		if (windowsOS) {
-			try {
-				for (LookAndFeelInfo info : getInstalledLookAndFeels()) {
-					if ("Windows".equals(info.getName())) {
-						setLookAndFeel(info.getClassName());
-						break;
-					}
-				}
-			} catch (Exception ex) {
-				SpectoError.ignored(ex, getClass());
-			}
-		}
-		
-		// Load languages
-		Locales.Loader.loadLocales();
+			throw new IllegalStateException("Failed to start OpenIC");
 
 		// Read config
 		Config.read();
 
-		// Create basics resources
+		// Configure font
+		Locales.Loader.loadLocales();
 		OCFont.create("/fonts");
 
+		// Create basics resources
+		this.assets = Assets.create("/gui.png");
+		this.render = Render.create(this.assets);
+
 		// Initialize sound and render
-		SoundManager.init();
 		this.render.init();
+		SoundManager.init();
 
 		// Bind keyboard
 		InputManager.bindKeyboard();
+
 		this.running = true;
 	}
 
 	public double getNanoPerTick() {
-		return (double) NANOSECONDS / Config.FPS_CAP;
+		return (double) NANOSECONDS / (double) fpsCap;
 	}
-	
+
 	@Override
 	public void start() {
 		this.thread.start();
@@ -213,7 +190,7 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 	public void stop(boolean force) {
 		if (force)
 			System.exit(0);
-		
+
 		this.running = false;
 
 		// Disable soundManager
@@ -256,7 +233,7 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 	public void stop() {
 		this.stop(false);
 	}
-	
+
 	/**
 	 * The {@code getClient()} method is often used for getting the current client
 	 * instance.
@@ -266,13 +243,13 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 	 *
 	 * @return The current client instance
 	 */
-	public static OpenCraft getClient() {
-		if (client == null)
-			return client = new OpenCraft();
-		
-		return client;
+	public static OpenCraft getClient(final String... client_args) {
+		if (oc == null)
+			oc = new OpenCraft(client_args[0], client_args[1], Boolean.parseBoolean(client_args[2]));
+
+		return oc;
 	}
-	
+
 	/**
 	 * <b>Main method</b><br>
 	 * Is the principal method that guides the: initialization, running and the stop
@@ -290,49 +267,52 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 		OptionSpec<?> legacyFlag = parser.accepts("legacy");
 		OptionSpec<?> gameDirArgument = parser.accepts("gameDir").withRequiredArg();
 		OptionSpec<?> configFileArgument = parser.acceptsAll(Arrays.asList("cnf", "conf", "config")).withRequiredArg();
+		OptionSpec<?> uiScaleArgument = parser.acceptsAll(Arrays.asList("scale", "uiscale")).withRequiredArg();
 
 		OptionSet argSet = parser.parse(args);
-		Config.LEGACY = argSet.has(legacyFlag);
+
+		String[] client_args = new String[3];
+
+		client_args[0] = "main";
+		client_args[2] = Boolean.toString(argSet.has(legacyFlag));
+
+		if (argSet.has(uiScaleArgument)) {
+			logger.warn("[CUSTOM UI SCALE] Use custom ui scales can cause the game to display wrong some objects!");
+			System.setProperty("sun.java2d.uiScale", (String) argSet.valueOf(uiScaleArgument));
+		} else
+			System.setProperty("sun.java2d.uiScale", "1.0"); // Default
 
 		if (argSet.has(gameDirArgument))
-			Config.GAME_DIRECTORY = (String) argSet.valueOf(gameDirArgument);
+			client_args[1] = (String) argSet.valueOf(gameDirArgument);
 
-		Config.DEFAULT_CONFIG_FILE = Config.GAME_DIRECTORY + "/options.txt";
+		Config.DEFAULT_CONFIG_FILE = client_args[1] + "/options.txt";
 
 		if (argSet.has(configFileArgument))
 			Config.DEFAULT_CONFIG_FILE = (String) argSet.valueOf(configFileArgument);
 
-		boolean playedForFirstTime = false;
-		if (!new File(Config.DEFAULT_CONFIG_FILE).exists())
-			playedForFirstTime = true;
-
 		/* Start the game */
-
-		OpenCraft client = OpenCraft.getClient();
-		Thread gameThread = client.thread;
-		gameThread.start();
+		OpenCraft client = OpenCraft.getClient(client_args);
+		client.thread.start();
 
 		/* Wait the game to end */
 
 		int status = 0;
 		try {
-			gameThread.join();
+			client.thread.join();
 		} catch (Exception ignored) {
 			status = 3;
-			OpenCraft.logger.error("The game ended with errors!");
+			logger.error("The game ended with errors!");
 		}
 
-		if (playedForFirstTime) {
-			System.out.println();
-			System.out.println(" ===== Thanks for playing OpenCraft =====");
-			System.out.println("   We wish you the best experience with");
-			System.out.println("  this game because we are putting all");
-			System.out.println("     our efforts to make this game.");
-			System.out.println();
-			System.out.println("   If you want, you can share this game!");
-			System.out.println(" =========== You're welcome!! ===========");
-			System.out.println("   - OpenCraft's Developer Team " + Calendar.getInstance().get(Calendar.YEAR));
-		}
+		System.out.println();
+		System.out.println(" ===== Thanks for playing OpenCraft =====");
+		System.out.println("   We wish you the best experience with");
+		System.out.println("  this game because we are putting all");
+		System.out.println("     our efforts to make this game.");
+		System.out.println();
+		System.out.println("   If you want, you can share this game!");
+		System.out.println(" =========== You're welcome!! ===========");
+		System.out.println("   - OpenCraft's Developer Team " + Calendar.getInstance().get(Calendar.YEAR));
 
 		// Stops the game
 		System.exit(status);
