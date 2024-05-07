@@ -22,6 +22,9 @@ import net.op.spectoland.SpectoError;
  */
 public class Config {
 
+	public static final String OFFICIAL_WEBPAGE = "https://opencraftstudios.github.io";
+	public static final String ONLINE_LANGSHEET = "https://raw.githubusercontent.com/OpenCraftStudios/piston-data/main/langsheet.csv";
+	
 	public static String DEFAULT_CONFIG_FILE;
 
 	/**

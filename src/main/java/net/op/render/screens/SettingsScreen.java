@@ -265,7 +265,7 @@ public class SettingsScreen extends Screen implements MouseListener {
 			currentTab = "options.generalTab";
 		else if (ofcpage) {
 			try {
-				Desktop.getDesktop().browse(new URI("https://opencraftmc.github.io"));
+				Desktop.getDesktop().browse(new URI(Config.OFFICIAL_WEBPAGE));
 			} catch (Exception ex) {
 				SpectoError.ignored(ex, SettingsScreen.class);
 			}
