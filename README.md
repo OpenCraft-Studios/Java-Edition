@@ -2,10 +2,10 @@
 	<img src="https://github.com/OpenCraftStudios/Java-Edition/blob/dev/.github/assets/images/icon.png?raw=true" alt="" height="128" width="128" />
 	<h1>OpenCraft</h1>
 	<br>
-	<a href="https://sourceforge.net/projects/OpenCraftStudios/files/latest/download"><img alt="Download OpenCraft" src="https://img.shields.io/sourceforge/dt/OpenCraftStudios.svg" ></a>
+	<a href="https://sourceforge.net/projects/OpenCraftMC/files/latest/download"><img alt="Download OpenCraft" src="https://img.shields.io/sourceforge/dt/OpenCraftMC.svg" ></a>
 </div>
 
-[![Download OpenCraft](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/OpenCraftStudios/files/latest/download)
+[![Download OpenCraft](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/OpenCraftMC/files/latest/download)
 
 ## About ℹ️
 **OpenCraft** is programmed on Java.
