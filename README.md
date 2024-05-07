@@ -1,11 +1,11 @@
 <div align="center">
-	<img src="https://github.com/OpenCraftMC/Java-Edition/blob/dev/.github/assets/images/icon.png?raw=true" alt="" height="128" width="128" />
+	<img src="https://github.com/OpenCraftStudios/Java-Edition/blob/dev/.github/assets/images/icon.png?raw=true" alt="" height="128" width="128" />
 	<h1>OpenCraft</h1>
 	<br>
-	<a href="https://sourceforge.net/projects/opencraftmc/files/latest/download"><img alt="Download OpenCraft" src="https://img.shields.io/sourceforge/dt/opencraftmc.svg" ></a>
+	<a href="https://sourceforge.net/projects/OpenCraftStudios/files/latest/download"><img alt="Download OpenCraft" src="https://img.shields.io/sourceforge/dt/OpenCraftStudios.svg" ></a>
 </div>
 
-[![Download OpenCraft](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/opencraftmc/files/latest/download)
+[![Download OpenCraft](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/OpenCraftStudios/files/latest/download)
 
 ## About ℹ️
 **OpenCraft** is programmed on Java.
@@ -27,7 +27,7 @@ Go to the [official discord server](https://discord.gg/wrjEBqNRq9) for support.
 
 ## Translating 🌍
 Actually, OpenCraft supports +6 languages: If you want to improve the translations, please,
-checkout the [Langsheet](https://github.com/OpenCraftMC/piston-data/blob/main/langsheet.csv).
+checkout the [Langsheet](https://github.com/OpenCraftStudios/piston-data/blob/main/langsheet.csv).
 
 | **NOTE** | This langsheet is automatically downloaded by OpenCraft. So the changes will apply inmediatly. |
 |----------|------------------------------------------------------------------------------------------------|
@@ -35,7 +35,7 @@ checkout the [Langsheet](https://github.com/OpenCraftMC/piston-data/blob/main/la
 ## Contributing ❤️
 We are a small community so we need help to implement upgrades for new OpenCraft versions, fixing bugs and expanding the project.
 We are always looking for motivated people to contribute. If you feel like it could be you,
-please have a look at the [issues section](https://github.com/OpenCraftMC/Java-Edition/issues) :)
+please have a look at the [issues section](https://github.com/OpenCraftStudios/Java-Edition/issues) :)
 
 ![Alt](https://repobeats.axiom.co/api/embed/b0abd013f1f54ae6ce4cd429e2ebdd5a5bbe5589.svg "Repobeats analytics image")
 
