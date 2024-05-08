@@ -1,7 +1,10 @@
 package net.op.spectoland;
 
+import static net.op.spectoland.ILogger.*;
+
 import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.zip.GZIPOutputStream;
 
 import net.op.crash.CrashReport;
@@ -13,28 +16,34 @@ public class SpectoError {
 	private SpectoError() {
 	}
 
-	public static void warn(final String message, Class<?> clazz) {
-		InternalLogger.out.println();
-		InternalLogger.out.println("WARNING: Caused from class " + clazz.getName() + ":");
-		InternalLogger.out.println(" | Message: " + message);
-		InternalLogger.out.println(" +");
-		InternalLogger.out.println();
+	public static void warn(final String message) {
+		iex++;
+		out.println(" WARN: " + message);
 	}
 
 	public static void error(final String message, Class<?> clazz) {
-		InternalLogger.out.println();
-		InternalLogger.out.println("ERROR: Caused from class " + clazz.getName() + ":");
-		InternalLogger.out.println(" | Error Message: " + message);
-		InternalLogger.out.println(" +");
-		InternalLogger.out.println();
+		iex++;
+		out.println(" ERROR: " + message);
 	}
 	
 	public static void info(final String message) {
-		InternalLogger.out.printf("\n INFO: %s\n", message);
+		out.println(" INFO: " + message);
 	}
 	
-	public static void thisIsStrange(Throwable tb, Class<?> clazz) {
-		InternalLogger.out.println();
+	public static void possibleCorruption(Throwable tb, Class<?> clazz) {
+		iex++;
+		
+		String strTime;
+		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+		strTime = formatter.format(new Date());
+		
+		out.println();
+		out.println(" ...DUMP...: at {" + strTime + "} in class (" + clazz.getName() + "):");
+		out.println("    '' An error was marked as unrecognized.");
+		out.println("    '' We are trying to identify the possible cause of this.");
+		out.println("    '' === STACK TRACE ===");
+		tb.printStackTrace(out);
+		out.println();
 	}
 
 	public static byte[] reportResult(CrashReport crash) {
@@ -42,28 +51,41 @@ public class SpectoError {
 		
 		try {
 			GZIPOutputStream gzos = new GZIPOutputStream(baos);
-			PrintStream out = new PrintStream(gzos);
 			
-			crash.write(out);
-			out.println();
-			out.println(InternalLogger.stackTrace());
+			crash.write(gzos);
+			gzos.write((byte) '\n');
+			gzos.write(ILogger.getData());
 			
-			out.close();
 			gzos.close();
-			baos.close();
 		} catch (Exception ex) {
-			// wTf
-			ignored(ex, SpectoError.class);
+			possibleCorruption(ex, SpectoError.class);
+			ex.printStackTrace();
 		}
 		
 		return baos.toByteArray();
 	}
 
 	public static void ignored(Throwable tb, Class<?> clazz) {
-		InternalLogger.ignoredExceptions++;
-		InternalLogger.out.println("[IGNORED EXCEPTION] " + clazz.getName() + " ->");
-		tb.printStackTrace(InternalLogger.out);
-		InternalLogger.out.println();
+		iex++;
+		
+		String strTime;
+		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+		strTime = formatter.format(new Date());
+		
+		String strCause;
+		if (tb.getCause() != null)
+			strCause = tb.getCause().getMessage();
+		else
+			strCause = "unknown";
+		
+		out.println();
+		out.println(" ERROR: at {" + strTime + "} in class (" + clazz.getName() + "):");
+		out.println("   * type: exception." + tb.getClass().getSimpleName());
+		out.println("   * cause: " + strCause);
+		out.println("   * message: " + tb.getMessage());
+		out.println("   === STACK TRACE ===");
+		tb.printStackTrace(out);
+		out.println();
 	}
 
 	public static void process(Throwable tb) {
@@ -78,7 +100,7 @@ public class SpectoError {
 			 * Because is better to prevent the game crashing by anything, but if it's
 			 * repetitive is better to stop.
 			 * 
-			 * TODO Implement that
+			 * FIXME Implement that
 			 */
 			System.gc();
 		} catch (ArithmeticException ignored) {

@@ -92,7 +92,7 @@ public class MenuScreen extends Screen implements MouseListener {
 
 		OCFont font = OCFont.minecraft();
 
-		font.size(20);
+		font.size(16);
 		font.drawShadow(g, translate("menu.Quit"), quitgame_x, height / 2 + 20, quitsel ? 0xFFFFA0 : 0xFFFFFF);
 		font.drawShadow(g, translate("menu.Options"), settings_x, height / 2 + 20, setsel ? 0xFFFFA0 : 0xFFFFFF);
 		font.drawShadow(g, translate("menu.singleplayer"), singlepy_x, height / 2 - 25, 0xA0A0A0);

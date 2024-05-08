@@ -1,8 +1,14 @@
 [IGNORED EXCEPTION] net.op.util.OCFont ->
-java.lang.NullPointerException: Cannot invoke "java.io.InputStream.readAllBytes()" because "in" is null
-	at net.op.util.OCFont.getFont(OCFont.java:69)
-	at net.op.util.OCFont.create(OCFont.java:42)
-	at net.op.OpenCraft.init(OpenCraft.java:186)
-	at net.op.OpenCraft.run(OpenCraft.java:70)
+java.io.IOException: Stream closed
+	at java.base/java.io.BufferedInputStream.getInIfOpen(BufferedInputStream.java:157)
+	at java.base/java.io.BufferedInputStream.read1(BufferedInputStream.java:282)
+	at java.base/java.io.BufferedInputStream.read(BufferedInputStream.java:343)
+	at java.base/java.io.FilterInputStream.read(FilterInputStream.java:106)
+	at java.desktop/java.awt.Font.createFont0(Font.java:1133)
+	at java.desktop/java.awt.Font.createFont(Font.java:1073)
+	at net.op.util.OCFont.getFont(OCFont.java:73)
+	at net.op.util.OCFont.create(OCFont.java:41)
+	at net.op.OpenCraft.init(OpenCraft.java:158)
+	at net.op.OpenCraft.run(OpenCraft.java:73)
 	at java.base/java.lang.Thread.run(Thread.java:831)
 

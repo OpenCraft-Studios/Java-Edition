@@ -15,8 +15,9 @@ public class OCFont {
 
 	private static Font MONOSPACE;
 	private static Font UNICODE;
+	private static Font MOJANGLES;
+	private static Font TLRENDER;
 	private static Font MINECRAFT;
-	private static Font TLRENDER = getSystemFont("consolas");
 
 	private int size = 12;
 	private int color = 0;
@@ -36,6 +37,7 @@ public class OCFont {
 	}
 
 	public static void create(String fontDir) {
+		MOJANGLES = getFont(fontDir + "/mojangles.ttf", TRUETYPE_FONT);
 		MINECRAFT = getFont(fontDir + "/minecraft.ttf", TRUETYPE_FONT);
 		TLRENDER = getFont(fontDir + "/tlrender.ttf", TRUETYPE_FONT);
 	}
@@ -48,6 +50,10 @@ public class OCFont {
 		return new OCFont(UNICODE);
 	}
 
+	public static OCFont mojangles() {
+		return new OCFont(MOJANGLES);
+	}
+	
 	public static OCFont minecraft() {
 		return new OCFont(MINECRAFT);
 	}

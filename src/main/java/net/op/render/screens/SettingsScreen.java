@@ -37,7 +37,7 @@ public class SettingsScreen extends Screen implements MouseListener {
 	private boolean donesel = false;
 	private boolean ofcpage = false;
 	private boolean musicBtn = false;
-	
+
 	private SettingsScreen() {
 		super(RESOURCE);
 	}
@@ -84,7 +84,7 @@ public class SettingsScreen extends Screen implements MouseListener {
 				null);
 		g2d.drawImage(assets.getButton(ofcpage ? BUTTON_HIGHLIGHTED : BUTTON), 30, height - 90, 257, 40, null);
 
-		OCFont font = OCFont.minecraft();
+		OCFont font = OCFont.mojangles();
 		font.size(20);
 		font.drawShadow(g2d, translate("gui.Done"), (width - 175) / 2 + 62, height - 66, donesel ? 0xFFFFA0 : 0xFFFFFF);
 
@@ -94,9 +94,12 @@ public class SettingsScreen extends Screen implements MouseListener {
 
 		font.drawShadow(g2d, strGotoOfcPage, 45, height - 66, ofcpage ? 0xFFFFA0 : 0xFFFFFF);
 
-		arrow1 = MouseUtils.inRange((width - 400) / 2 + 100, 20, 21, 33);
 		arrow0 = MouseUtils.inRange((width - 400) / 2 + 273, 20, 21, 33);
+		arrow1 = MouseUtils.inRange((width - 400) / 2 + 100, 20, 21, 33);
 
+		arrow0 &= currentTab.equals("options.generalTab");
+		arrow1 &= currentTab.equals("options.localesTab");
+		
 		g2d.drawImage(assets.getArrow(arrow1 ? 3 : 1), (width - 400) / 2 + 100, 15, 21, 33, null);
 		g2d.drawImage(assets.getArrow(arrow0 ? 2 : 0), (width - 400) / 2 + 273, 15, 21, 33, null);
 
@@ -108,7 +111,7 @@ public class SettingsScreen extends Screen implements MouseListener {
 	}
 
 	private void drawGeneralTab(Graphics g, Assets assets) {
-		OCFont font = OCFont.minecraft();
+		OCFont font = OCFont.mojangles();
 
 		musicBtn = MouseUtils.inRange(30, 80, 200, 40);
 		g.drawImage(assets.getButton(musicBtn ? BUTTON_HIGHLIGHTED : BUTTON), 30, 80, 200, 40, null);
@@ -128,7 +131,7 @@ public class SettingsScreen extends Screen implements MouseListener {
 		final int height = Display.height();
 		final String strLang = Locales.getGenericName(Locales.getLocale());
 
-		OCFont font = OCFont.minecraft();
+		OCFont font = OCFont.mojangles();
 		font.size(20);
 
 		boolean enLang, spLang, itLang, frLang, glLang, caLang, ptLang;
@@ -252,7 +255,7 @@ public class SettingsScreen extends Screen implements MouseListener {
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseReleased(MouseEvent e) {
 		if (donesel) {
 			currentTab = "options.generalTab";
 			Config.save();
@@ -273,11 +276,11 @@ public class SettingsScreen extends Screen implements MouseListener {
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
+	public void mouseClicked(MouseEvent e) {
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
+	public void mousePressed(MouseEvent e) {
 	}
 
 	@Override

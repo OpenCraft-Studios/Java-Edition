@@ -1,7 +1,11 @@
 package net.op.render;
 
 import static net.op.OpenCraft.oc;
+import static org.josl.openic.IC13.icIsKeyPressed;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Composite;
 import java.awt.DisplayMode;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -9,6 +13,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +24,14 @@ import org.scgi.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.op.Locales;
 import net.op.OpenCraft;
 import net.op.input.InputManager;
 import net.op.render.screens.Screen;
 import net.op.render.textures.Assets;
 import net.op.render.textures.Texture;
+import net.op.sound.SoundManager;
+import net.op.util.OCFont;
 import net.op.util.ResourceGetter;
 
 /**
@@ -147,10 +155,40 @@ public final class Render {
 
 		Graphics2D g2d = (Graphics2D) Context.getGraphics();
 		Screen.renderCurrent(g2d, this.assets);
+
+		boolean keyF3 = (icIsKeyPressed(KeyEvent.VK_F3));
+		if (keyF3)
+			drawF3(g2d);
+
 		g2d.dispose();
 
 		Context.draw();
 		Display.update();
+	}
+
+	private void drawF3(Graphics2D g2d) {
+		Composite comp = g2d.getComposite();
+		AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f);
+
+		OCFont font = OCFont.tlrender();
+		
+		g2d.setColor(Color.GRAY);
+		g2d.setComposite(ac);
+			g2d.fillRect(10, 10, 500, 30);
+			g2d.fillRect(10, 40, 510, 30);
+			g2d.fillRect(10, 70, 250, 30);
+			g2d.fillRect(10, 100, 237, 30);
+			g2d.fillRect(10, 130, 190, 30);
+		g2d.setComposite(comp);
+		
+		font.color(Color.WHITE);
+		font.size(20);
+		font.drawShadow(g2d, OpenCraft.NAME + " " + OpenCraft.VERSION + " (Vanilla)", 15, 30);
+		font.drawShadow(g2d, "Actual screen: " + Screen.getCurrent().getResource().getId(), 15, 60);
+		font.drawShadow(g2d, "SoundAPI: " + (SoundManager.MUSIC ? "Active" : "Passive" ), 15, 90);
+		font.drawShadow(g2d, "Language: " + Locales.getLocale().toLanguageTag(), 15, 120);
+		font.drawShadow(g2d, "UI Scale: " + System.getProperty("sun.java2d.uiScale"), 15, 150);
+		
 	}
 
 }

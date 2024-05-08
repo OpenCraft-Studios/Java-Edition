@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-public class InternalLogger {
+public class ILogger {
 
-	public static int ignoredExceptions = 0;
+	public static int iex = 0;
 
 	public static OutputStream os;
 	public static PrintStream out;
@@ -19,9 +19,12 @@ public class InternalLogger {
 	static {
 		os = new ByteArrayOutputStream();
 		out = new PrintStream(os);
+		
+		out.println("#version 4");
+		out.println();
 	}
 
-	private InternalLogger() {
+	private ILogger() {
 	}
 
 	public static void writeFile() throws IOException {
@@ -38,7 +41,7 @@ public class InternalLogger {
 		fos.close();
 	}
 
-	private static byte[] getData() {
+	public static byte[] getData() {
 		return ((ByteArrayOutputStream) os).toByteArray();
 	}
 

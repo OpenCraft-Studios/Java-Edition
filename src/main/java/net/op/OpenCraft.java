@@ -22,7 +22,7 @@ import net.op.input.InputManager;
 import net.op.render.Render;
 import net.op.render.textures.Assets;
 import net.op.sound.SoundManager;
-import net.op.spectoland.InternalLogger;
+import net.op.spectoland.ILogger;
 import net.op.spectoland.SpectoError;
 import net.op.util.OCFont;
 
@@ -49,7 +49,7 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 	public boolean running = false;
 	public boolean legacyCnf = false;
 	public int fpsCap = 70;
-	public String directory;
+	public String directory = "opcraft";
 
 	/**
 	 * Creates a instance of the game. This method must be executed once. If you
@@ -143,7 +143,7 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 	 */
 	private void init() {
 		if (running) {
-			logger.info("[INIT] Already running!");
+			logger.info("#inittask Already running!");
 			return;
 		}
 
@@ -153,7 +153,7 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 		// Read config
 		Config.read();
 
-		// Configure font
+		// Configure font and translations
 		Locales.Loader.loadLocales();
 		OCFont.create("/fonts");
 
@@ -200,15 +200,15 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 		Display.destroy();
 
 		// Stop logging and collect exceptions
-		if (InternalLogger.ignoredExceptions > 0) {
-			System.err.printf("\n(!): %d ignored exceptions were throwed!\n", InternalLogger.ignoredExceptions);
+		if (ILogger.iex > 0) {
+			System.err.printf("\n(!): %d ignored exceptions were throwed!\n", ILogger.iex);
 			try {
-				InternalLogger.writeFile();
+				ILogger.writeFile();
 			} catch (Exception ignored) {
 			}
 		}
 
-		InternalLogger.stopLogging();
+		ILogger.stopLogging();
 
 		// Finish the thread
 		try {
