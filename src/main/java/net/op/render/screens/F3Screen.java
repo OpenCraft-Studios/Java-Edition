@@ -6,10 +6,10 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+
 import org.scgi.Context;
 import org.scgi.Display;
-
-import com.sun.glass.events.KeyEvent;
 
 import net.op.Locales;
 import net.op.OpenCraft;
