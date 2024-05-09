@@ -20,7 +20,7 @@ public class ILogger {
 		os = new ByteArrayOutputStream();
 		out = new PrintStream(os);
 		
-		out.println("#version 4");
+		out.println("# version 4");
 		out.println();
 	}
 

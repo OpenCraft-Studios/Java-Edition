@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
+import net.op.render.screens.F3Screen;
 import net.op.sound.SoundManager;
 import net.op.spectoland.SpectoError;
 
@@ -50,11 +51,13 @@ public class GameSettings {
 	 * @param properties The object to read
 	 */
 	public static void read(Properties properties) {
+		F3Screen.setStatus("Reading settings...");
 		Locales.setLocale(Locales.of((String) properties.getOrDefault("lang", "en-US")));
 		if (oc.legacyCnf)
 			SoundManager.MUSIC = Boolean.parseBoolean((String) properties.getOrDefault("music", "false"));
 		else
 			SoundManager.MUSIC = Double.parseDouble((String) properties.getOrDefault("soundCategory_music", "0.0")) > 0;
+		F3Screen.setStatus("Settings readed!");
 	}
 
 	/**
@@ -101,6 +104,7 @@ public class GameSettings {
 		}
 
 		writer.close();
+		F3Screen.setStatus("Saving settings...");
 	}
 
 	/**

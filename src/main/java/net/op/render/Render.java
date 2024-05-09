@@ -1,18 +1,15 @@
 package net.op.render;
 
+import static net.op.GameSettings.getDirectory;
 import static net.op.OpenCraft.oc;
 import static org.josl.openic.IC13.icIsKeyPressed;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Composite;
 import java.awt.DisplayMode;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
@@ -27,16 +24,13 @@ import org.scgi.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.op.GameSettings;
-import net.op.Locales;
 import net.op.OpenCraft;
 import net.op.input.InputManager;
+import net.op.render.screens.F3Screen;
 import net.op.render.screens.Screen;
 import net.op.render.textures.Assets;
 import net.op.render.textures.Texture;
-import net.op.sound.SoundManager;
 import net.op.spectoland.SpectoError;
-import net.op.util.OCFont;
 import net.op.util.ResourceGetter;
 
 /**
@@ -99,23 +93,22 @@ public final class Render {
 		Context.create();
 		InputManager.bindMouse();
 
-		// Get the DPI info
-		final int DPI = Toolkit.getDefaultToolkit().getScreenResolution();
-
 		// Show render details
 		logger.info("Render system initialized!");
+		SpectoError.info("Render System initialized!");
 		logger.info("[OpenGL] Using OpenGL: " + (Context.usesOpenGL() ? "Yes" : "No"));
-
-		logger.info("DPI is set to {} ({})", DPI, Math.round(DPI * 1.0417d) + "%");
-		if (DPI != 96)
-			logger.info(" \u2514\u2500 (Recommended 96)", DPI);
-
+		if (Context.usesOpenGL())
+			SpectoError.info("Using OpenGL!");
+		
 		// Do "VSync"
-		if (!vsync())
+		if (!vsync()) {
+			SpectoError.warn("Imposible to determinate the refresh rate!");
 			logger.warn("[VSync] Imposible to determinate the refresh rate!");
+		}
 
 		// Show FPS Rate
-		logger.info("FPS Rate: " + OpenCraft.getClient().fpsCap);
+		SpectoError.info("FPS Rate is set to " + oc.fpsCap);
+		logger.info("FPS Rate: " + oc.fpsCap);
 	}
 
 	private void configDisplay() {
@@ -135,13 +128,14 @@ public final class Render {
 		boolean someNull = icons.stream().anyMatch(tex -> tex.isNull());
 		if (!someNull)
 			Display.setIcons(icons.stream().map(tex -> (Image) tex.getImage()).collect(Collectors.toList()));
-
+		
+		SpectoError.info("Display icons loaded!");
 		Display.show();
 	}
 
 	public boolean vsync() {
 		int fpsRate;
-		fpsRate = Render.GFX_DISPLAY_MODE.getRefreshRate();
+		fpsRate = GFX_DISPLAY_MODE.getRefreshRate();
 
 		if (fpsRate != DisplayMode.REFRESH_RATE_UNKNOWN) {
 			oc.fpsCap = fpsRate;
@@ -160,12 +154,13 @@ public final class Render {
 			BufferedImage bi = new BufferedImage(Display.width(), Display.height(), BufferedImage.TYPE_INT_RGB);
 			Screen.renderCurrent(bi.getGraphics(), this.assets);
 			try {
-				ImageIO.write(bi, "PNG", new FileOutputStream(GameSettings.getDirectory() + "/screenshot.png"));
+				ImageIO.write(bi, "PNG", new FileOutputStream(getDirectory() + "/screenshot.png"));
+				F3Screen.setStatus("Taking screenshot...");
 			} catch (Exception ex) {
 				SpectoError.ignored(ex, getClass());
 			}
 		}
-		
+
 		if (!Context.shouldRender())
 			return;
 
@@ -173,46 +168,12 @@ public final class Render {
 		Screen.renderCurrent(g2d, this.assets);
 
 		if (icIsKeyPressed(KeyEvent.VK_F3))
-			drawF3(g2d);
+			F3Screen.drawF3(g2d);
 
 		g2d.dispose();
 
 		Context.draw();
 		Display.update();
-	}
-
-	private void drawF3(Graphics2D g2d) {
-		Composite comp = g2d.getComposite();
-		AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f);
-
-		OCFont font = OCFont.tlrender();
-		
-		g2d.setColor(Color.GRAY);
-		g2d.setComposite(ac);
-			g2d.fillRect(10, 10, 500, 30);
-			g2d.fillRect(10, 40, 510, 30);
-			g2d.fillRect(10, 70, 225, 30);
-			g2d.fillRect(10, 100, 250, 30);
-			g2d.fillRect(10, 130, 237, 30);
-			g2d.fillRect(10, 160, 190, 30);
-			g2d.fillRect(10, 190, 290, 30);
-
-			if (icIsKeyPressed(KeyEvent.VK_F2))
-				g2d.fillRect(10, Display.height() - 80, 320, 30);
-		g2d.setComposite(comp);
-		
-		font.color(Color.WHITE);
-		font.size(20);
-		font.drawShadow(g2d, OpenCraft.NAME + " " + OpenCraft.VERSION + " (Vanilla)", 15, 30);
-		font.drawShadow(g2d, "Actual screen: " + Screen.getCurrent().getResource().getId(), 15, 60);
-		font.drawShadow(g2d, "OpenGL: " + (Context.usesOpenGL() ? "Enabled" : "Disabled"), 15, 90);
-		font.drawShadow(g2d, "SoundAPI: " + (SoundManager.MUSIC ? "Active" : "Passive" ), 15, 120);
-		font.drawShadow(g2d, "Language: " + Locales.getLocale().toLanguageTag(), 15, 150);
-		font.drawShadow(g2d, "UI Scale: " + System.getProperty("sun.java2d.uiScale"), 15, 180);
-		font.drawShadow(g2d, "Resolution: " + Display.width() + "x" + Display.height(), 15, 210);
-		
-		if (icIsKeyPressed(KeyEvent.VK_F2))
-			font.drawShadow(g2d, "(Saving screenshot...)", 15, Display.height() - 60);
-	}
+	}	
 
 }

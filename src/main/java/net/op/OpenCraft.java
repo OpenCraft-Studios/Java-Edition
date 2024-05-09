@@ -200,13 +200,8 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 		Display.destroy();
 
 		// Stop logging and collect exceptions
-		if (ILogger.iex > 0) {
+		if (ILogger.iex > 0)
 			System.err.printf("\n(!): %d ignored exceptions were throwed!\n", ILogger.iex);
-			try {
-				ILogger.writeFile();
-			} catch (Exception ignored) {
-			}
-		}
 
 		ILogger.stopLogging();
 
@@ -261,7 +256,10 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 		// Parse arguments
 		OptionParser parser = new OptionParser();
 
-		/* Compatibility for Minecraft launchers. I will not convert this into a pay game */
+		/*
+		 * Compatibility for Minecraft launchers. I will not convert this into a pay
+		 * game
+		 */
 		parser.accepts("demo");
 		parser.accepts("sessionId");
 		parser.accepts("tokenId");
@@ -289,7 +287,7 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 
 		if (argSet.has(usernameArgument))
 			logger.info("Setting user {}", argSet.valueOf(usernameArgument));
-		
+
 		if (argSet.has(gameDirArgument))
 			client_args[1] = (String) argSet.valueOf(gameDirArgument);
 

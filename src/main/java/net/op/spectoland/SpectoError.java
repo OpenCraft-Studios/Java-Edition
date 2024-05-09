@@ -11,18 +11,16 @@ import net.op.crash.CrashReport;
 
 public class SpectoError {
 
-	private static int exception_counter = 0;
+	private static int exc = 0;
 
 	private SpectoError() {
 	}
 
 	public static void warn(final String message) {
-		iex++;
 		out.println(" WARN: " + message);
 	}
 
 	public static void error(final String message, Class<?> clazz) {
-		iex++;
 		out.println(" ERROR: " + message);
 	}
 	
@@ -76,7 +74,7 @@ public class SpectoError {
 		if (tb.getCause() != null)
 			strCause = tb.getCause().getMessage();
 		else
-			strCause = "unknown";
+			strCause = "Unknown";
 		
 		out.println();
 		out.println(" ERROR: at {" + strTime + "} in class (" + clazz.getName() + "):");
@@ -118,7 +116,7 @@ public class SpectoError {
 			 * This is that way because we don't want the game crash for anything, just for
 			 * important. And it's considered important if the error repeats by five.
 			 */
-			if (exception_counter++ >= 5) {
+			if (exc++ >= 5) {
 				any.printStackTrace();
 				System.exit(1);
 			}

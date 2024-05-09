@@ -32,11 +32,11 @@ public class SettingsScreen extends Screen implements MouseListener {
 
 	private String currentTab = "options.generalTab";
 
-	private boolean arrow2 = false;
-	private boolean arrow1 = false;
-	private boolean donesel = false;
-	private boolean ofcpage = false;
-	private boolean musicBtn = false;
+	public boolean arrow2 = false;
+	public boolean arrow1 = false;
+	public boolean donesel = false;
+	public boolean ofcpage = false;
+	public boolean musicBtn = false;
 
 	private SettingsScreen() {
 		super(RESOURCE);
