@@ -5,6 +5,7 @@ import static net.op.spectoland.ILogger.*;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.zip.Deflater;
 import java.util.zip.GZIPOutputStream;
 
 import net.op.crash.CrashReport;
@@ -48,7 +49,11 @@ public class SpectoError {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		
 		try {
-			GZIPOutputStream gzos = new GZIPOutputStream(baos);
+			GZIPOutputStream gzos = new GZIPOutputStream(baos) {
+				{
+					this.def.setLevel(Deflater.BEST_COMPRESSION);
+				}
+			};
 			
 			crash.write(gzos);
 			gzos.write((byte) '\n');

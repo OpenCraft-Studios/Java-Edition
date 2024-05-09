@@ -30,7 +30,7 @@ public class F3Screen {
 				ILogger.writeFile();
 			} catch (Exception ignored) {
 			}
-			setStatus("Saving internal log file");
+			setStatus("Saving internal log file...");
 		}
 		
 		Composite comp = g2d.getComposite();
@@ -41,7 +41,7 @@ public class F3Screen {
 		g2d.setColor(Color.GRAY);
 		g2d.setComposite(ac);
 		{
-			g2d.fillRect(10, 10, 500, 30);
+			g2d.fillRect(10, 10, 350, 30);
 			g2d.fillRect(10, 40, 510, 30);
 			g2d.fillRect(10, 70, 225, 30);
 			g2d.fillRect(10, 100, 250, 30);
@@ -49,7 +49,7 @@ public class F3Screen {
 			g2d.fillRect(10, 160, 190, 30);
 			g2d.fillRect(10, 190, 290, 30);
 			if (status != null)
-				g2d.fillRect(10, Display.height() - 80, 320, 30);
+				g2d.fillRect(10, Display.height() - 80, 500, 30);
 		}
 		g2d.setComposite(comp);
 
