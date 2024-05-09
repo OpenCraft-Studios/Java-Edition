@@ -16,7 +16,7 @@ import java.util.Locale;
 
 import org.scgi.Display;
 
-import net.op.Config;
+import net.op.GameSettings;
 import net.op.Locales;
 import net.op.input.MouseUtils;
 import net.op.render.textures.Assets;
@@ -32,7 +32,7 @@ public class SettingsScreen extends Screen implements MouseListener {
 
 	private String currentTab = "options.generalTab";
 
-	private boolean arrow0 = false;
+	private boolean arrow2 = false;
 	private boolean arrow1 = false;
 	private boolean donesel = false;
 	private boolean ofcpage = false;
@@ -94,14 +94,13 @@ public class SettingsScreen extends Screen implements MouseListener {
 
 		font.drawShadow(g2d, strGotoOfcPage, 45, height - 66, ofcpage ? 0xFFFFA0 : 0xFFFFFF);
 
-		arrow0 = MouseUtils.inRange((width - 400) / 2 + 273, 20, 21, 33);
 		arrow1 = MouseUtils.inRange((width - 400) / 2 + 100, 20, 21, 33);
+		arrow2 = MouseUtils.inRange((width - 400) / 2 + 273, 20, 21, 33);
 
-		arrow0 &= currentTab.equals("options.generalTab");
-		arrow1 &= currentTab.equals("options.localesTab");
+		arrow2 &= currentTab.equals("options.generalTab");
 		
 		g2d.drawImage(assets.getArrow(arrow1 ? 3 : 1), (width - 400) / 2 + 100, 15, 21, 33, null);
-		g2d.drawImage(assets.getArrow(arrow0 ? 2 : 0), (width - 400) / 2 + 273, 15, 21, 33, null);
+		g2d.drawImage(assets.getArrow(arrow2 ? 2 : 0), (width - 400) / 2 + 273, 15, 21, 33, null);
 
 		font.drawShadow(g2d, translate(currentTab), (width - 400) / 2 + 155, 37, 0xFFFFFF);
 
@@ -255,23 +254,29 @@ public class SettingsScreen extends Screen implements MouseListener {
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		if (donesel) {
-			currentTab = "options.generalTab";
-			Config.save();
-			Screen.setCurrent(MenuScreen.class);
-		} else if (musicBtn) {
+	public void mouseReleased(MouseEvent mouse) {
+		if (musicBtn) {
 			SoundManager.toggle();
-		} else if (arrow0)
+		} else if (arrow2)
 			currentTab = "options.localesTab";
-		else if (arrow1)
+		else if (arrow1) {
+			if (currentTab.equals("options.generalTab"))
+				donesel = true;
+			
 			currentTab = "options.generalTab";
+		}
 		else if (ofcpage) {
 			try {
-				Desktop.getDesktop().browse(new URI(Config.OFFICIAL_WEBPAGE));
+				Desktop.getDesktop().browse(new URI(GameSettings.OFFICIAL_WEBPAGE));
 			} catch (Exception ex) {
 				SpectoError.ignored(ex, SettingsScreen.class);
 			}
+		}
+		
+		if (donesel) {
+			currentTab = "options.generalTab";
+			GameSettings.save();
+			Screen.setCurrent(MenuScreen.class);
 		}
 	}
 

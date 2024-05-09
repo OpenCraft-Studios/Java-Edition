@@ -20,12 +20,12 @@ import net.op.spectoland.SpectoError;
  * class can be converted to a {@code Properties} object that can be readed and
  * saved to a file.
  */
-public class Config {
+public class GameSettings {
 
 	public static final String OFFICIAL_WEBPAGE = "https://opencraftstudios.github.io";
 	public static final String ONLINE_LANGSHEET = "https://raw.githubusercontent.com/OpenCraftStudios/piston-data/main/langsheet.csv";
 	
-	public static String DEFAULT_CONFIG_FILE;
+	public static String DEF_CONFIG;
 
 	/**
 	 * This method converts the settings to a {@code Properties} object.
@@ -69,10 +69,10 @@ public class Config {
 			gameSettings.load(new FileInputStream(gameSettingsFile));
 		} catch (Exception ex) {
 			logger.warn("Failed to load game settings!");
-			SpectoError.ignored(ex, Config.class);
+			SpectoError.ignored(ex, GameSettings.class);
 		}
 
-		Config.read(gameSettings);
+		GameSettings.read(gameSettings);
 	}
 
 	/**
@@ -86,14 +86,14 @@ public class Config {
 	 * This method reads the configuration written in the default file to apply it.
 	 */
 	public static void read() {
-		read(DEFAULT_CONFIG_FILE);
+		read(DEF_CONFIG);
 	}
 
 	/**
 	 * This method saves the actual configuration to the default file.
 	 */
 	public static void save(BufferedWriter writer) throws IOException {
-		Set<Entry<Object, Object>> entries = Config.toProperties().entrySet();
+		Set<Entry<Object, Object>> entries = GameSettings.toProperties().entrySet();
 
 		for (Entry<Object, Object> entry : entries) {
 			writer.write((String) entry.getKey() + ":" + (String) entry.getValue());
@@ -111,7 +111,7 @@ public class Config {
 			save(new BufferedWriter(new FileWriter(file)));
 		} catch (Exception ex) {
 			logger.warn("Failed to save game settings!");
-			SpectoError.ignored(ex, Config.class);
+			SpectoError.ignored(ex, GameSettings.class);
 		}
 	}
 
@@ -126,7 +126,7 @@ public class Config {
 	 * This method saves the actual configuration to the default file.
 	 */
 	public static void save() {
-		save(DEFAULT_CONFIG_FILE);
+		save(DEF_CONFIG);
 	}
 
 	/**

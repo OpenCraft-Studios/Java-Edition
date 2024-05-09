@@ -1,9 +1,9 @@
-[18:49:27] [main/INFO] [net.op.render.Render/]: Render system initialized!
-[18:49:28] [main/INFO] [net.op.render.Render/]: [OpenGL] Using OpenGL: No
-[18:49:28] [main/INFO] [net.op.render.Render/]: DPI is set to 96 (100%)
-[18:49:28] [main/INFO] [net.op.render.Render/]: FPS Rate: 60
-[18:49:28] [main/INFO] [net.op.sound.SoundManager/]: Sound manager started!
-[18:49:28] [main/INFO] [net.op.sound.SoundManager/]: [SoundAPI] Sound API status: Passive
-[18:49:28] [main/INFO] [net.op.OpenCraft/]: Selected language: English (United States)
-[18:49:28] [main/INFO] [net.op.OpenCraft/]: OpenCraft 24r11 started!
-[18:49:33] [main/INFO] [net.op.sound.SoundManager/]: Shutdown sound system!
+[18:12:19] [main/INFO] [net.op.render.Render/]: Render system initialized!
+[18:12:19] [main/INFO] [net.op.render.Render/]: [OpenGL] Using OpenGL: No
+[18:12:19] [main/INFO] [net.op.render.Render/]: DPI is set to 96 (100%)
+[18:12:19] [main/INFO] [net.op.render.Render/]: FPS Rate: 60
+[18:12:19] [main/INFO] [net.op.sound.SoundManager/]: Sound manager started!
+[18:12:19] [main/INFO] [net.op.sound.SoundManager/]: [SoundAPI] Sound API status: Passive
+[18:12:19] [main/INFO] [net.op.OpenCraft/]: Selected language: English (United States)
+[18:12:19] [main/INFO] [net.op.OpenCraft/]: OpenCraft 24r11 started!
+[18:12:35] [main/INFO] [net.op.sound.SoundManager/]: Shutdown sound system!

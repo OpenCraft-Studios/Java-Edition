@@ -1,6 +1,6 @@
 package net.op.spectoland;
 
-import static net.op.Config.getDirectory;
+import static net.op.GameSettings.getDirectory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

@@ -23,10 +23,13 @@ import net.op.util.Resource;
 public class MenuScreen extends Screen implements MouseListener {
 
 	public static final Resource RESOURCE = Resource.format("opencraft:screens.menuscreen");
+	public static final int TIMEOUT = 1500;
+	
 	private static MenuScreen instance = null;
 
 	private boolean quitsel = false;
 	private boolean setsel = false;
+	//private long start = -1;
 
 	private MenuScreen() {
 		super(MenuScreen.RESOURCE);
@@ -48,6 +51,8 @@ public class MenuScreen extends Screen implements MouseListener {
 				g.drawImage(assets.getBackground(), x, y, 64, 64, null);
 			}
 		}
+		
+		g.drawImage(assets.getLogo(), (width - 500) / 2, (480 > height) ? 10 : 30, 500, 87, null);
 
 		if (getCurrent().equals(MenuScreen.getInstance())) {
 			quitsel = MouseUtils.inRange(width / 2, height / 2 - 4, 200, 40);
@@ -63,8 +68,6 @@ public class MenuScreen extends Screen implements MouseListener {
 				null);
 		g.drawImage(assets.getButton(quitsel ? BUTTON_HIGHLIGHTED : BUTTON), width / 2, height / 2 - 4, 200, 40, null);
 
-		// Logo
-		g.drawImage(assets.getLogo(), (width - 500) / 2, (480 > height) ? 10 : 30, 500, 87, null);
 		g.setColor(Color.WHITE);
 
 		int singlepy_x = width / 2 - 59;

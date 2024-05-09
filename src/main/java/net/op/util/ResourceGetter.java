@@ -1,6 +1,6 @@
 package net.op.util;
 
-import static net.op.Config.getDirectory;
+import static net.op.GameSettings.getDirectory;
 
 import java.io.FileInputStream;
 import java.io.InputStream;

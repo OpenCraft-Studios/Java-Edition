@@ -151,7 +151,7 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 			throw new IllegalStateException("Failed to start OpenIC");
 
 		// Read config
-		Config.read();
+		GameSettings.read();
 
 		// Configure font and translations
 		Locales.Loader.loadLocales();
@@ -261,13 +261,18 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 		// Parse arguments
 		OptionParser parser = new OptionParser();
 
-		/* Support for Minecraft launchers. I will not convert this into a pay game */
+		/* Compatibility for Minecraft launchers. I will not convert this into a pay game */
 		parser.accepts("demo");
+		parser.accepts("sessionId");
+		parser.accepts("tokenId");
+		parser.accepts("token");
+		parser.accepts("authsessionid");
 
 		OptionSpec<?> legacyFlag = parser.accepts("legacy");
 		OptionSpec<?> gameDirArgument = parser.accepts("gameDir").withRequiredArg();
 		OptionSpec<?> configFileArgument = parser.acceptsAll(Arrays.asList("cnf", "conf", "config")).withRequiredArg();
 		OptionSpec<?> uiScaleArgument = parser.acceptsAll(Arrays.asList("scale", "uiscale")).withRequiredArg();
+		OptionSpec<?> usernameArgument = parser.accepts("username");
 
 		OptionSet argSet = parser.parse(args);
 
@@ -282,13 +287,16 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 		} else
 			System.setProperty("sun.java2d.uiScale", "1.0"); // Default
 
+		if (argSet.has(usernameArgument))
+			logger.info("Setting user {}", argSet.valueOf(usernameArgument));
+		
 		if (argSet.has(gameDirArgument))
 			client_args[1] = (String) argSet.valueOf(gameDirArgument);
 
-		Config.DEFAULT_CONFIG_FILE = client_args[1] + "/options.txt";
+		GameSettings.DEF_CONFIG = client_args[1] + "/options.txt";
 
 		if (argSet.has(configFileArgument))
-			Config.DEFAULT_CONFIG_FILE = (String) argSet.valueOf(configFileArgument);
+			GameSettings.DEF_CONFIG = (String) argSet.valueOf(configFileArgument);
 
 		/* Start the game */
 		OpenCraft client = OpenCraft.getClient(client_args);

@@ -1,6 +1,6 @@
 package net.op.crash;
 
-import static net.op.Config.*;
+import static net.op.GameSettings.*;
 
 import java.io.File;
 import java.io.FileOutputStream;

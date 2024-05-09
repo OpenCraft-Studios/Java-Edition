@@ -79,7 +79,7 @@ public class Locales {
 			Optional<InputStream> opstream = Optional.empty();
 
 			try {
-				URI csvURI = new URI(Config.ONLINE_LANGSHEET);
+				URI csvURI = new URI(GameSettings.ONLINE_LANGSHEET);
 				InputStream in = csvURI.toURL().openStream();
 
 				opstream = Optional.ofNullable(in);

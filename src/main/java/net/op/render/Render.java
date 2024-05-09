@@ -15,15 +15,19 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.imageio.ImageIO;
 
 import org.scgi.Context;
 import org.scgi.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.op.GameSettings;
 import net.op.Locales;
 import net.op.OpenCraft;
 import net.op.input.InputManager;
@@ -31,6 +35,7 @@ import net.op.render.screens.Screen;
 import net.op.render.textures.Assets;
 import net.op.render.textures.Texture;
 import net.op.sound.SoundManager;
+import net.op.spectoland.SpectoError;
 import net.op.util.OCFont;
 import net.op.util.ResourceGetter;
 
@@ -150,14 +155,24 @@ public final class Render {
 	 * Renders the game.
 	 */
 	public void render() {
+		boolean screenshot = icIsKeyPressed(KeyEvent.VK_F2);
+		if (screenshot) {
+			BufferedImage bi = new BufferedImage(Display.width(), Display.height(), BufferedImage.TYPE_INT_RGB);
+			Screen.renderCurrent(bi.getGraphics(), this.assets);
+			try {
+				ImageIO.write(bi, "PNG", new FileOutputStream(GameSettings.getDirectory() + "/screenshot.png"));
+			} catch (Exception ex) {
+				SpectoError.ignored(ex, getClass());
+			}
+		}
+		
 		if (!Context.shouldRender())
 			return;
 
 		Graphics2D g2d = (Graphics2D) Context.getGraphics();
 		Screen.renderCurrent(g2d, this.assets);
 
-		boolean keyF3 = (icIsKeyPressed(KeyEvent.VK_F3));
-		if (keyF3)
+		if (icIsKeyPressed(KeyEvent.VK_F3))
 			drawF3(g2d);
 
 		g2d.dispose();
@@ -176,19 +191,28 @@ public final class Render {
 		g2d.setComposite(ac);
 			g2d.fillRect(10, 10, 500, 30);
 			g2d.fillRect(10, 40, 510, 30);
-			g2d.fillRect(10, 70, 250, 30);
-			g2d.fillRect(10, 100, 237, 30);
-			g2d.fillRect(10, 130, 190, 30);
+			g2d.fillRect(10, 70, 225, 30);
+			g2d.fillRect(10, 100, 250, 30);
+			g2d.fillRect(10, 130, 237, 30);
+			g2d.fillRect(10, 160, 190, 30);
+			g2d.fillRect(10, 190, 290, 30);
+
+			if (icIsKeyPressed(KeyEvent.VK_F2))
+				g2d.fillRect(10, Display.height() - 80, 320, 30);
 		g2d.setComposite(comp);
 		
 		font.color(Color.WHITE);
 		font.size(20);
 		font.drawShadow(g2d, OpenCraft.NAME + " " + OpenCraft.VERSION + " (Vanilla)", 15, 30);
 		font.drawShadow(g2d, "Actual screen: " + Screen.getCurrent().getResource().getId(), 15, 60);
-		font.drawShadow(g2d, "SoundAPI: " + (SoundManager.MUSIC ? "Active" : "Passive" ), 15, 90);
-		font.drawShadow(g2d, "Language: " + Locales.getLocale().toLanguageTag(), 15, 120);
-		font.drawShadow(g2d, "UI Scale: " + System.getProperty("sun.java2d.uiScale"), 15, 150);
+		font.drawShadow(g2d, "OpenGL: " + (Context.usesOpenGL() ? "Enabled" : "Disabled"), 15, 90);
+		font.drawShadow(g2d, "SoundAPI: " + (SoundManager.MUSIC ? "Active" : "Passive" ), 15, 120);
+		font.drawShadow(g2d, "Language: " + Locales.getLocale().toLanguageTag(), 15, 150);
+		font.drawShadow(g2d, "UI Scale: " + System.getProperty("sun.java2d.uiScale"), 15, 180);
+		font.drawShadow(g2d, "Resolution: " + Display.width() + "x" + Display.height(), 15, 210);
 		
+		if (icIsKeyPressed(KeyEvent.VK_F2))
+			font.drawShadow(g2d, "(Saving screenshot...)", 15, Display.height() - 60);
 	}
 
 }
