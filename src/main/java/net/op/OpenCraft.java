@@ -32,7 +32,7 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 
 	public static final String NAME = "OpenCraft";
 	public static final String VERSION = "24r11";
-	public static final String TECHNICAL_NAME = "System Update 2";
+	public static final String TECHNICAL_NAME = "System Update 3";
 	public static final String DISPLAY_NAME = NAME + ' ' + VERSION;
 
 	public static final int NANOSECONDS = 1000000000;
