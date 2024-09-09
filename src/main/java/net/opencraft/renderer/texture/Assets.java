@@ -15,7 +15,7 @@ public class Assets {
     public static final int BUTTON_HIGHLIGHTED = 2;
 	
 	private final Tilesheet gui;
-	private final Lazy<BufferedImage> logo;
+	private Lazy<BufferedImage> logo;
 
 	private Assets(Tilesheet gui) {
 		this.gui = gui;
