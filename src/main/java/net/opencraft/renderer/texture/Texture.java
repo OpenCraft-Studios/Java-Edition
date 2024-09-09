@@ -10,6 +10,8 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
+import io.vavr.Lazy;
+
 public class Texture {
 
     private Optional<Image> opImg;
@@ -32,7 +34,7 @@ public class Texture {
         return Texture.of(null);
     }
 
-    public static Texture read(InputStream in) {
+    public static Texture getTexture(String format, InputStream in) {
         if (in == null) {
             return Texture.empty();
         }
@@ -44,6 +46,10 @@ public class Texture {
         }
 
         return Texture.of(img);
+    }
+    
+    public static Lazy<Texture> lazyLoad(String path) {
+    	return Lazy.of(() -> Texture.getTexture("PNG", Texture.class.getResourceAsStream(path)));
     }
 
     public boolean isNull() {

@@ -2,7 +2,7 @@ package net.opencraft.renderer.texture;
 
 import java.awt.image.BufferedImage;
 
-import net.opencraft.util.ResourceGetter;
+import net.opencraft.util.Files;
 
 public class Tilesheet {
 
@@ -17,7 +17,7 @@ public class Tilesheet {
     }
     
     public Tilesheet(String path) {
-        this(Texture.read(ResourceGetter.getInternal(path)));
+        this(Texture.getTexture("PNG", Files.internal(path)));
     }
 
     public static Tilesheet forTexture(Texture tilesheet) {

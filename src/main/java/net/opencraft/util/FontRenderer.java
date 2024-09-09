@@ -69,7 +69,7 @@ public class FontRenderer {
 	public static Font getFont(String fontpath, int type) {
 		Font font = MONOSPACE;
 		try {
-			InputStream in = new BufferedInputStream(ResourceGetter.getInternal(fontpath));
+			InputStream in = new BufferedInputStream(Files.internal(fontpath));
 			font = createFont(type, in);
 		} catch (Exception ex) {
 			SpectoError.ignored(ex, FontRenderer.class);

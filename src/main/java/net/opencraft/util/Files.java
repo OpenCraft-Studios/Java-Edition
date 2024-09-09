@@ -7,20 +7,20 @@ import java.io.InputStream;
 
 import net.opencraft.spectoland.SpectoError;
 
-public class ResourceGetter {
+public class Files {
 
-	private ResourceGetter() {
+	private Files() {
 	}
 
-	public static InputStream getInternal(String path) {
+	public static InputStream internal(String path) {
 		if (!Resource.isValid(path)) {
 			return null;
 		}
 
-		return ResourceGetter.class.getResourceAsStream(path);
+		return Files.class.getResourceAsStream(path);
 	}
 
-	public static InputStream getExternal(String path) {
+	public static InputStream external(String path) {
 		InputStream in = null;
 		if (!Resource.isValid(path)) {
 			return in;
@@ -33,7 +33,7 @@ public class ResourceGetter {
 		try {
 			in = new FileInputStream(getDirectory() + path);
 		} catch (Exception ex) {
-			SpectoError.ignored(ex, ResourceGetter.class);
+			SpectoError.ignored(ex, Files.class);
 		}
 
 		return in;

@@ -10,7 +10,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import net.opencraft.util.Resource;
-import net.opencraft.util.ResourceGetter;
+import net.opencraft.util.Files;
 
 public class Sound {
 
@@ -56,7 +56,7 @@ public class Sound {
 
 	public AudioInputStream inputStream() throws UnsupportedAudioFileException, IOException {
 		InputStream in;
-		in = ResourceGetter.getExternal("/resources" + path);
+		in = Files.external("/resources" + path);
 
 		return getAudioInputStream(new BufferedInputStream(in));
 	}

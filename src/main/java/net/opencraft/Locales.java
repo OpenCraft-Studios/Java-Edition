@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 import net.opencraft.spectoland.SpectoError;
-import net.opencraft.util.ResourceGetter;
+import net.opencraft.util.Files;
 
 public class Locales {
 
@@ -91,7 +91,7 @@ public class Locales {
 		}
 
 		private static InputStream getInternalCSV() {
-			return ResourceGetter.getInternal("/lang/langsheet.csv");
+			return Files.internal("/lang/langsheet.csv");
 		}
 
 	}

@@ -31,7 +31,7 @@ import net.opencraft.renderer.screens.Screen;
 import net.opencraft.renderer.texture.Assets;
 import net.opencraft.renderer.texture.Texture;
 import net.opencraft.spectoland.SpectoError;
-import net.opencraft.util.ResourceGetter;
+import net.opencraft.util.Files;
 
 /**
  * <h1>Render</h1><br>
@@ -122,8 +122,10 @@ public final class Renderer {
 		iconsPath.add("/resources/icons/icon_48x48.png");
 		iconsPath.add("/resources/icons/icon_256x256.png");
 
-		List<Texture> icons = iconsPath.stream().map(path -> ResourceGetter.getExternal(path))
-				.map(in -> Texture.read(in)).collect(Collectors.toList());
+		List<Texture> icons = iconsPath.stream()
+				.map(path -> Files.external(path))
+				.map(in -> Texture.getTexture("PNG", in))
+				.collect(Collectors.toList());
 
 		boolean someNull = icons.stream().anyMatch(tex -> tex.isNull());
 		if (!someNull)
