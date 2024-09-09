@@ -1,6 +1,7 @@
 package net.opencraft.renderer.screens;
 
 import static net.opencraft.Locales.*;
+import static net.opencraft.OpenCraft.*;
 import static net.opencraft.renderer.texture.Assets.*;
 
 import java.awt.*;
@@ -35,7 +36,7 @@ public class SettingsScreen extends Screen implements MouseListener {
 	}
 
 	@Override
-	public void render(Graphics2D g2d, Assets assets) {
+	public void render(Graphics2D g2d) {
 		int width = Display.width();
 		int height = Display.height();
 
@@ -52,13 +53,13 @@ public class SettingsScreen extends Screen implements MouseListener {
 
 				g2d.setColor(Color.BLACK);
 				g2d.fillRect(x, y, 64, 64);
-				g2d.drawImage(assets.getBackground(), x, y, 64, 64, null);
+				g2d.drawImage(oc.assets.getBackground(), x, y, 64, 64, null);
 			}
 		}
 		g2d.setComposite(defcomposite);
 
 		if (currentTab.equalsIgnoreCase("options.generalTab")) {
-			drawGeneralTab(g2d, assets);
+			drawGeneralTab(g2d, oc.assets);
 		} else if (currentTab.equalsIgnoreCase("options.localesTab")) {
 			drawLocalesTab(g2d);
 		}
@@ -66,9 +67,9 @@ public class SettingsScreen extends Screen implements MouseListener {
 		/*-------------------------------*/
 		donesel = MouseUtils.inRange((width - 175) / 2, height - 90, 175, 40);
 		ofcpage = MouseUtils.inRange(30, height - 90, 257, 40);
-		g2d.drawImage(assets.getButton(donesel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 175) / 2, height - 90, 175, 40,
+		g2d.drawImage(oc.assets.getButton(donesel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 175) / 2, height - 90, 175, 40,
 				null);
-		g2d.drawImage(assets.getButton(ofcpage ? BUTTON_HIGHLIGHTED : BUTTON), 30, height - 90, 257, 40, null);
+		g2d.drawImage(oc.assets.getButton(ofcpage ? BUTTON_HIGHLIGHTED : BUTTON), 30, height - 90, 257, 40, null);
 
 		FontRenderer font = FontRenderer.mojangles();
 		font.size(20);
@@ -85,8 +86,8 @@ public class SettingsScreen extends Screen implements MouseListener {
 
 		arrow2 &= currentTab.equals("options.generalTab");
 		
-		g2d.drawImage(assets.getArrow(arrow1 ? 3 : 1), (width - 400) / 2 + 100, 15, 21, 33, null);
-		g2d.drawImage(assets.getArrow(arrow2 ? 2 : 0), (width - 400) / 2 + 273, 15, 21, 33, null);
+		g2d.drawImage(oc.assets.getArrow(arrow1 ? 3 : 1), (width - 400) / 2 + 100, 15, 21, 33, null);
+		g2d.drawImage(oc.assets.getArrow(arrow2 ? 2 : 0), (width - 400) / 2 + 273, 15, 21, 33, null);
 
 		font.drawShadow(g2d, translate(currentTab), (width - 400) / 2 + 155, 37, 0xFFFFFF);
 

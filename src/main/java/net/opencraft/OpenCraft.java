@@ -157,7 +157,7 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 
 		// Create basics resources
 		this.assets = Assets.create("/gui.png");
-		this.render = Renderer.create(this.assets);
+		this.render = Renderer.create();
 
 		// Initialize sound and render
 		this.render.init();

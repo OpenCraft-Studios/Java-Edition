@@ -3,14 +3,13 @@ package net.opencraft.renderer.screens;
 import java.awt.Graphics2D;
 import java.awt.event.MouseListener;
 
-import net.opencraft.renderer.texture.Assets;
 import net.opencraft.util.MouseUtils;
 
 public abstract class Screen {
 
 	private static Screen current = Loadscreen.getInstance();
 
-	public abstract void render(Graphics2D g2d, Assets assets);
+	public abstract void render(Graphics2D g2d);
 
 	public static void setCurrent(Class<? extends Screen> screenClass) {
 		if (Menuscreen.class.equals(screenClass))
@@ -29,13 +28,13 @@ public abstract class Screen {
 		return current;
 	}
 
-	public static void renderCurrent(Graphics2D g2d, Assets assets) {
+	public static void renderCurrent(Graphics2D g2d) {
 		if (current == null)
 			return;
 		if (current instanceof MouseListener)
 			MouseUtils.makeCurrentListener((MouseListener) current);
 		
-		current.render(g2d, assets);
+		current.render(g2d);
 	}
 	
 	@Override

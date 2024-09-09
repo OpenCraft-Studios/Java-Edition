@@ -2,6 +2,7 @@ package net.opencraft.renderer.screens;
 
 import static java.awt.AlphaComposite.*;
 import static java.awt.image.BufferedImage.*;
+import static net.opencraft.OpenCraft.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -9,8 +10,6 @@ import java.awt.image.BufferedImage;
 import org.lwjgl.opengl.Display;
 
 import net.opencraft.renderer.gui.GuiProgressBar;
-import net.opencraft.renderer.texture.Assets;
-import net.opencraft.util.FontRenderer;
 
 public class Loadscreen extends Screen {
 
@@ -25,30 +24,25 @@ public class Loadscreen extends Screen {
 	}
 
 	@Override
-	public void render(Graphics2D g, Assets assets) {
-		animatedLS((Graphics2D) g, true, assets);
+	public void render(Graphics2D g2d) {
+		animatedLS(g2d, true);
 	}
 
-	public void animatedLS(Graphics2D g2d, boolean updateProgress, Assets assets) {
+	public void animatedLS(Graphics2D g2d, boolean updateProgress) {
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(0, 0, 854, 480);
 
 		// Draw OpenCraft Text
 
-		g2d.setColor(Color.BLACK);
-		g2d.setFont(FontRenderer.getSystemFont("Microgramma D Extended").deriveFont(Font.BOLD, 70));
-		
-		FontMetrics metrics = g2d.getFontMetrics();
-		String str = "OPENCRAFT";
+		BufferedImage loadingLogo = oc.assets.getLoadingLogo();
 		{	
-			Rectangle textBounds = new Rectangle();
-			textBounds.width = metrics.stringWidth(str);
-			textBounds.height = metrics.getHeight();
-		
-			textBounds.x = (854 - textBounds.width) / 2;
-			textBounds.y = (480 - textBounds.height) / 2 + metrics.getAscent();
-		
-			g2d.drawString(str, textBounds.x, textBounds.y);
+			final int width = loadingLogo.getWidth() * 2;
+			final int height = loadingLogo.getHeight() * 2;
+			
+			int logoX = (854 - width) / 2;
+			int logoY = (480 - height) / 2;
+			
+			g2d.drawImage(loadingLogo, logoX, logoY, width, height, null);
 		}
 		
 		progressBar.setSize(604, 24);
@@ -60,12 +54,12 @@ public class Loadscreen extends Screen {
 			return;
 		
 		if (progressBar.getProgress() > 99)
-			attemptToChange(g2d, assets);
+			attemptToChange(g2d);
 		else
 			progressBar.addProgress(0.42f);
 	}
 
-	private void attemptToChange(Graphics2D g2d, Assets assets) {
+	private void attemptToChange(Graphics2D g2d) {
 		final long current = System.currentTimeMillis();
 
 		if (start == -1)
@@ -77,11 +71,11 @@ public class Loadscreen extends Screen {
 			BufferedImage bi = new BufferedImage(854, 480, TYPE_INT_ARGB);
 
 			Graphics2D gbi = bi.createGraphics();
-			nextScreen.render(g2d, assets);
+			nextScreen.render(g2d);
 
 			AlphaComposite ac = AlphaComposite.getInstance(SRC_OVER, (float) alpha);
 			gbi.setComposite(ac);
-			animatedLS(gbi, false, null);
+			animatedLS(gbi, false);
 
 			g2d.drawImage(bi, 0, 0, null);
 			return;

@@ -23,7 +23,6 @@ import net.opencraft.InputHandler;
 import net.opencraft.OpenCraft;
 import net.opencraft.renderer.screens.F3Screen;
 import net.opencraft.renderer.screens.Screen;
-import net.opencraft.renderer.texture.Assets;
 import net.opencraft.renderer.texture.Texture;
 import net.opencraft.spectoland.SpectoError;
 import net.opencraft.util.Files;
@@ -42,20 +41,17 @@ public final class Renderer {
 	public static final DisplayMode GFX_DISPLAY_MODE = DEF_GRAPHICS_DEVICE.getDisplayMode();
 	public static final Logger logger = LoggerFactory.getLogger(Renderer.class);
 
-	private final Assets assets;
-
 	/**
 	 * Creates a new instance of this class.
 	 */
-	private Renderer(Assets assets) {
-		this.assets = assets;
+	private Renderer() {
 	}
 
 	/**
 	 * @return a new instance of this class.
 	 */
-	public static Renderer create(Assets assets) {
-		return new Renderer(assets);
+	public static Renderer create() {
+		return new Renderer();
 	}
 
 	/**
@@ -149,7 +145,7 @@ public final class Renderer {
 		boolean screenshot = icIsKeyPressed(KeyEvent.VK_F2);
 		if (screenshot) {
 			BufferedImage bi = new BufferedImage(Display.width(), Display.height(), BufferedImage.TYPE_INT_RGB);
-			Screen.renderCurrent(bi.createGraphics(), this.assets);
+			Screen.renderCurrent(bi.createGraphics());
 			try {
 				ImageIO.write(bi, "PNG", new FileOutputStream(new File(oc.directory, "screenshot.png")));
 				F3Screen.setStatus("Taking screenshot...");
@@ -162,7 +158,7 @@ public final class Renderer {
 			return;
 
 		Graphics2D g2d = (Graphics2D) Context.getGraphics();
-		Screen.renderCurrent(g2d, this.assets);
+		Screen.renderCurrent(g2d);
 
 		if (icIsKeyPressed(KeyEvent.VK_F3))
 			F3Screen.drawF3(g2d);

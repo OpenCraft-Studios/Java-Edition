@@ -13,7 +13,6 @@ import org.lwjgl.opengl.Display;
 
 import net.opencraft.Locales;
 import net.opencraft.OpenCraft;
-import net.opencraft.renderer.texture.Assets;
 import net.opencraft.util.FontRenderer;
 import net.opencraft.util.MouseUtils;
 
@@ -31,7 +30,7 @@ public class Menuscreen extends Screen implements MouseListener {
 	}
 
 	@Override
-	public void render(Graphics2D g2d, Assets assets) {
+	public void render(Graphics2D g2d) {
 		int width = Display.width();
 		int height = Display.height();
 
@@ -39,11 +38,11 @@ public class Menuscreen extends Screen implements MouseListener {
 
 		for (int x = 0; x < width; x += 64) {
 			for (int y = 0; y < height; y += 64) {
-				g2d.drawImage(assets.getBackground(), x, y, 64, 64, null);
+				g2d.drawImage(oc.assets.getBackground(), x, y, 64, 64, null);
 			}
 		}
 		
-		g2d.drawImage(assets.getLogo(), (width - 500) / 2, (480 > height) ? 10 : 30, 500, 87, null);
+		g2d.drawImage(oc.assets.getLogo(), (width - 500) / 2, (480 > height) ? 10 : 30, 500, 87, null);
 
 		if (getCurrent().equals(Menuscreen.getInstance())) {
 			quitsel = MouseUtils.inRange(width / 2, height / 2 - 4, 200, 40);
@@ -54,10 +53,10 @@ public class Menuscreen extends Screen implements MouseListener {
 		}
 
 		// Draw buttons
-		g2d.drawImage(assets.getButton(BUTTON_DISABLED), (width - 400) / 2, height / 2 - 50, 400, 40, null);
-		g2d.drawImage(assets.getButton(setsel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 400) / 2, height / 2 - 4, 198, 40,
+		g2d.drawImage(oc.assets.getButton(BUTTON_DISABLED), (width - 400) / 2, height / 2 - 50, 400, 40, null);
+		g2d.drawImage(oc.assets.getButton(setsel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 400) / 2, height / 2 - 4, 198, 40,
 				null);
-		g2d.drawImage(assets.getButton(quitsel ? BUTTON_HIGHLIGHTED : BUTTON), width / 2, height / 2 - 4, 200, 40, null);
+		g2d.drawImage(oc.assets.getButton(quitsel ? BUTTON_HIGHLIGHTED : BUTTON), width / 2, height / 2 - 4, 200, 40, null);
 
 		g2d.setColor(Color.WHITE);
 
