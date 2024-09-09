@@ -133,24 +133,5 @@ public class GameSettings {
 		save(DEF_CONFIG);
 	}
 
-	/**
-	 * It's used to set the current game directory.
-	 *
-	 * @param gameDir Game's directory
-	 */
-	public static void setDirectory(String gameDir) {
-		oc.directory = gameDir;
-	}
-
-	/**
-	 * Returns the game directory
-	 *
-	 * @return The game directory
-	 *
-	 * @see #setDirectory(String)
-	 */
-	public static String getDirectory() {
-		return oc.directory;
-	}
 
 }

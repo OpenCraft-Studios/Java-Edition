@@ -1,9 +1,8 @@
 package net.opencraft.util;
 
-import static net.opencraft.GameSettings.*;
+import static net.opencraft.OpenCraft.*;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 
 import net.opencraft.spectoland.SpectoError;
 
@@ -22,16 +21,11 @@ public class Files {
 
 	public static InputStream external(String path) {
 		InputStream in = null;
-		if (!Resource.isValid(path)) {
+		if (!Resource.isValid(path))
 			return in;
-		}
-
-		if (getDirectory().isEmpty()) {
-			path = path.substring(1);
-		}
 
 		try {
-			in = new FileInputStream(getDirectory() + path);
+			in = new FileInputStream(new File(oc.directory, path));
 		} catch (Exception ex) {
 			SpectoError.ignored(ex, Files.class);
 		}

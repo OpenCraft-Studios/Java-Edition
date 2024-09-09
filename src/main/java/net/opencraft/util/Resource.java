@@ -76,12 +76,12 @@ public final class Resource {
     }
 
     public static boolean isValid(String resourceURL) {
-        if (resourceURL == null) {
+        if (resourceURL == null)
             return false;
-        } else if (resourceURL.isEmpty()) {
+        
+        if (resourceURL.isEmpty())
             return false;
-        }
-
+        
         return true;
 
     }

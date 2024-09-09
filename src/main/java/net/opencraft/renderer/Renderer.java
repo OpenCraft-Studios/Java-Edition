@@ -1,17 +1,12 @@
 package net.opencraft.renderer;
 
-import static net.opencraft.GameSettings.*;
 import static net.opencraft.OpenCraft.*;
-import static org.josl.openic.IC13.icIsKeyPressed;
+import static org.josl.openic.IC13.*;
 
-import java.awt.DisplayMode;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -156,7 +151,7 @@ public final class Renderer {
 			BufferedImage bi = new BufferedImage(Display.width(), Display.height(), BufferedImage.TYPE_INT_RGB);
 			Screen.renderCurrent(bi.getGraphics(), this.assets);
 			try {
-				ImageIO.write(bi, "PNG", new FileOutputStream(getDirectory() + "/screenshot.png"));
+				ImageIO.write(bi, "PNG", new FileOutputStream(new File(oc.directory, "screenshot.png")));
 				F3Screen.setStatus("Taking screenshot...");
 			} catch (Exception ex) {
 				SpectoError.ignored(ex, getClass());

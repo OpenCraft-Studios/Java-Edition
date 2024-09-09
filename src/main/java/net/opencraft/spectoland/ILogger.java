@@ -1,13 +1,8 @@
 package net.opencraft.spectoland;
 
-import static net.opencraft.GameSettings.*;
+import static net.opencraft.OpenCraft.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 
 public class ILogger {
 
@@ -28,7 +23,7 @@ public class ILogger {
 	}
 
 	public static void writeFile() throws IOException {
-		File internalFile = new File(getDirectory() + "/logs/internal.log");
+		File internalFile = new File(oc.directory, "logs/internal.log");
 		if (!internalFile.getParentFile().exists()) {
 			internalFile.getParentFile().mkdirs();
 		}

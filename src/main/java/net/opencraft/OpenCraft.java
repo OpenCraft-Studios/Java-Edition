@@ -1,6 +1,6 @@
 package net.opencraft;
 
-import static org.josl.openic.IC15.icInit;
+import static org.josl.openic.IC15.*;
 
 import java.io.File;
 import java.util.Arrays;
@@ -14,9 +14,7 @@ import org.lwjgl.opengl.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import joptsimple.OptionParser;
-import joptsimple.OptionSet;
-import joptsimple.OptionSpec;
+import joptsimple.*;
 import net.opencraft.crash.CrashReport;
 import net.opencraft.renderer.Renderer;
 import net.opencraft.renderer.texture.Assets;
@@ -48,17 +46,18 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 	public boolean running = false;
 	public boolean legacyCnf = false;
 	public int fpsCap = 70;
-	public String directory = "opcraft";
+	public final File directory;
 
 	/**
 	 * Creates a instance of the game. This method must be executed once. If you
 	 * execute it more times, the game could crash or being completely unusable.
 	 */
-	OpenCraft(String thread_name, String directory, boolean legacyCnf) {
+	OpenCraft(File directory, boolean legacyCnf) {
 		this.directory = directory;
+		this.legacyCnf = legacyCnf;
 
 		this.thread = new Thread(this);
-		this.thread.setName(thread_name);
+		this.thread.setName("oc-thread");
 	}
 
 	/**
@@ -229,22 +228,6 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 	}
 
 	/**
-	 * The {@code getClient()} method is often used for getting the current client
-	 * instance.
-	 *
-	 * The client is a <i>singleton</i> because is more easy to have a non-static
-	 * client and access it by a static method.
-	 *
-	 * @return The current client instance
-	 */
-	public static OpenCraft getClient(final String... client_args) {
-		if (oc == null)
-			oc = new OpenCraft(client_args[0], client_args[1], Boolean.parseBoolean(client_args[2]));
-
-		return oc;
-	}
-
-	/**
 	 * <b>Main method</b><br>
 	 * Is the principal method that guides the: initialization, running and the stop
 	 * of the game. If you want to create your own OpenCraft launcher, we recommend
@@ -254,6 +237,11 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 	public static void main(String[] args) {
 		// Parse arguments
 		OptionParser parser = new OptionParser();
+		
+		File gameDir = new File("opcraft");
+		boolean legacyCnf;
+		
+		
 
 		/*
 		 * Compatibility for Minecraft launchers. I will not convert this into a pay
@@ -272,11 +260,7 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 		OptionSpec<?> usernameArgument = parser.accepts("username");
 
 		OptionSet argSet = parser.parse(args);
-
-		String[] client_args = new String[3];
-
-		client_args[0] = "main";
-		client_args[2] = Boolean.toString(argSet.has(legacyFlag));
+		legacyCnf = argSet.has(legacyFlag);
 
 		if (argSet.has(uiScaleArgument)) {
 			logger.warn("[CUSTOM UI SCALE] Use custom ui scales can cause the game to display wrong some objects!");
@@ -288,22 +272,22 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 			logger.info("Setting user {}", argSet.valueOf(usernameArgument));
 
 		if (argSet.has(gameDirArgument))
-			client_args[1] = (String) argSet.valueOf(gameDirArgument);
+			gameDir = new File((String) argSet.valueOf(gameDirArgument));
 
-		GameSettings.DEF_CONFIG = client_args[1] + "/options.txt";
+		GameSettings.DEF_CONFIG = new File(gameDir, "options.txt").getPath();
 
 		if (argSet.has(configFileArgument))
 			GameSettings.DEF_CONFIG = (String) argSet.valueOf(configFileArgument);
 
 		/* Start the game */
-		OpenCraft client = OpenCraft.getClient(client_args);
-		client.thread.start();
+		OpenCraft.oc = new OpenCraft(gameDir, legacyCnf);
+		oc.thread.start();
 
 		/* Wait the game to end */
 
 		int status = 0;
 		try {
-			client.thread.join();
+			oc.thread.join();
 		} catch (Exception ignored) {
 			status = 3;
 			logger.error("The game ended with errors!");

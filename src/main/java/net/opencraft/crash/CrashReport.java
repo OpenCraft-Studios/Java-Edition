@@ -1,13 +1,8 @@
 package net.opencraft.crash;
 
-import static net.opencraft.GameSettings.*;
+import static net.opencraft.OpenCraft.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Calendar;
 import java.util.Optional;
 
@@ -47,7 +42,7 @@ public class CrashReport {
 				+ "-" + cInstance.get(Calendar.DAY_OF_MONTH) + "_" + cInstance.get(Calendar.HOUR) + "-"
 				+ cInstance.get(Calendar.MINUTE) + "-" + cInstance.get(Calendar.SECOND);
 
-		return getDirectory() + "/logs/crashes/crash-" + filepath + ".log";
+		return oc.directory + "/logs/crashes/crash-" + filepath + ".log";
 	}
 
 	/**
