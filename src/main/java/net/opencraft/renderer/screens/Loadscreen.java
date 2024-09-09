@@ -1,5 +1,8 @@
 package net.opencraft.renderer.screens;
 
+import static java.awt.AlphaComposite.*;
+import static java.awt.image.BufferedImage.*;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -18,7 +21,6 @@ public class Loadscreen extends Screen {
 	private GuiProgressBar progressBar = new GuiProgressBar();
 	private long start = -1;
 	
-
 	private Loadscreen() {
 	}
 
@@ -27,7 +29,7 @@ public class Loadscreen extends Screen {
 		animatedLS((Graphics2D) g, true, assets);
 	}
 
-	public void animatedLS(Graphics2D g2d, boolean slideUp, Assets assets) {
+	public void animatedLS(Graphics2D g2d, boolean updateProgress, Assets assets) {
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(0, 0, 854, 480);
 
@@ -48,16 +50,13 @@ public class Loadscreen extends Screen {
 		
 			g2d.drawString(str, textBounds.x, textBounds.y);
 		}
-
-		g2d.setFont(FontRenderer.getSystemFont("Consolas").deriveFont(Font.BOLD, 23));
-		g2d.drawString(Math.round(progressBar.getProgress()) + "%", 50, 50);
 		
 		progressBar.setSize(604, 24);
 		progressBar.setLocation(124, 358);
 		progressBar.draw(g2d);
 		
-		/* OpenCraft Text Slide Up */
-		if (!slideUp)
+		// Update progress bar
+		if (!updateProgress)
 			return;
 		
 		if (progressBar.getProgress() > 99)
@@ -75,12 +74,12 @@ public class Loadscreen extends Screen {
 		if (current - start <= TRANSITION_DURATION) {
 			double alpha = 1 - (current - start) / TRANSITION_DURATION;
 
-			BufferedImage bi = new BufferedImage(854, 480, BufferedImage.TYPE_INT_ARGB);
+			BufferedImage bi = new BufferedImage(854, 480, TYPE_INT_ARGB);
 
 			Graphics2D gbi = bi.createGraphics();
 			nextScreen.render(g2d, assets);
 
-			AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) alpha);
+			AlphaComposite ac = AlphaComposite.getInstance(SRC_OVER, (float) alpha);
 			gbi.setComposite(ac);
 			animatedLS(gbi, false, null);
 
