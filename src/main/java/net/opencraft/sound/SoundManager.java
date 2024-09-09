@@ -118,10 +118,11 @@ public class SoundManager {
 
 	public static void shutdown() {
 		disable();
-		logger.info("Shutdown sound system!");
+		logger.info("Shutdowning sound system!");
 	}
 
 	public static double getVolume() {
+		// Volume feature don't supported yet!
 		return MUSIC ? 1.0 : 0.0;
 	}
 
