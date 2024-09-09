@@ -12,7 +12,7 @@ import net.opencraft.util.FontRenderer;
 public class Loadscreen extends Screen {
 
 	private static Menuscreen nextScreen = Menuscreen.getInstance();
-	private static final double TRANSITION_TIME = 1e3; // Original value: 3250
+	private static final double TRANSITION_DURATION = 1e3; // Original value: 3250
 
 	public static Loadscreen instance = getInstance();
 	private GuiProgressBar progressBar = new GuiProgressBar();
@@ -72,8 +72,8 @@ public class Loadscreen extends Screen {
 		if (start == -1)
 			start = current;
 		
-		if (current - start <= TRANSITION_TIME) {
-			double alpha = 1 - (current - start) / TRANSITION_TIME;
+		if (current - start <= TRANSITION_DURATION) {
+			double alpha = 1 - (current - start) / TRANSITION_DURATION;
 
 			BufferedImage bi = new BufferedImage(854, 480, BufferedImage.TYPE_INT_ARGB);
 
