@@ -15,10 +15,11 @@ public class Assets {
     public static final int BUTTON_HIGHLIGHTED = 2;
 	
 	private final Tilesheet gui;
-	private Lazy<BufferedImage> logo;
+	private Lazy<BufferedImage> loadingLogo;
 
 	private Assets(Tilesheet gui) {
 		this.gui = gui;
+		this.loadingLogo = LazyTextureLoader.lazyLoad("/loading_logo.png");
 	}
 	
 	private Assets(Tilesheet... tss) {
@@ -49,6 +50,10 @@ public class Assets {
 
 	public Image getBackground() {
 		return gui.get(242, 0, 16, 16);
+	}
+	
+	public BufferedImage getLoadingLogo() {
+		return loadingLogo.get();
 	}
 
 }
