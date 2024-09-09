@@ -29,6 +29,19 @@ public class Loadscreen extends Screen {
 	}
 
 	public void animatedLS(Graphics2D g2d, boolean updateProgress) {
+		staticLS(g2d);
+		
+		// Update progress bar
+		if (!updateProgress)
+			return;
+		
+		if (progressBar.getProgress() > 99)
+			attemptToChange(g2d);
+		else
+			progressBar.addProgress(0.42f);
+	}
+
+	private void staticLS(Graphics2D g2d) {
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(0, 0, 854, 480);
 
@@ -48,15 +61,6 @@ public class Loadscreen extends Screen {
 		progressBar.setSize(604, 24);
 		progressBar.setLocation(124, 358);
 		progressBar.draw(g2d);
-		
-		// Update progress bar
-		if (!updateProgress)
-			return;
-		
-		if (progressBar.getProgress() > 99)
-			attemptToChange(g2d);
-		else
-			progressBar.addProgress(0.42f);
 	}
 
 	private void attemptToChange(Graphics2D g2d) {
