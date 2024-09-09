@@ -23,7 +23,7 @@ public class Locales {
 	private static final Map<String, String> CATALAN = new HashMap<>();
 	private static final Map<String, String> PORTUGUESE = new HashMap<>();
 
-	private static Locale locale;
+	private static Locale locale = Locales.getLocale();
 
 	public static class Loader {
 
