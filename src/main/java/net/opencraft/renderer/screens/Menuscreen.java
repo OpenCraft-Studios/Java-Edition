@@ -4,8 +4,7 @@ import static net.opencraft.Locales.*;
 import static net.opencraft.OpenCraft.*;
 import static net.opencraft.renderer.texture.Assets.*;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -31,16 +30,12 @@ public class Menuscreen extends Screen implements MouseListener {
 
 	@Override
 	public void render(Graphics2D g2d) {
-		int width = Display.width();
-		int height = Display.height();
+		final int width = Display.width();
+		final int height = Display.height();
 
 		g2d.setColor(Color.BLACK);
-
-		for (int x = 0; x < width; x += 64) {
-			for (int y = 0; y < height; y += 64) {
-				g2d.drawImage(oc.assets.getBackground(), x, y, 64, 64, null);
-			}
-		}
+		g2d.setPaint(new TexturePaint(oc.assets.getBackground(), new Rectangle(0, 0, 64, 64)));
+		g2d.fillRect(0, 0, width, height);
 		
 		g2d.drawImage(oc.assets.getLogo(), (width - 500) / 2, (480 > height) ? 10 : 30, 500, 87, null);
 
