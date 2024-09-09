@@ -17,17 +17,17 @@ import net.opencraft.renderer.texture.Assets;
 import net.opencraft.util.FontRenderer;
 import net.opencraft.util.MouseUtils;
 
-public class MenuScreen extends Screen implements MouseListener {
+public class Menuscreen extends Screen implements MouseListener {
 
 	public static final int TIMEOUT = 1500;
 	
-	private static MenuScreen instance = null;
+	private static Menuscreen instance = null;
 
 	private boolean quitsel = false;
 	private boolean setsel = false;
 	//private long start = -1;
 
-	private MenuScreen() {
+	private Menuscreen() {
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class MenuScreen extends Screen implements MouseListener {
 		
 		g.drawImage(assets.getLogo(), (width - 500) / 2, (480 > height) ? 10 : 30, 500, 87, null);
 
-		if (getCurrent().equals(MenuScreen.getInstance())) {
+		if (getCurrent().equals(Menuscreen.getInstance())) {
 			quitsel = MouseUtils.inRange(width / 2, height / 2 - 4, 200, 40);
 			setsel = MouseUtils.inRange((width - 400) / 2, height / 2 - 4, 198, 40);
 		} else {
@@ -96,9 +96,9 @@ public class MenuScreen extends Screen implements MouseListener {
 		font.drawShadow(g, OpenCraft.NAME + " " + OpenCraft.TECHNICAL_NAME, 3, 15, 0x808080);
 	}
 
-	public static MenuScreen getInstance() {
+	public static Menuscreen getInstance() {
 		if (instance == null)
-			instance = new MenuScreen();
+			instance = new Menuscreen();
 		
 		return instance;
 	}

@@ -13,8 +13,8 @@ public abstract class Screen {
 	public abstract void render(Graphics g, Assets assets);
 
 	public static void setCurrent(Class<? extends Screen> screenClass) {
-		if (MenuScreen.class.equals(screenClass))
-			Screen.setCurrent(MenuScreen.getInstance());
+		if (Menuscreen.class.equals(screenClass))
+			Screen.setCurrent(Menuscreen.getInstance());
 		else if (Loadscreen.class.equals(screenClass))
 			Screen.setCurrent(Loadscreen.getInstance());
 		else if (SettingsScreen.class.equals(screenClass))

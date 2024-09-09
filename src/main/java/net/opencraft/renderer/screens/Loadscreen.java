@@ -11,7 +11,7 @@ import net.opencraft.util.FontRenderer;
 
 public class Loadscreen extends Screen {
 
-	private static MenuScreen nextScreen = MenuScreen.getInstance();
+	private static Menuscreen nextScreen = Menuscreen.getInstance();
 	private static final double TRANSITION_TIME = 1e3; // Original value: 3250
 
 	public static Loadscreen instance = getInstance();

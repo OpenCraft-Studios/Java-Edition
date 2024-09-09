@@ -264,7 +264,7 @@ public class SettingsScreen extends Screen implements MouseListener {
 		if (donesel) {
 			currentTab = "options.generalTab";
 			GameSettings.save();
-			Screen.setCurrent(MenuScreen.class);
+			Screen.setCurrent(Menuscreen.class);
 		}
 	}
 
