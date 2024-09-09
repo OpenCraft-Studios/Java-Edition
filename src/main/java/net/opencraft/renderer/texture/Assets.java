@@ -1,9 +1,12 @@
 package net.opencraft.renderer.texture;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import io.vavr.Lazy;
 
 public class Assets {
 
