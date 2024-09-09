@@ -49,11 +49,11 @@ public class Loadscreen extends Screen {
 
 		BufferedImage loadingLogo = oc.assets.getLoadingLogo();
 		{	
-			final int width = loadingLogo.getWidth() * 2;
-			final int height = loadingLogo.getHeight() * 2;
+			final int width = (int) (loadingLogo.getWidth() * 1.5f);
+			final int height = (int) (loadingLogo.getHeight() * 1.5f);
 			
 			int logoX = (854 - width) / 2;
-			int logoY = (480 - height) / 2;
+			int logoY = (480 - height) / 2 - 27;
 			
 			g2d.drawImage(loadingLogo, logoX, logoY, width, height, null);
 		}
