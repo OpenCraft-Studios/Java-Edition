@@ -24,7 +24,7 @@ import java.util.Set;
 public class GameSettings {
 
 	public static final String OFFICIAL_WEBPAGE = "https://opencraftstudios.github.io";
-	public static final String ONLINE_LANGSHEET = "https://raw.githubusercontent.com/OpenCraftStudios/piston-data/main/langsheet.csv";
+	public static final String ONLINE_LANGSHEET = "https://raw.githubusercontent.com/OpenCraft-Studios/piston-data/main/langsheet.csv";
 	
 	public static String DEF_CONFIG;
 
