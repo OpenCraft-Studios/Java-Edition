@@ -5,7 +5,7 @@ import static net.opencraft.OpenCraft.*;
 import static net.opencraft.renderer.texture.Assets.*;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -31,19 +31,19 @@ public class Menuscreen extends Screen implements MouseListener {
 	}
 
 	@Override
-	public void render(Graphics g, Assets assets) {
+	public void render(Graphics2D g2d, Assets assets) {
 		int width = Display.width();
 		int height = Display.height();
 
-		g.setColor(Color.BLACK);
+		g2d.setColor(Color.BLACK);
 
 		for (int x = 0; x < width; x += 64) {
 			for (int y = 0; y < height; y += 64) {
-				g.drawImage(assets.getBackground(), x, y, 64, 64, null);
+				g2d.drawImage(assets.getBackground(), x, y, 64, 64, null);
 			}
 		}
 		
-		g.drawImage(assets.getLogo(), (width - 500) / 2, (480 > height) ? 10 : 30, 500, 87, null);
+		g2d.drawImage(assets.getLogo(), (width - 500) / 2, (480 > height) ? 10 : 30, 500, 87, null);
 
 		if (getCurrent().equals(Menuscreen.getInstance())) {
 			quitsel = MouseUtils.inRange(width / 2, height / 2 - 4, 200, 40);
@@ -54,12 +54,12 @@ public class Menuscreen extends Screen implements MouseListener {
 		}
 
 		// Draw buttons
-		g.drawImage(assets.getButton(BUTTON_DISABLED), (width - 400) / 2, height / 2 - 50, 400, 40, null);
-		g.drawImage(assets.getButton(setsel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 400) / 2, height / 2 - 4, 198, 40,
+		g2d.drawImage(assets.getButton(BUTTON_DISABLED), (width - 400) / 2, height / 2 - 50, 400, 40, null);
+		g2d.drawImage(assets.getButton(setsel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 400) / 2, height / 2 - 4, 198, 40,
 				null);
-		g.drawImage(assets.getButton(quitsel ? BUTTON_HIGHLIGHTED : BUTTON), width / 2, height / 2 - 4, 200, 40, null);
+		g2d.drawImage(assets.getButton(quitsel ? BUTTON_HIGHLIGHTED : BUTTON), width / 2, height / 2 - 4, 200, 40, null);
 
-		g.setColor(Color.WHITE);
+		g2d.setColor(Color.WHITE);
 
 		int singlepy_x = width / 2 - 59;
 		int settings_x = width / 2 - 150;
@@ -87,13 +87,13 @@ public class Menuscreen extends Screen implements MouseListener {
 		FontRenderer font = FontRenderer.minecraft();
 
 		font.size(16);
-		font.drawShadow(g, translate("menu.Quit"), quitgame_x, height / 2 + 20, quitsel ? 0xFFFFA0 : 0xFFFFFF);
-		font.drawShadow(g, translate("menu.Options"), settings_x, height / 2 + 20, setsel ? 0xFFFFA0 : 0xFFFFFF);
-		font.drawShadow(g, translate("menu.singleplayer"), singlepy_x, height / 2 - 25, 0xA0A0A0);
+		font.drawShadow(g2d, translate("menu.Quit"), quitgame_x, height / 2 + 20, quitsel ? 0xFFFFA0 : 0xFFFFFF);
+		font.drawShadow(g2d, translate("menu.Options"), settings_x, height / 2 + 20, setsel ? 0xFFFFA0 : 0xFFFFFF);
+		font.drawShadow(g2d, translate("menu.singleplayer"), singlepy_x, height / 2 - 25, 0xA0A0A0);
 
 		// Draw game name
 		font = FontRenderer.tlrender().size(14);
-		font.drawShadow(g, OpenCraft.NAME + " " + OpenCraft.TECHNICAL_NAME, 3, 15, 0x808080);
+		font.drawShadow(g2d, OpenCraft.NAME + " " + OpenCraft.TECHNICAL_NAME, 3, 15, 0x808080);
 	}
 
 	public static Menuscreen getInstance() {

@@ -23,7 +23,7 @@ public class Loadscreen extends Screen {
 	}
 
 	@Override
-	public void render(Graphics g, Assets assets) {
+	public void render(Graphics2D g, Assets assets) {
 		animatedLS((Graphics2D) g, true, assets);
 	}
 
@@ -66,7 +66,7 @@ public class Loadscreen extends Screen {
 			progressBar.addProgress(0.42f);
 	}
 
-	private void attemptToChange(Graphics g2d, Assets assets) {
+	private void attemptToChange(Graphics2D g2d, Assets assets) {
 		final long current = System.currentTimeMillis();
 
 		if (start == -1)

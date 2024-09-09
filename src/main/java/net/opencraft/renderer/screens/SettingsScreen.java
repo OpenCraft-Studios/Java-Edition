@@ -35,9 +35,7 @@ public class SettingsScreen extends Screen implements MouseListener {
 	}
 
 	@Override
-	public void render(Graphics g, Assets assets) {
-		Graphics2D g2d = (Graphics2D) g;
-
+	public void render(Graphics2D g2d, Assets assets) {
 		int width = Display.width();
 		int height = Display.height();
 

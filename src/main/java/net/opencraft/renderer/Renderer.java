@@ -149,7 +149,7 @@ public final class Renderer {
 		boolean screenshot = icIsKeyPressed(KeyEvent.VK_F2);
 		if (screenshot) {
 			BufferedImage bi = new BufferedImage(Display.width(), Display.height(), BufferedImage.TYPE_INT_RGB);
-			Screen.renderCurrent(bi.getGraphics(), this.assets);
+			Screen.renderCurrent(bi.createGraphics(), this.assets);
 			try {
 				ImageIO.write(bi, "PNG", new FileOutputStream(new File(oc.directory, "screenshot.png")));
 				F3Screen.setStatus("Taking screenshot...");
