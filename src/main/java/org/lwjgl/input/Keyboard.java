@@ -7,10 +7,10 @@ import java.util.*;
 
 public class Keyboard implements KeyListener {
 
-	private static HashSet<Integer> currentKeys = new HashSet<>();
-    private static HashSet<Integer> prevKeys = new HashSet<>();
-	
+	private static HashSet<Integer> pressedKeys = new HashSet<>();
 	private static Keyboard instance;
+	
+	private static int currentKeyCode = -1;
 	
 	private Keyboard(Component parent) {
 		parent.addKeyListener(this);
@@ -30,29 +30,35 @@ public class Keyboard implements KeyListener {
 		return instance != null;
 	}
 	
-	public static boolean isKeyPressed(int keyCode) {
-        return currentKeys.contains(keyCode);
+	public static boolean isKeyDown(int keyCode) {
+        return pressedKeys.contains(keyCode);
     }
 
-    public static boolean isKeyJustPressed(int keyCode) {
-        return currentKeys.contains(keyCode) && !prevKeys.contains(keyCode);
+    public static boolean isKeyClicked(int keyCode) {
+        boolean down = isKeyDown(keyCode);
+        if (down)
+        	pressedKeys.remove(keyCode);
+        
+        return down;
     }
 	
-	public static void poll() {
-		prevKeys.clear();
-        prevKeys.addAll(currentKeys);	
+	public void keyTyped(KeyEvent e) {
 	}
-	
-	public void keyTyped(KeyEvent e) {}
 
 	@Override
     public void keyPressed(KeyEvent e) {
-        currentKeys.add(e.getKeyCode());
+		int keyCode = e.getKeyCode();
+		if (keyCode == currentKeyCode)
+			return;
+		
+		pressedKeys.add(e.getKeyCode());
+		currentKeyCode = keyCode;
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        currentKeys.remove(e.getKeyCode());
+        pressedKeys.remove(e.getKeyCode());
+        currentKeyCode = -1;
     }
 	
 	

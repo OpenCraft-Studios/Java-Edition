@@ -56,9 +56,8 @@ public final class Renderer {
 	public void render(Graphics2D g2d) {
 		Screen.renderCurrent(g2d);
 
-		if (Keyboard.isKeyJustPressed(KeyEvent.VK_F3))
+		if (Keyboard.isKeyClicked(KeyEvent.VK_F3))
 			F3Screen.toggleVisible();
-		Keyboard.poll();
 		
 		if (F3Screen.isVisible())
 			F3Screen.draw(g2d);

@@ -3,16 +3,18 @@ package org.lwjgl.input;
 import java.awt.Component;
 import java.awt.event.*;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JFrame;
 
 public class Mouse implements MouseListener, MouseMotionListener, MouseWheelListener {
 
-	private static HashSet<Integer> currentMouseButtons = new HashSet<>();
-    private static HashSet<Integer> prevMouseButtons = new HashSet<>();
+	private static Set<Integer> pressed = new HashSet<>();
     private static Mouse instance;
     private static int x, y, xo, yo, xd, yd;
     private static int dwheel;
+    
+    private static int currentButton = -1;
     
     private Mouse(Component parent) {
     	if (parent instanceof JFrame)
@@ -37,17 +39,16 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
     	return instance != null;
     }
     
-    public static void poll() {
-    	prevMouseButtons.clear();
-        prevMouseButtons.addAll(currentMouseButtons);
-    }
-    
 	public static boolean isButtonDown(int button) {
-        return currentMouseButtons.contains(button);
+        return pressed.contains(button);
     }
 
-    public static boolean isButtonJustPressed(int button) {
-        return currentMouseButtons.contains(button) && !prevMouseButtons.contains(button);
+    public static boolean isButtonClicked(int button) {
+        boolean down = isButtonDown(button);
+        if (down)
+        	pressed.remove(button);
+        
+        return down;
     }
 
     public static int getX() {
@@ -93,12 +94,18 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 	
 	@Override
     public void mousePressed(MouseEvent e) {
-        currentMouseButtons.add(e.getButton());
+		int button = e.getButton();
+		if (button == currentButton)
+			return;
+		
+        pressed.add(e.getButton());
+        currentButton = button;
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        currentMouseButtons.remove(e.getButton());
+        pressed.remove(e.getButton());
+        currentButton = -1;
     }
 
 	public void mouseEntered(MouseEvent e) {}

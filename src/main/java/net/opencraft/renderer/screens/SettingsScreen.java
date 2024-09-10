@@ -44,7 +44,6 @@ public class SettingsScreen extends Screen {
 
 	@Override
 	public void render(Graphics2D g2d) {
-		pollEvents();
 		int width = Display.getWidth();
 		int height = Display.getHeight();
 
@@ -90,15 +89,14 @@ public class SettingsScreen extends Screen {
 		back_arrow.setHighlighted(MouseUtils.inRange(back_arrow));
 		back_arrow.draw(g2d);
 		
-		//g2d.drawImage(oc.assets.getArrow(arrow1 ? ARROW_HIGHLIGHTED | ARROW_LEFT  : ARROW_NORMAL | ARROW_LEFT), (width - 400) / 2 + 100, 15, 21, 33, null);
-		//g2d.drawImage(oc.assets.getArrow(arrow2 ? ARROW_HIGHLIGHTED | ARROW_RIGHT : ARROW_NORMAL | ARROW_RIGHT), (width - 400) / 2 + 273, 15, 21, 33, null);
-
 		font.drawShadow(g2d, translate(currentTab), (width - 400) / 2 + 155, 37, 0xFFFFFF);
 
 		g2d.setColor(Color.WHITE);
 		g2d.setStroke(new BasicStroke(2F));
 		g2d.drawLine(0, 60, width, 60);
 		g2d.drawLine(0, height - 100, width, height - 100);
+		
+		pollEvents();
 	}
 
 	private void drawGeneralTab(Graphics g, Assets assets) {
@@ -245,11 +243,8 @@ public class SettingsScreen extends Screen {
 	}
 
 	public void pollEvents() {
-		if (!Mouse.isButtonDown(1)) {
-			Mouse.poll();
+		if (!Mouse.isButtonClicked(1))
 			return;
-		}
-		Mouse.poll();
 		
 		if (musicBtn) {
 			SoundManager.toggleSound();
@@ -263,9 +258,9 @@ public class SettingsScreen extends Screen {
 		}
 		
 		if (donesel) {
+			Screen.setCurrent(Menuscreen.class);
 			currentTab = "options.generalTab";
 			GameSettings.save();
-			Screen.setCurrent(Menuscreen.class);
 		}
 	}
 	

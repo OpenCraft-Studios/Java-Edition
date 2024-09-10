@@ -87,7 +87,7 @@ public class Menuscreen extends Screen {
 	}
 
 	private void pollEvents() {
-		if (!Mouse.isButtonJustPressed(1))
+		if (!Mouse.isButtonClicked(1))
 			return;
 		
 		if (setsel)
