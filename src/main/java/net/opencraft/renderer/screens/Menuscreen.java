@@ -2,42 +2,41 @@ package net.opencraft.renderer.screens;
 
 import static net.opencraft.Locales.*;
 import static net.opencraft.OpenCraft.*;
-import static net.opencraft.renderer.texture.Assets.*;
+import static net.opencraft.renderer.gui.GuiButton.*;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 
-import org.lwjgl.opengl.Display;
+import org.lwjgl.input.Mouse;
 
+import io.vavr.Lazy;
 import net.opencraft.Locales;
-import net.opencraft.OpenCraft;
 import net.opencraft.util.FontRenderer;
 import net.opencraft.util.MouseUtils;
 
-public class Menuscreen extends Screen implements MouseListener {
-
-	public static final int TIMEOUT = 1500;
+public class Menuscreen extends Screen {
 	
 	private static Menuscreen instance = null;
 
 	private boolean quitsel = false;
 	private boolean setsel = false;
-	//private long start = -1;
+	private Lazy<BufferedImage> logo;
 
 	private Menuscreen() {
+		logo = Lazy.of(oc.assets::getLogo);
 	}
 
 	@Override
 	public void render(Graphics2D g2d) {
-		final int width = Display.width();
-		final int height = Display.height();
+		pollEvents();
+		final int width = oc.width;
+		final int height = oc.height;
 
 		g2d.setColor(Color.BLACK);
 		g2d.setPaint(new TexturePaint(oc.assets.getBackground(), new Rectangle(0, 0, 64, 64)));
 		g2d.fillRect(0, 0, width, height);
-		
-		g2d.drawImage(oc.assets.getLogo(), (width - 500) / 2, (480 > height) ? 10 : 30, 500, 87, null);
+
+		g2d.drawImage(logo.get(), (width - 500) / 2, (480 > height) ? 10 : 30, 500, 87, null);
 
 		if (getCurrent().equals(Menuscreen.getInstance())) {
 			quitsel = MouseUtils.inRange(width / 2, height / 2 - 4, 200, 40);
@@ -49,9 +48,10 @@ public class Menuscreen extends Screen implements MouseListener {
 
 		// Draw buttons
 		g2d.drawImage(oc.assets.getButton(BUTTON_DISABLED), (width - 400) / 2, height / 2 - 50, 400, 40, null);
-		g2d.drawImage(oc.assets.getButton(setsel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 400) / 2, height / 2 - 4, 198, 40,
-				null);
-		g2d.drawImage(oc.assets.getButton(quitsel ? BUTTON_HIGHLIGHTED : BUTTON), width / 2, height / 2 - 4, 200, 40, null);
+		g2d.drawImage(oc.assets.getButton(setsel ? BUTTON_HIGHLIGHTED : BUTTON_NORMAL), (width - 400) / 2,
+				height / 2 - 4, 198, 40, null);
+		g2d.drawImage(oc.assets.getButton(quitsel ? BUTTON_HIGHLIGHTED : BUTTON_NORMAL), width / 2, height / 2 - 4, 200,
+				40, null);
 
 		g2d.setColor(Color.WHITE);
 
@@ -84,45 +84,28 @@ public class Menuscreen extends Screen implements MouseListener {
 		font.drawShadow(g2d, translate("menu.Quit"), quitgame_x, height / 2 + 20, quitsel ? 0xFFFFA0 : 0xFFFFFF);
 		font.drawShadow(g2d, translate("menu.Options"), settings_x, height / 2 + 20, setsel ? 0xFFFFA0 : 0xFFFFFF);
 		font.drawShadow(g2d, translate("menu.singleplayer"), singlepy_x, height / 2 - 25, 0xA0A0A0);
+	}
 
-		// Draw game name
-		font = FontRenderer.tlrender().size(14);
-		font.drawShadow(g2d, OpenCraft.NAME + " " + OpenCraft.TECHNICAL_NAME, 3, 15, 0x808080);
+	private void pollEvents() {
+		if (!Mouse.isButtonJustPressed(1))
+			return;
+		
+		if (setsel)
+			Screen.setCurrent(SettingsScreen.class);
+		else if (quitsel)
+			oc.running = false;
+		
 	}
 
 	public static Menuscreen getInstance() {
 		if (instance == null)
 			instance = new Menuscreen();
-		
+
 		return instance;
 	}
 
 	public static void destroy() {
 		instance = null;
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		if (setsel)
-			Screen.setCurrent(SettingsScreen.class);
-		else if (quitsel)
-			oc.running = false;
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
 	}
 
 }

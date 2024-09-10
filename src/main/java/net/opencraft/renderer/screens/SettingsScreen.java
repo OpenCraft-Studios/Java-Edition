@@ -2,43 +2,51 @@ package net.opencraft.renderer.screens;
 
 import static net.opencraft.Locales.*;
 import static net.opencraft.OpenCraft.*;
-import static net.opencraft.renderer.texture.Assets.*;
+import static net.opencraft.renderer.gui.GuiArrow.*;
+import static net.opencraft.renderer.gui.GuiButton.*;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.net.URI;
 import java.util.Locale;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
 import net.opencraft.GameSettings;
 import net.opencraft.Locales;
+import net.opencraft.renderer.gui.GuiArrow;
 import net.opencraft.renderer.texture.Assets;
 import net.opencraft.sound.SoundManager;
-import net.opencraft.spectoland.SpectoError;
 import net.opencraft.util.FontRenderer;
 import net.opencraft.util.MouseUtils;
 
-public class SettingsScreen extends Screen implements MouseListener {
+public class SettingsScreen extends Screen {
 
 	private static final SettingsScreen instance = new SettingsScreen();
 
 	private String currentTab = "options.generalTab";
 
-	public boolean arrow2 = false;
-	public boolean arrow1 = false;
+	private GuiArrow back_arrow, next_arrow;
+	
 	public boolean donesel = false;
-	public boolean ofcpage = false;
 	public boolean musicBtn = false;
 
 	private SettingsScreen() {
+		back_arrow = new GuiArrow();
+		back_arrow.setSize(21, 33);
+		back_arrow.setDirection(ARROW_LEFT);
+		
+		next_arrow = new GuiArrow();
+		next_arrow.setSize(21, 33);
+		next_arrow.setDirection(ARROW_RIGHT);
+		
+		
 	}
 
 	@Override
 	public void render(Graphics2D g2d) {
-		int width = Display.width();
-		int height = Display.height();
+		pollEvents();
+		int width = Display.getWidth();
+		int height = Display.getHeight();
 
 		g2d.setPaintMode();
 		g2d.setColor(Color.WHITE);
@@ -66,32 +74,29 @@ public class SettingsScreen extends Screen implements MouseListener {
 
 		/*-------------------------------*/
 		donesel = MouseUtils.inRange((width - 175) / 2, height - 90, 175, 40);
-		ofcpage = MouseUtils.inRange(30, height - 90, 257, 40);
-		g2d.drawImage(oc.assets.getButton(donesel ? BUTTON_HIGHLIGHTED : BUTTON), (width - 175) / 2, height - 90, 175, 40,
+		g2d.drawImage(oc.assets.getButton(donesel ? BUTTON_HIGHLIGHTED : BUTTON_NORMAL), (width - 175) / 2, height - 90, 175, 40,
 				null);
-		g2d.drawImage(oc.assets.getButton(ofcpage ? BUTTON_HIGHLIGHTED : BUTTON), 30, height - 90, 257, 40, null);
 
 		FontRenderer font = FontRenderer.mojangles();
 		font.size(20);
 		font.drawShadow(g2d, translate("gui.Done"), (width - 175) / 2 + 62, height - 66, donesel ? 0xFFFFA0 : 0xFFFFFF);
-
-		String strGotoOfcPage = translate("gui.gotoOfcPage");
-		if (strGotoOfcPage.length() >= 24)
-			strGotoOfcPage = strGotoOfcPage.substring(0, 21) + "...";
-
-		font.drawShadow(g2d, strGotoOfcPage, 45, height - 66, ofcpage ? 0xFFFFA0 : 0xFFFFFF);
-
-		arrow1 = MouseUtils.inRange((width - 400) / 2 + 100, 20, 21, 33);
-		arrow2 = MouseUtils.inRange((width - 400) / 2 + 273, 20, 21, 33);
-
-		arrow2 &= currentTab.equals("options.generalTab");
 		
-		g2d.drawImage(oc.assets.getArrow(arrow1 ? 3 : 1), (width - 400) / 2 + 100, 15, 21, 33, null);
-		g2d.drawImage(oc.assets.getArrow(arrow2 ? 2 : 0), (width - 400) / 2 + 273, 15, 21, 33, null);
+		next_arrow.setLocation((width - 400) / 2 + 273, 15);
+		next_arrow.setHighlighted(MouseUtils.inRange(next_arrow)
+				&& currentTab.equals("options.generalTab"));
+		next_arrow.draw(g2d);
+		
+		back_arrow.setLocation((width - 400) / 2 + 100, 15);
+		back_arrow.setHighlighted(MouseUtils.inRange(back_arrow));
+		back_arrow.draw(g2d);
+		
+		//g2d.drawImage(oc.assets.getArrow(arrow1 ? ARROW_HIGHLIGHTED | ARROW_LEFT  : ARROW_NORMAL | ARROW_LEFT), (width - 400) / 2 + 100, 15, 21, 33, null);
+		//g2d.drawImage(oc.assets.getArrow(arrow2 ? ARROW_HIGHLIGHTED | ARROW_RIGHT : ARROW_NORMAL | ARROW_RIGHT), (width - 400) / 2 + 273, 15, 21, 33, null);
 
 		font.drawShadow(g2d, translate(currentTab), (width - 400) / 2 + 155, 37, 0xFFFFFF);
 
 		g2d.setColor(Color.WHITE);
+		g2d.setStroke(new BasicStroke(2F));
 		g2d.drawLine(0, 60, width, 60);
 		g2d.drawLine(0, height - 100, width, height - 100);
 	}
@@ -100,7 +105,7 @@ public class SettingsScreen extends Screen implements MouseListener {
 		FontRenderer font = FontRenderer.mojangles();
 
 		musicBtn = MouseUtils.inRange(30, 80, 200, 40);
-		g.drawImage(assets.getButton(musicBtn ? BUTTON_HIGHLIGHTED : BUTTON), 30, 80, 200, 40, null);
+		g.drawImage(assets.getButton(musicBtn ? BUTTON_HIGHLIGHTED : BUTTON_NORMAL), 30, 80, 200, 40, null);
 
 		font.size(20);
 		font.color(musicBtn ? 0xFFFFA0 : 0xFFFFFF);
@@ -108,13 +113,12 @@ public class SettingsScreen extends Screen implements MouseListener {
 				translate("options.Music") + ": " + translate(SoundManager.MUSIC ? "options.ON" : "options.OFF"), 45,
 				105);
 
-		font.color(Color.WHITE);
 	}
 
 	private void drawLocalesTab(Graphics g) {
 		// Draw buttons
-		final int width = Display.width();
-		final int height = Display.height();
+		final int width = Display.getWidth();
+		final int height = Display.getHeight();
 		final String strLang = Locales.getGenericName(Locales.getLocale());
 
 		FontRenderer font = FontRenderer.mojangles();
@@ -232,7 +236,7 @@ public class SettingsScreen extends Screen implements MouseListener {
 		else if (ptLang)
 			lang = Locales.of("pt-PT");
 
-		if (lang != null && MouseUtils.isButtonPressed(1))
+		if (lang != null && Mouse.isButtonDown(1))
 			Locales.setLocale(lang);
 	}
 
@@ -240,24 +244,22 @@ public class SettingsScreen extends Screen implements MouseListener {
 		return instance;
 	}
 
-	@Override
-	public void mouseReleased(MouseEvent mouse) {
+	public void pollEvents() {
+		if (!Mouse.isButtonDown(1)) {
+			Mouse.poll();
+			return;
+		}
+		Mouse.poll();
+		
 		if (musicBtn) {
-			SoundManager.toggle();
-		} else if (arrow2)
+			SoundManager.toggleSound();
+		} else if (next_arrow.isHighlighted()) {
 			currentTab = "options.localesTab";
-		else if (arrow1) {
+		} else if (back_arrow.isHighlighted()) {
 			if (currentTab.equals("options.generalTab"))
 				donesel = true;
 			
 			currentTab = "options.generalTab";
-		}
-		else if (ofcpage) {
-			try {
-				Desktop.getDesktop().browse(new URI(GameSettings.OFFICIAL_WEBPAGE));
-			} catch (Exception ex) {
-				SpectoError.ignored(ex, SettingsScreen.class);
-			}
 		}
 		
 		if (donesel) {
@@ -266,21 +268,10 @@ public class SettingsScreen extends Screen implements MouseListener {
 			Screen.setCurrent(Menuscreen.class);
 		}
 	}
-
+	
 	@Override
-	public void mouseClicked(MouseEvent e) {
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
+	public String toString() {
+		return super.toString(); //+ "#" + currentTab.substring(8, 15); lateeer...
 	}
 
 }

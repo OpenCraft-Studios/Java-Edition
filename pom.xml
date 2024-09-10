@@ -7,6 +7,81 @@
 	<version>24r11</version>
 	<name>OpenCraft</name>
 	<description>An exact copy of Minecraft.</description>
+
+	<properties>
+		<java.version>8</java.version>
+		<maven.compiler.release>8</maven.compiler.release>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<!-- Dependency versions -->
+		<lombok.version>1.18.20</lombok.version>
+		<joml.version>1.10.8</joml.version>
+		<openic.version>1.3</openic.version>
+		<vavr.version>0.10.4</vavr.version>
+		<guppy4j.version>0.0.7</guppy4j.version>
+		<joptsimple.version>5.0.4</joptsimple.version>
+		<log4j.version>2.23.1</log4j.version>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.joml</groupId>
+			<artifactId>joml</artifactId>
+			<version>${joml.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.josl.openic</groupId>
+			<artifactId>openic</artifactId>
+			<version>${openic.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.vavr</groupId>
+			<artifactId>vavr</artifactId>
+			<version>${vavr.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.guppy4j</groupId>
+			<artifactId>sound-impl</artifactId>
+			<version>${guppy4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.jopt-simple</groupId>
+			<artifactId>jopt-simple</artifactId>
+			<version>${joptsimple.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j2-impl</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+
+	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -15,6 +90,15 @@
 				<version>3.11.0</version>
 				<configuration>
 					<encoding>${project.build.sourceEncoding}</encoding>
+					<source>1.8</source>
+					<target>1.8</target>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>1.18.32</version>
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -28,62 +112,10 @@
 		</plugins>
 	</build>
 
-	<dependencies>
-
-		<dependency>
-			<groupId>org.josl.openic</groupId>
-			<artifactId>openic</artifactId>
-			<version>1.3</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>io.vavr</groupId>
-			<artifactId>vavr</artifactId>
-			<version>0.10.4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.guppy4j</groupId>
-			<artifactId>sound-impl</artifactId>
-			<version>0.0.7</version>
-		</dependency>
-
-		<dependency>
-			<groupId>net.sf.jopt-simple</groupId>
-			<artifactId>jopt-simple</artifactId>
-			<version>5.0.4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>2.23.1</version>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.23.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j2-impl</artifactId>
-			<version>2.23.1</version>
-		</dependency>
-
-	</dependencies>
-
 	<repositories>
 		<repository>
 			<id>github</id>
 			<url>https://maven.pkg.github.com/CiroZDP/OpenIC</url>
 		</repository>
 	</repositories>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.release>17</maven.compiler.release>
-	</properties>
 </project>

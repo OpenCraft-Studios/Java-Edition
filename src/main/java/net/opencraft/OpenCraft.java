@@ -1,63 +1,69 @@
 package net.opencraft;
 
-import static org.josl.openic.IC15.*;
-
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.File;
 import java.util.Arrays;
-import java.util.Calendar;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 import org.guppy4j.run.Startable;
 import org.guppy4j.run.Stoppable;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import joptsimple.*;
 import net.opencraft.crash.CrashReport;
+import net.opencraft.renderer.DisplayManager;
 import net.opencraft.renderer.Renderer;
 import net.opencraft.renderer.texture.Assets;
 import net.opencraft.sound.SoundManager;
 import net.opencraft.spectoland.ILogger;
-import net.opencraft.spectoland.SpectoError;
 import net.opencraft.util.FontRenderer;
 
-public final class OpenCraft implements Runnable, Startable, Stoppable {
+public final class OpenCraft extends JPanel
+		implements Runnable, Startable, Stoppable, ComponentListener {
 
 	/* Static variables... */
-
-	public static final String NAME = "OpenCraft";
-	public static final String VERSION = "24r11";
-	public static final String TECHNICAL_NAME = "System Update 3";
-	public static final String DISPLAY_NAME = NAME + ' ' + VERSION;
-
-	public static final int NANOSECONDS = 1000000000;
-	public static final Logger logger = LoggerFactory.getLogger(OpenCraft.class);
+	static final Logger logger = LoggerFactory.getLogger(OpenCraft.class);
 	public static OpenCraft oc;
 
 	public final Thread thread;
 
 	// Objects
-	public Renderer render;
+	public Renderer renderer;
 	public Assets assets;
 
 	// Settings
-	public boolean running = false;
-	public boolean legacyCnf = false;
-	public int fpsCap = 70;
 	public final File directory;
+	public boolean running = false;
+	
+	// Size
+	public int width, height;
+	
+	// Timers
+	public Timer renderTimer;
+	public Timer tickTimer;
 
 	/**
 	 * Creates a instance of the game. This method must be executed once. If you
 	 * execute it more times, the game could crash or being completely unusable.
 	 */
-	OpenCraft(File directory, boolean legacyCnf) {
+	OpenCraft(int width, int height, File directory) {
+		this.width = width;
+		this.height = height;
+		
+		this.renderTimer = new Timer(1000 / DisplayManager.getMonitorFramerate(), e -> Display.update());
+		this.tickTimer   = new Timer(1000 / 20, e -> tick());
+		
 		this.directory = directory;
-		this.legacyCnf = legacyCnf;
-
 		this.thread = new Thread(this);
-		this.thread.setName("oc-thread");
+		this.thread.setName("main");
 	}
 
 	/**
@@ -82,47 +88,14 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 		}
 
 		// Game status info
-		logger.info(String.format("Selected language: %s", Locales.getDisplayName(Locales.getLocale())));
-		logger.info(OpenCraft.DISPLAY_NAME + " started!");
+		logger.info("Selected language: {}", Locales.getDisplayName(Locales.getLocale()));
+		logger.info("OpenCraft {} started!", SharedConstants.VERSION_STRING);
 
-		/* The FPS Limiter */
-		// (I could use a Timer class or something but is so difficult, I prefer doing
-		// this into the run method)
-		long lastUpdate = System.nanoTime();
-
-		double timePassed;
-		double delta = 0;
-
-		while (running && !Display.shouldClose()) {
-			try {
-				final long loopStart = System.nanoTime();
-
-				timePassed = loopStart - lastUpdate;
-				lastUpdate = loopStart;
-
-				delta += timePassed / this.getNanoPerTick();
-
-				while (delta >= 1) {
-					runStep();
-					delta--;
-				}
-
-			} catch (Throwable tb) {
-				SpectoError.process(tb);
-			}
-		}
+		renderTimer.start();
+		tickTimer.start();
 
 		// Finally stops the game
-		stop();
-	}
-
-	public void runStep() {
-		boolean properlySize = Display.width() > 136 || Display.height() > 39;
-		if (!properlySize)
-			return;
-
-		tick();
-		this.render.render();
+		//stop();4
 	}
 
 	/**
@@ -130,6 +103,12 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 	 * anywhere, just in case that the game is not updating properly.
 	 */
 	public void tick() {
+		running &= !Display.isCloseRequested();
+		if (!running) {
+			this.stop();
+			return;
+		}
+		
 		SoundManager.update();
 	}
 
@@ -137,17 +116,9 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 	 * The method {@code init()} is used to initialize the game and its
 	 * dependencies.
 	 *
-	 * Is private because it must not be executed twice.
+	 * Is private because it must not be executed twice externally.
 	 */
 	private void init() {
-		if (running) {
-			logger.info("#inittask Already running!");
-			return;
-		}
-
-		if (!icInit())
-			throw new IllegalStateException("Failed to start OpenIC");
-
 		// Read config
 		GameSettings.read();
 
@@ -157,20 +128,18 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 
 		// Create basics resources
 		this.assets = Assets.create("/gui.png");
-		this.render = Renderer.create();
+		this.renderer = Renderer.create();
 
+		DisplayManager.create(this, width, height);
+		DisplayManager.addCanvas(this);
+		Mouse.create(this);
+		Keyboard.create(this);
+		
 		// Initialize sound and render
-		this.render.init();
+		this.renderer.init();
 		SoundManager.init();
 
-		// Bind keyboard
-		InputHandler.bindKeyboard();
-
 		this.running = true;
-	}
-
-	public double getNanoPerTick() {
-		return (double) NANOSECONDS / (double) fpsCap;
 	}
 
 	@Override
@@ -181,16 +150,13 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 	/**
 	 * This method is used to stop the game. Normally this is executed at the end of
 	 * the game, but you can still use it for stop it whenever you want.
-	 *
-	 * @param force This is used for stopping the game suddenly
 	 */
-	@SuppressWarnings("deprecation")
-	public void stop(boolean force) {
-		if (force)
-			System.exit(0);
-
+	public void stop() {
 		this.running = false;
 
+		tickTimer.stop();
+		renderTimer.stop();
+		
 		// Disable soundManager
 		SoundManager.shutdown();
 
@@ -202,29 +168,23 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 			System.err.printf("\n(!): %d ignored exceptions were throwed!\n", ILogger.iex);
 
 		ILogger.stopLogging();
+		System.exit(0);
 
-		// Finish the thread
-		try {
-			thread.stop();
-		} catch (Exception e1) {
-			try {
-				thread.interrupt();
-			} catch (Exception e2) {
-				e1.printStackTrace();
-				e2.printStackTrace();
-				System.exit(0);
-			}
-		}
 	}
-
+	
 	/**
-	 * This method is effectively the same as {@code stop(boolean force)} but it
-	 * takes as default argument 'force' for value 'false': So the game ends
-	 * correctly and it saves everything.
+	 * Renders the game.
 	 */
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		renderer.render(g2d);
+	}
+	
 	@Override
-	public void stop() {
-		this.stop(false);
+	public void componentResized(ComponentEvent e) {
+		oc.width = Display.getWidth();
+		oc.height = Display.getHeight();
 	}
 
 	/**
@@ -239,10 +199,7 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 		OptionParser parser = new OptionParser();
 		
 		File gameDir = new File("opcraft");
-		boolean legacyCnf;
 		
-		
-
 		/*
 		 * Compatibility for Minecraft launchers. I will not convert this into a pay
 		 * game
@@ -260,7 +217,7 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 		OptionSpec<?> usernameArgument = parser.accepts("username");
 
 		OptionSet argSet = parser.parse(args);
-		legacyCnf = argSet.has(legacyFlag);
+		GameSettings.LEGACY_CONFIG = argSet.has(legacyFlag);
 
 		if (argSet.has(uiScaleArgument)) {
 			logger.warn("[CUSTOM UI SCALE] Use custom ui scales can cause the game to display wrong some objects!");
@@ -274,37 +231,18 @@ public final class OpenCraft implements Runnable, Startable, Stoppable {
 		if (argSet.has(gameDirArgument))
 			gameDir = new File((String) argSet.valueOf(gameDirArgument));
 
-		GameSettings.DEF_CONFIG = new File(gameDir, "options.txt").getPath();
-
 		if (argSet.has(configFileArgument))
 			GameSettings.DEF_CONFIG = (String) argSet.valueOf(configFileArgument);
-
+		else
+			GameSettings.DEF_CONFIG = new File(gameDir, "options.txt").getPath();
+		
 		/* Start the game */
-		OpenCraft.oc = new OpenCraft(gameDir, legacyCnf);
+		OpenCraft.oc = new OpenCraft(854, 480, gameDir);
 		oc.thread.start();
-
-		/* Wait the game to end */
-
-		int status = 0;
-		try {
-			oc.thread.join();
-		} catch (Exception ignored) {
-			status = 3;
-			logger.error("The game ended with errors!");
-		}
-
-		System.out.println();
-		System.out.println(" ===== Thanks for playing OpenCraft =====");
-		System.out.println("   We wish you the best experience with");
-		System.out.println("  this game because we are putting all");
-		System.out.println("     our efforts to make this game.");
-		System.out.println();
-		System.out.println("   If you want, you can share this game!");
-		System.out.println(" =========== You're welcome!! ===========");
-		System.out.println("   - OpenCraft's Developer Team " + Calendar.getInstance().get(Calendar.YEAR));
-
-		// Stops the game
-		System.exit(status);
 	}
+
+	public void componentMoved(ComponentEvent e)  {}
+	public void componentShown(ComponentEvent e)  {}
+	public void componentHidden(ComponentEvent e) {}
 
 }

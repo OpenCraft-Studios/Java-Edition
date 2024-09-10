@@ -126,7 +126,7 @@ public class SoundManager {
 		return MUSIC ? 1.0 : 0.0;
 	}
 
-	public static void toggle() {
+	public static void toggleSound() {
 		if (MUSIC)
 			disable();
 		else

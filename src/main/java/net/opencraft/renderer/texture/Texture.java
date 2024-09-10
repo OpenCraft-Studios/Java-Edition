@@ -2,8 +2,7 @@ package net.opencraft.renderer.texture;
 
 import static net.opencraft.renderer.Renderer.*;
 
-import java.awt.Color;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.Optional;
@@ -17,13 +16,10 @@ public class Texture {
     private Optional<Image> opImg;
 
     public Texture(BufferedImage img) {
-        Image img1 = null;
+        if (img != null)
+            img = toCompatibleImage(img);
         
-        if (img != null) {
-            img1 = toCompatibleImage(img);
-        }
-        
-        this.opImg = Optional.ofNullable(img1);
+        this.opImg = Optional.ofNullable(img);
     }
 
     public static Texture of(BufferedImage img) {
@@ -33,6 +29,29 @@ public class Texture {
     public static Texture empty() {
         return Texture.of(null);
     }
+    
+    /**
+	 * Returns the preferred color model by your device. This possibly decrease the
+	 * CPU using.
+	 *
+	 * @param image The original image
+	 * @return The optimized image
+	 */
+	public static BufferedImage toCompatibleImage(final BufferedImage image) {
+		if (image.getColorModel().equals(GFX_CONFIG.getColorModel())) {
+			return image;
+		}
+
+		final BufferedImage new_image = GFX_CONFIG.createCompatibleImage(image.getWidth(), image.getHeight(),
+				image.getTransparency());
+
+		final Graphics2D g2d = (Graphics2D) new_image.getGraphics();
+
+		g2d.drawImage(image, 0, 0, null);
+		g2d.dispose();
+
+		return new_image;
+	}
 
     public static Texture getTexture(String format, InputStream in) {
         if (in == null) {

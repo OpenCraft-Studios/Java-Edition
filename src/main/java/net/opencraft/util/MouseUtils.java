@@ -1,39 +1,29 @@
 package net.opencraft.util;
 
-import static org.josl.openic.IC12.icGetMouseDX;
-import static org.josl.openic.IC12.icGetMouseDY;
+import java.awt.Point;
+import java.awt.Rectangle;
 
-import java.awt.event.MouseListener;
+import org.lwjgl.input.Mouse;
 
-import org.josl.openic.IC;
-import org.josl.openic.input.ComponentMouse;
+import net.opencraft.renderer.gui.GuiElement;
 
 public class MouseUtils {
 
 	private MouseUtils() {
 	}
-
-	public static boolean inRange(int[] bounds) {
-		double mouseX = icGetMouseDX();
-		double mouseY = icGetMouseDY();
-
-		return mouseX >= bounds[0] && mouseY >= bounds[1] && mouseX <= bounds[2] && mouseY <= bounds[3];
+	
+	public static boolean inRange(Rectangle bounds) {
+		Point mousePos = new Point(Mouse.getX(), Mouse.getY());
+		return bounds.contains(mousePos);
 	}
 
 	public static boolean inRange(int x, int y, int w, int h) {
-		return inRange(new int[] { x, y, x + w, y + h });
-	}
-
-	public static boolean isButtonPressed(int button) {
-		return ((ComponentMouse) IC.getDefaultMouse()).isButtonPressed(button);
+		Rectangle bounds = new Rectangle(x, y, w, h);
+		return inRange(bounds);
 	}
 	
-	public static MouseListener defaultListener() {
-		return ((ComponentMouse) IC.getDefaultMouse()).getListener();
-	}
-	
-	public static void makeCurrentListener(MouseListener listener) {
-		((ComponentMouse) IC.getDefaultMouse()).appendListener(listener);
+	public static boolean inRange(GuiElement element) {
+		return inRange(element.getBounds());
 	}
 
 }

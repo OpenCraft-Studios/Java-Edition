@@ -2,44 +2,33 @@ package net.opencraft.renderer.gui;
 
 import java.awt.*;
 
+import org.joml.Vector2f;
+
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class GuiElement {
 
+	@Getter @Setter
 	protected int x, y, width, height;
 
 	public abstract void draw(Graphics2D g2d);
 	
+	/* Override-able event methods */
+	
+	public void mouseClicked(Vector2f pos, int button) {
+	}
+	
+	public void mouseEntered(Vector2f pos, Vector2f delta) {
+	}
+	
+	public void mouseExited(Vector2f pos, Vector2f delta) {
+	}
+	
 	/* Setters & Getters */
 	
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
+	public Rectangle getBounds() {
+		return new Rectangle(x, y, width, height);
 	}
 	
 	public Dimension getSize() {

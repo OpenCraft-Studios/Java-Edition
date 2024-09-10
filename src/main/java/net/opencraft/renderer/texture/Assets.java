@@ -8,10 +8,6 @@ import java.util.stream.Collectors;
 import io.vavr.Lazy;
 
 public class Assets {
-
-	public static final int BUTTON_DISABLED = 0,
-							BUTTON = 1,
-							BUTTON_HIGHLIGHTED = 2;
 	
 	private final Tilesheet gui;
 	private Lazy<Texture> loadingLogo;
@@ -24,7 +20,7 @@ public class Assets {
 	private Assets(Tilesheet... tss) {
 		this(tss[0]);
 	}
-
+	
 	public static Assets create(Tilesheet... tss) {
 		return new Assets(tss);
 	}
@@ -36,7 +32,7 @@ public class Assets {
 		
 		return create(tilesheets.toArray(new Tilesheet[0]));
 	}
-
+	
 	public BufferedImage getButton(int button_id) {
 		return gui.get(0, button_id * 20, 200, 20);
 	}

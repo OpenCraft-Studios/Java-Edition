@@ -49,13 +49,13 @@ public class Loadscreen extends Screen {
 
 		BufferedImage loadingLogo = oc.assets.getLoadingLogo();
 		{	
-			final int width = (int) (loadingLogo.getWidth() * 1.5f);
-			final int height = (int) (loadingLogo.getHeight() * 1.5f);
+			int logoW = (int) (loadingLogo.getWidth() * 1.5f);
+			int logoH = (int) (loadingLogo.getHeight() * 1.5f);
 			
-			int logoX = (854 - width) / 2;
-			int logoY = (480 - height) / 2 - 27;
+			int logoX = (854 - logoW) / 2;
+			int logoY = (480 - logoH) / 2 - 27;
 			
-			g2d.drawImage(loadingLogo, logoX, logoY, width, height, null);
+			g2d.drawImage(loadingLogo, logoX, logoY, logoW, logoH, null);
 		}
 		
 		progressBar.setSize(604, 24);

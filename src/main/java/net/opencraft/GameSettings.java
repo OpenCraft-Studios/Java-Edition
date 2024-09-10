@@ -27,6 +27,7 @@ public class GameSettings {
 	public static final String ONLINE_LANGSHEET = "https://raw.githubusercontent.com/OpenCraft-Studios/piston-data/main/langsheet.csv";
 	
 	public static String DEF_CONFIG;
+	public static boolean LEGACY_CONFIG = false;
 
 	/**
 	 * This method converts the settings to a {@code Properties} object.
@@ -37,7 +38,7 @@ public class GameSettings {
 		Properties properties = new Properties();
 
 		properties.setProperty("lang", Locales.getLocale().toLanguageTag());
-		if (oc.legacyCnf)
+		if (LEGACY_CONFIG)
 			properties.setProperty("music", Boolean.toString(SoundManager.MUSIC));
 		else
 			properties.setProperty("soundCategory_music", Double.toString(SoundManager.getVolume()));
@@ -53,7 +54,7 @@ public class GameSettings {
 	public static void read(Properties properties) {
 		F3Screen.setStatus("Reading settings...");
 		Locales.setLocale(Locales.of((String) properties.getOrDefault("lang", "en-US")));
-		if (oc.legacyCnf)
+		if (LEGACY_CONFIG)
 			SoundManager.MUSIC = Boolean.parseBoolean((String) properties.getOrDefault("music", "false"));
 		else
 			SoundManager.MUSIC = Double.parseDouble((String) properties.getOrDefault("soundCategory_music", "0.0")) > 0;

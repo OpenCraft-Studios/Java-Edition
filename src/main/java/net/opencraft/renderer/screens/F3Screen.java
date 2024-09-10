@@ -1,70 +1,69 @@
 package net.opencraft.renderer.screens;
 
-import static org.josl.openic.IC13.*;
+import java.awt.*;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Composite;
-import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-
-import org.lwjgl.opengl.Context;
 import org.lwjgl.opengl.Display;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.opencraft.Locales;
-import net.opencraft.OpenCraft;
+import net.opencraft.SharedConstants;
+import net.opencraft.renderer.Renderer;
 import net.opencraft.sound.SoundManager;
-import net.opencraft.spectoland.ILogger;
 import net.opencraft.util.FontRenderer;
 
 public class F3Screen {
 
+	public static String status = null;
+	
+	@Getter @Setter
+	private static boolean visible = false;
+	
 	private F3Screen() {
 	}
 
-	public static String status = null;
-
-	public static void drawF3(Graphics2D g2d) {
-		if (icIsKeyPressed(KeyEvent.VK_I)) {
+	public static void draw(Graphics2D g2d) {
+		/*if (icIsKeyPressed(KeyEvent.VK_I)) {
 			try {
 				ILogger.writeFile();
 			} catch (Exception ignored) {
 			}
 			setStatus("Saving internal log file...");
-		}
+		}*/
 		
-		Composite comp = g2d.getComposite();
-		AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f);
+		Composite saveCMP = g2d.getComposite();
+		AlphaComposite alphaCMP = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f);
 
-		FontRenderer font = FontRenderer.tlrender();
+		FontRenderer font = FontRenderer.mojangles();
 
 		g2d.setColor(Color.GRAY);
-		g2d.setComposite(ac);
+		int r = 7;
+		g2d.setComposite(alphaCMP);
 		{
-			g2d.fillRect(10, 10, 350, 30);
-			g2d.fillRect(10, 40, 510, 30);
-			g2d.fillRect(10, 70, 225, 30);
-			g2d.fillRect(10, 100, 250, 30);
-			g2d.fillRect(10, 130, 237, 30);
-			g2d.fillRect(10, 160, 190, 30);
-			g2d.fillRect(10, 190, 290, 30);
+			g2d.fillRoundRect(10, 10, 350, 30, r, r);
+			g2d.fillRoundRect(10, 40, 390, 30, r, r);
+			g2d.fillRoundRect(10, 70, 225, 30, r, r);
+			g2d.fillRoundRect(10, 100, 250, 30, r, r);
+			g2d.fillRoundRect(10, 130, 237, 30, r, r);
+			g2d.fillRoundRect(10, 160, 190, 30, r, r);
+			g2d.fillRoundRect(10, 190, 290, 30, r, r);
 			if (status != null)
-				g2d.fillRect(10, Display.height() - 80, 500, 30);
+				g2d.fillRoundRect(10, Display.getHeight() - 80, 500, 30, r, r);
 		}
-		g2d.setComposite(comp);
+		g2d.setComposite(saveCMP);
 
 		font.color(Color.WHITE);
 		font.size(20);
-		font.drawShadow(g2d, OpenCraft.NAME + " " + OpenCraft.VERSION + " (Vanilla)", 15, 30);
-		font.drawShadow(g2d, "Actual screen: " + Screen.getCurrent().getClass().getSimpleName(), 15, 60);
-		font.drawShadow(g2d, "OpenGL: " + (Context.usesOpenGL() ? "Enabled" : "Disabled"), 15, 90);
+		font.drawShadow(g2d, "OpenCraft " + SharedConstants.VERSION_STRING + " (Vanilla)", 15, 30);
+		font.drawShadow(g2d, "Actual screen: " + Screen.getCurrent().toString(), 15, 60);
+		font.drawShadow(g2d, "OpenGL: " + (Renderer.usesOpenGL() ? "Enabled" : "Disabled"), 15, 90);
 		font.drawShadow(g2d, "SoundAPI: " + (SoundManager.MUSIC ? "Active" : "Passive"), 15, 120);
 		font.drawShadow(g2d, "Language: " + Locales.getLocale().toLanguageTag(), 15, 150);
 		font.drawShadow(g2d, "UI Scale: " + System.getProperty("sun.java2d.uiScale"), 15, 180);
-		font.drawShadow(g2d, "Resolution: " + Display.width() + "x" + Display.height(), 15, 210);
+		font.drawShadow(g2d, "Resolution: " + Display.getWidth() + "x" + Display.getHeight(), 15, 210);
 
 		if (status != null)
-			font.drawShadow(g2d, status, 15, Display.height() - 60);
+			font.drawShadow(g2d, status, 15, Display.getHeight() - 60);
 
 		clearStatus();
 	}
@@ -75,6 +74,10 @@ public class F3Screen {
 	
 	public static void clearStatus() {
 		status = null;
+	}
+
+	public static void toggleVisible() {
+		visible = !visible;
 	}
 
 }
