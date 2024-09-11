@@ -93,9 +93,6 @@ public final class OpenCraft extends JPanel
 
 		renderTimer.start();
 		tickTimer.start();
-
-		// Finally stops the game
-		//stop();4
 	}
 
 	/**

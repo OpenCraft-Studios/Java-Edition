@@ -44,26 +44,11 @@ public class SettingsScreen extends Screen {
 
 	@Override
 	public void render(Graphics2D g2d) {
-		int width = Display.getWidth();
-		int height = Display.getHeight();
-
-		g2d.setPaintMode();
-		g2d.setColor(Color.WHITE);
-
-		Composite defcomposite = g2d.getComposite();
-		for (int x = 0; x < width; x += 64) {
-			for (int y = 0; y < height; y += 64) {
-				if (y <= 60 || y >= (height - 100))
-					g2d.setComposite(defcomposite);
-				else
-					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-
-				g2d.setColor(Color.BLACK);
-				g2d.fillRect(x, y, 64, 64);
-				g2d.drawImage(oc.assets.getBackground(), x, y, 64, 64, null);
-			}
-		}
-		g2d.setComposite(defcomposite);
+		super.clearScreen(g2d);
+		int width = oc.width;
+		int height = oc.height;
+		
+		drawOptionsBackground(g2d);
 
 		if (currentTab.equalsIgnoreCase("options.generalTab")) {
 			drawGeneralTab(g2d, oc.assets);

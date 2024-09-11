@@ -12,7 +12,7 @@
 		<java.version>8</java.version>
 		<maven.compiler.release>8</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
+
 		<!-- Dependency versions -->
 		<lombok.version>1.18.20</lombok.version>
 		<joml.version>1.10.8</joml.version>
@@ -30,7 +30,7 @@
 			<artifactId>lombok</artifactId>
 			<version>${lombok.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.joml</groupId>
 			<artifactId>joml</artifactId>

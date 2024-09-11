@@ -32,9 +32,8 @@ public class Menuscreen extends Screen {
 		final int width = oc.width;
 		final int height = oc.height;
 
+		super.drawDirtBackground(g2d);
 		g2d.setColor(Color.BLACK);
-		g2d.setPaint(new TexturePaint(oc.assets.getBackground(), new Rectangle(0, 0, 64, 64)));
-		g2d.fillRect(0, 0, width, height);
 
 		g2d.drawImage(logo.get(), (width - 500) / 2, (480 > height) ? 10 : 30, 500, 87, null);
 
