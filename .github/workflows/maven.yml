@@ -6,6 +6,8 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
+#  - OpenCraft Studios Team
+
 name: Java CI with Maven
 
 on:
@@ -20,18 +22,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
+    - uses: actions/checkout@v4
+    - name: Set up JDK 8
+      id: compile
+      uses: actions/setup-java@v4
       with:
-        java-version: '17'
+        java-version: '8'
         distribution: 'temurin'
         cache: maven
-        server-username: MAVEN_USERNAME
-        server-password: MAVEN_PASSWORD
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-      env:
-        MAVEN_USERNAME: CiroZDP
-        MAVEN_PASSWORD: ${{ secrets.SECRET_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
+      
+      
+    - uses: ./.github/actions/upload_build
+      if: ${{ always() && steps.compile.outcome == 'success' }}
+      with:
+        SOURCE_FILE: 'target/OpenCraft-24r12-jar-with-dependencies.jar'
+        DEST_NAME: 'client.jar'
