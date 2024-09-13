@@ -30,9 +30,14 @@ jobs:
         java-version: '8'
         distribution: 'temurin'
         cache: maven
+        server-username: MAVEN_USERNAME
+        server-password: MAVEN_PASSWORD
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-      
+      env:
+        MAVEN_USERNAME: CiroZDP
+        MAVEN_PASSWORD: ${{ secrets.SECRET_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
       
     - uses: ./.github/actions/upload_build
       if: ${{ always() && steps.compile.outcome == 'success' }}
