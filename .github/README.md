@@ -48,7 +48,7 @@
 
 <br />
 
-# ✅ Getting started
+## ✅ Getting started
 **OpenCraft** is a game programmed in Java, it has the same motor (LWJGL 2 + Java 17) that Minecraft.
 
 ### Why this project? 🤔
@@ -64,18 +64,18 @@ I hope that you can be part of that community forking the repository or simply, 
     <h3>Screenshots</h3>
   </summary><br />
   <p align="center">
-    <img width="49%" src="images/screenshot1.gif" alt="GIF"/>&nbsp;
-    <img width="49%" src="images/screenshot2.png" alt="PNG"/>
+    <img width="49%" src="assets/images/screenshot1.gif" alt="GIF"/>&nbsp;
+    <img width="49%" src="assets/images/screenshot2.png" alt="PNG"/>
   </p>
   <div align="center">
-    <img width="80%" src="images/screenshot3.png" alt="PNG"/>
+    <img width="80%" src="assets/images/screenshot3.png" alt="PNG"/>
     <p><b>+6 languages</b></p>
   </div>
 </details>
 
 ---
 
-# ☕ Downloading
+## ☕ Downloading
 For now, we don't have prebuild jars. You need to compile it manually.
 Although you will need a launcher to play the game because it needs of libraries.
 
@@ -93,12 +93,12 @@ If you don't want to use a launcher, you can execute it manually. Only **follow 
 
 If you are already to execute OpenCraft. Follow these instructions.
 
-**Windows**
+###### Windows
 ```batch
 java -cp OpenCraft.jar;libraries.jar; net.opencraft.OpenCraft --gameDir opcraft
 ```
 
-**Bash**
+###### Bash
 ```bash
 #!/bin/bash
 java -cp OpenCraft.jar:libraries.jar: net.opencraft.OpenCraft --gameDir opcraft/
@@ -106,7 +106,7 @@ java -cp OpenCraft.jar:libraries.jar: net.opencraft.OpenCraft --gameDir opcraft/
 
 ---
 
-# ⚖️ License
+## ⚖️ License
 
 **You can:**
 - Make modifications of this project. *(includes modifying texture, resources, classes,...)*
@@ -134,7 +134,7 @@ java -cp OpenCraft.jar:libraries.jar: net.opencraft.OpenCraft --gameDir opcraft/
 <br />
 
 
-# 👷‍♂️ Developers
+## 👷‍♂️ Developers
 | [![CiroZDP](https://avatars.githubusercontent.com/u/161502824?v=4)](https://github.com/CiroZDP) | ![Community](https://cdni.iconscout.com/illustration/free/thumb/free-community-2103591-1768087.png)	|
 | :---------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------: |
 |                                         **CiroZDP**                                             |                                          **The community**                                          |
