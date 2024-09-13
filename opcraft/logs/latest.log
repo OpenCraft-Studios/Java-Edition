@@ -1,7 +1,0 @@
-[22:18:32] [main/INFO] [net.opencraft.renderer.Renderer/]: Render system initialized!
-[22:18:32] [main/INFO] [net.opencraft.renderer.Renderer/]: [OpenGL] Using OpenGL: No
-[22:18:32] [main/INFO] [net.opencraft.renderer.Renderer/]: FPS Rate: 60
-[22:18:32] [main/INFO] [net.opencraft.sound.SoundManager/]: Sound manager started!
-[22:18:32] [main/INFO] [net.opencraft.sound.SoundManager/]: [SoundAPI] Sound API status: Passive
-[22:18:32] [main/INFO] [net.opencraft.OpenCraft/]: Selected language: English (United States)
-[22:18:32] [main/INFO] [net.opencraft.OpenCraft/]: OpenCraft 24r11 started!
