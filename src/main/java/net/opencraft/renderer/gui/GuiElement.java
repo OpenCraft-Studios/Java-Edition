@@ -2,8 +2,6 @@ package net.opencraft.renderer.gui;
 
 import java.awt.*;
 
-import org.joml.Vector2f;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,13 +14,13 @@ public abstract class GuiElement {
 	
 	/* Override-able event methods */
 	
-	public void mouseClicked(Vector2f pos, int button) {
+	public void mouseClicked(int x, int y, int button) {
 	}
 	
-	public void mouseEntered(Vector2f pos, Vector2f delta) {
+	public void mouseEntered(int x, int y, int dx, int dy) {
 	}
 	
-	public void mouseExited(Vector2f pos, Vector2f delta) {
+	public void mouseExited(int x, int y, int dx, int dy) {
 	}
 	
 	/* Setters & Getters */
@@ -60,6 +58,15 @@ public abstract class GuiElement {
 	public void scale(float scalar) {
 		this.width *= scalar;
 		this.height *= scalar;
+	}
+	
+	public void setBounds(int x, int y, int width, int height) {
+		setSize(width, height);
+		setLocation(x, y);
+	}
+	
+	public void setBounds(Rectangle bounds) {
+		setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
 	
 }

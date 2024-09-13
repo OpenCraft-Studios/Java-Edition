@@ -50,7 +50,7 @@ public class Loadscreen extends Screen {
 		BufferedImage loadingLogo = oc.assets.getLoadingLogo();
 		{	
 			int logoW = 840;
-			int logoH = 445;
+			int logoH = 480;
 			
 			int logoX = 0;
 			int logoY = 0;

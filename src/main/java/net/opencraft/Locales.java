@@ -1,19 +1,15 @@
 package net.opencraft;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
+import java.util.function.Consumer;
 
+import lombok.Getter;
 import net.opencraft.spectoland.SpectoError;
 import net.opencraft.util.Files;
 
-public class Locales {
+public final class Locales {
 
 	private static final Map<String, String> ENGLISH = new HashMap<>();
 	private static final Map<String, String> GALICIAN = new HashMap<>();
@@ -22,7 +18,9 @@ public class Locales {
 	private static final Map<String, String> ITALIAN = new HashMap<>();
 	private static final Map<String, String> CATALAN = new HashMap<>();
 	private static final Map<String, String> PORTUGUESE = new HashMap<>();
-
+	
+	@Getter
+	private static final List<Consumer<Locale>> listeners = new ArrayList<>();
 	private static Locale locale = Locales.getLocale();
 
 	public static class Loader {
@@ -79,7 +77,7 @@ public class Locales {
 			Optional<InputStream> opstream = Optional.empty();
 
 			try {
-				URI csvURI = new URI(GameSettings.ONLINE_LANGSHEET);
+				URI csvURI = new URI(SharedConstants.ONLINE_LANGSHEET);
 				InputStream in = csvURI.toURL().openStream();
 
 				opstream = Optional.ofNullable(in);
@@ -116,6 +114,14 @@ public class Locales {
 
 	public static void setLocale(Locale locale) {
 		Locales.locale = locale;
+		callListeners();
+	}
+	
+	private static void callListeners() {
+		for (int i = 0; i < listeners.size(); i++) {
+			Consumer<Locale> listener = listeners.get(i);
+			listener.accept(locale);
+		}
 	}
 
 	public static Locale getLocale() {
@@ -124,22 +130,22 @@ public class Locales {
 
 	public static String translate(String resource, final Locale locale) {
 		final String _def = "???";
-		final String lname = getGenericName(locale);
+		final String lname = getGenericName(locale).toLowerCase();
 		
 		resource = resource.trim().toLowerCase();
 		Map<String, String> translations = ENGLISH;
 		
-		if (lname.equalsIgnoreCase("Spanish"))
+		if (lname.equals("spanish"))
 			translations = SPANISH;
-		else if (lname.equalsIgnoreCase("Italian"))
+		else if (lname.equals("italian"))
 			translations = ITALIAN;
-		else if (lname.equalsIgnoreCase("French"))
+		else if (lname.equals("french"))
 			translations = FRENCH;
-		else if (lname.equalsIgnoreCase("Galician"))
+		else if (lname.equals("galician"))
 			translations = GALICIAN;
-		else if (lname.equalsIgnoreCase("Catalan"))
+		else if (lname.equals("catalan"))
 			translations = CATALAN;
-		else if (lname.equalsIgnoreCase("Portuguese"))
+		else if (lname.equals("portuguese"))
 			translations = PORTUGUESE;
 		
 		return translations.getOrDefault(resource, _def);

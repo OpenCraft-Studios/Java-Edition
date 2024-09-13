@@ -1,29 +1,71 @@
 package net.opencraft.renderer.screens;
 
-import static net.opencraft.Locales.*;
 import static net.opencraft.OpenCraft.*;
-import static net.opencraft.renderer.gui.GuiButton.*;
+import static net.opencraft.SharedConstants.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Locale;
+import java.util.function.Consumer;
 
 import org.lwjgl.input.Mouse;
 
 import io.vavr.Lazy;
 import net.opencraft.Locales;
+import net.opencraft.renderer.gui.GuiButton;
 import net.opencraft.util.FontRenderer;
-import net.opencraft.util.MouseUtils;
 
 public class Menuscreen extends Screen {
 	
 	private static Menuscreen instance = null;
-
-	private boolean quitsel = false;
-	private boolean setsel = false;
 	private Lazy<BufferedImage> logo;
+
+	private FontRenderer font;
+	private GuiButton quitButton, singlepyButton, settingsButton;
 
 	private Menuscreen() {
 		logo = Lazy.of(oc.assets::getLogo);
+		Locales.getListeners().add(this::translationChanged);
+		
+		this.font = FontRenderer.minecraft();
+		initComponents();
+		
+		// Update button names
+		translationChanged(null);
+	}
+
+	private void initComponents() {
+		
+		/* Quit Game Button */
+		
+		this.quitButton = new GuiButton(font) {
+			public void mouseClicked(int x, int y, int button) {
+				oc.running = false;
+			}
+		};
+		quitButton.setSize(200, 40);
+		
+		/* Settings button */
+		this.settingsButton = new GuiButton(font) {
+			public void mouseClicked(int x, int y, int button) {
+				goToConfigScreen();
+			}
+		};
+		settingsButton.setSize(198, 40);
+		
+		
+		/* Singleplayer button */
+		
+		this.singlepyButton = new GuiButton(font);
+		singlepyButton.setSize(400, 40);
+		singlepyButton.setEnabled(false);
+		
+	}
+	
+	public void translationChanged(Locale locale) {
+		singlepyButton.setTranslatedText("menu.singleplayer");
+		settingsButton.setTranslatedText("menu.Options");
+		quitButton.setTranslatedText("menu.Quit");
 	}
 
 	@Override
@@ -37,63 +79,49 @@ public class Menuscreen extends Screen {
 
 		g2d.drawImage(logo.get(), (width - 500) / 2, (480 > height) ? 10 : 30, 500, 87, null);
 
-		if (getCurrent().equals(Menuscreen.getInstance())) {
-			quitsel = MouseUtils.inRange(width / 2, height / 2 - 4, 200, 40);
+		/*if (equals(getCurrent())) {
 			setsel = MouseUtils.inRange((width - 400) / 2, height / 2 - 4, 198, 40);
 		} else {
-			quitsel = false;
 			setsel = false;
+		}*/
+
+		// Calculate buttons' position
+		singlepyButton.setLocation((width - 400) / 2, height / 2 - 50);
+		settingsButton.setLocation((width - 400) / 2, height / 2 - 4);
+		quitButton.setLocation(width / 2, height / 2 - 4);
+
+		if (equals(getCurrent())) {
+			// TODO: singlepyButton.setHighlighted(Mouse::inRange);
+			quitButton.setHighlighted(Mouse::inRange);
+			settingsButton.setHighlighted(Mouse::inRange);
 		}
+		
+		singlepyButton.draw(g2d);
+		settingsButton.draw(g2d);
+		quitButton.draw(g2d);
+		
+		FontMetrics metrics = font.size(14).metrics(g2d);
+		String version_text = "OpenCraft " + TECHNICAL_NAME + " " + VERSION_STRING;
+		int version_textH = metrics.getHeight() + metrics.getAscent();
+		
+		font.color(0xFFFFFF);
+		font.drawShadow(g2d, version_text, 7, height - version_textH - 25);
 
-		// Draw buttons
-		g2d.drawImage(oc.assets.getButton(BUTTON_DISABLED), (width - 400) / 2, height / 2 - 50, 400, 40, null);
-		g2d.drawImage(oc.assets.getButton(setsel ? BUTTON_HIGHLIGHTED : BUTTON_NORMAL), (width - 400) / 2,
-				height / 2 - 4, 198, 40, null);
-		g2d.drawImage(oc.assets.getButton(quitsel ? BUTTON_HIGHLIGHTED : BUTTON_NORMAL), width / 2, height / 2 - 4, 200,
-				40, null);
-
-		g2d.setColor(Color.WHITE);
-
-		int singlepy_x = width / 2 - 59;
-		int settings_x = width / 2 - 150;
-		int quitgame_x = width / 2 + 50;
-
-		/* Center texts from another languages */
-		String langName = Locales.getGenericName(Locales.getLocale());
-		{
-			if (langName.equalsIgnoreCase("French")) {
-				quitgame_x = width / 2 + 30;
-			} else if (langName.equalsIgnoreCase("Galician") || langName.equalsIgnoreCase("Portuguese")) {
-				quitgame_x = width / 2 + 34;
-			} else if (langName.equalsIgnoreCase("Catalan")) {
-				quitgame_x = width / 2 + 27;
-			} else if (langName.equalsIgnoreCase("Italian")) {
-				singlepy_x = width / 2 - 87;
-				settings_x = width / 2 - 145;
-				quitgame_x = width / 2 + 34;
-			} else if (langName.equalsIgnoreCase("Spanish")) {
-				settings_x = width / 2 - 155;
-				quitgame_x = width / 2 + 21;
-			}
-		}
-
-		FontRenderer font = FontRenderer.minecraft();
-
-		font.size(16);
-		font.drawShadow(g2d, translate("menu.Quit"), quitgame_x, height / 2 + 20, quitsel ? 0xFFFFA0 : 0xFFFFFF);
-		font.drawShadow(g2d, translate("menu.Options"), settings_x, height / 2 + 20, setsel ? 0xFFFFA0 : 0xFFFFFF);
-		font.drawShadow(g2d, translate("menu.singleplayer"), singlepy_x, height / 2 - 25, 0xA0A0A0);
 	}
 
 	private void pollEvents() {
-		if (!Mouse.isButtonClicked(1))
+		final int button = 1;
+		if (!Mouse.isButtonClicked(button))
 			return;
 		
-		if (setsel)
-			Screen.setCurrent(SettingsScreen.class);
-		else if (quitsel)
-			oc.running = false;
-		
+		if (quitButton.isHighlighted())
+			quitButton.mouseClicked(Mouse.getX(), Mouse.getY(), button);
+		if (settingsButton.isHighlighted())
+			settingsButton.mouseClicked(Mouse.getX(), Mouse.getY(), button);
+	}
+
+	private void goToConfigScreen() {
+		Screen.setCurrent(SettingsScreen.class);
 	}
 
 	public static Menuscreen getInstance() {
@@ -103,8 +131,15 @@ public class Menuscreen extends Screen {
 		return instance;
 	}
 
-	public static void destroy() {
+	public static void destroyInstance() {
+		try {
+			Locales.getListeners().remove((Consumer<Locale>) instance::translationChanged);
+		} catch (Exception ignored) {
+			System.err.println("Listener not found!");
+		}
+		
 		instance = null;
 	}
 
 }
+

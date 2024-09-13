@@ -6,9 +6,10 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import org.joml.Vector2f;
+import net.opencraft.renderer.gui.interfaces.HighlightCalculator;
 
-public class GuiArrow extends GuiElement implements IState, IUpdateable, IHighlight {
+public class GuiArrow extends GuiElement
+	implements IState, IUpdateable, IHighlight {
 
 	public static final int ARROW_LEFT        = 0b01,
 							ARROW_RIGHT       = 0b00,
@@ -43,7 +44,20 @@ public class GuiArrow extends GuiElement implements IState, IUpdateable, IHighli
 		return state;
 	}
 	
+	@Override
+	public void setState(int state) {
+		if (getState() == state)
+			return;
+		
+		highlighted = (state >> 1) == 1;
+		right       = (state &  1) == 1;
+		this.update();
+	}
+	
 	public void setDirection(int direction) {
+		if (direction == ARROW_RIGHT && right)
+			return;
+		
 		this.right = direction == ARROW_RIGHT;
 		this.update();
 	}
@@ -69,13 +83,18 @@ public class GuiArrow extends GuiElement implements IState, IUpdateable, IHighli
 	}
 	
 	@Override
-	public void mouseEntered(Vector2f pos, Vector2f delta) {
+	public void mouseEntered(int x, int y, int dx, int dy) {
 		setHighlighted(true);
 	}
 	
 	@Override
-	public void mouseExited(Vector2f pos, Vector2f delta) {
+	public void mouseExited(int x, int y, int dx, int dy) {
 		setHighlighted(false);
+	}
+
+	@Override
+	public void setHighlighted(HighlightCalculator calc) {
+		setHighlighted(calc.shouldHighlight(getBounds()));
 	}
 	
 }

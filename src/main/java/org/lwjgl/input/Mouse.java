@@ -1,6 +1,6 @@
 package org.lwjgl.input;
 
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -107,6 +107,20 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
         pressed.remove(e.getButton());
         currentButton = -1;
     }
+    
+    public static boolean inRange(Rectangle bounds) {
+		Point mousePos = getPos();
+		return bounds.contains(mousePos);
+	}
+
+	private static Point getPos() {
+		return new Point(x, y);
+	}
+
+	public static boolean inRange(int x, int y, int w, int h) {
+		Rectangle bounds = new Rectangle(x, y, w, h);
+		return inRange(bounds);
+	}
 
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseClicked(MouseEvent e) {}

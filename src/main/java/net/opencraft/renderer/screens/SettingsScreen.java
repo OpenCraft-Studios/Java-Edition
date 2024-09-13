@@ -17,7 +17,6 @@ import net.opencraft.renderer.gui.GuiArrow;
 import net.opencraft.renderer.texture.Assets;
 import net.opencraft.sound.SoundManager;
 import net.opencraft.util.FontRenderer;
-import net.opencraft.util.MouseUtils;
 
 public class SettingsScreen extends Screen {
 
@@ -57,7 +56,7 @@ public class SettingsScreen extends Screen {
 		}
 
 		/*-------------------------------*/
-		donesel = MouseUtils.inRange((width - 175) / 2, height - 90, 175, 40);
+		donesel = Mouse.inRange((width - 175) / 2, height - 90, 175, 40);
 		g2d.drawImage(oc.assets.getButton(donesel ? BUTTON_HIGHLIGHTED : BUTTON_NORMAL), (width - 175) / 2, height - 90, 175, 40,
 				null);
 
@@ -66,12 +65,12 @@ public class SettingsScreen extends Screen {
 		font.drawShadow(g2d, translate("gui.Done"), (width - 175) / 2 + 62, height - 66, donesel ? 0xFFFFA0 : 0xFFFFFF);
 		
 		next_arrow.setLocation((width - 400) / 2 + 273, 15);
-		next_arrow.setHighlighted(MouseUtils.inRange(next_arrow)
+		next_arrow.setHighlighted(Mouse.inRange(next_arrow.getBounds())
 				&& currentTab.equals("options.generalTab"));
 		next_arrow.draw(g2d);
 		
 		back_arrow.setLocation((width - 400) / 2 + 100, 15);
-		back_arrow.setHighlighted(MouseUtils.inRange(back_arrow));
+		back_arrow.setHighlighted(Mouse::inRange);
 		back_arrow.draw(g2d);
 		
 		font.drawShadow(g2d, translate(currentTab), (width - 400) / 2 + 155, 37, 0xFFFFFF);
@@ -87,7 +86,7 @@ public class SettingsScreen extends Screen {
 	private void drawGeneralTab(Graphics g, Assets assets) {
 		FontRenderer font = FontRenderer.mojangles();
 
-		musicBtn = MouseUtils.inRange(30, 80, 200, 40);
+		musicBtn = Mouse.inRange(30, 80, 200, 40);
 		g.drawImage(assets.getButton(musicBtn ? BUTTON_HIGHLIGHTED : BUTTON_NORMAL), 30, 80, 200, 40, null);
 
 		font.size(20);
@@ -117,7 +116,7 @@ public class SettingsScreen extends Screen {
 		ptLang = false;
 
 		if (height >= 220) {
-			enLang = MouseUtils.inRange((width - 350) / 2 - 1, 80 - 1, 350 + 1, 40 + 1);
+			enLang = Mouse.inRange((width - 350) / 2 - 1, 80 - 1, 350 + 1, 40 + 1);
 
 			g.setColor(Color.BLACK);
 			g.fillRect((width - 350) / 2, 80, 350, 40);
@@ -129,7 +128,7 @@ public class SettingsScreen extends Screen {
 		}
 
 		if (height >= 270) {
-			spLang = MouseUtils.inRange((width - 350) / 2 - 1, 80 + 50 - 1, 350 + 1, 40 + 1);
+			spLang = Mouse.inRange((width - 350) / 2 - 1, 80 + 50 - 1, 350 + 1, 40 + 1);
 
 			g.setColor(Color.BLACK);
 			g.fillRect((width - 350) / 2, 80 + 50, 350, 40);
@@ -141,7 +140,7 @@ public class SettingsScreen extends Screen {
 		}
 
 		if (height >= 320) {
-			itLang = MouseUtils.inRange((width - 350) / 2 - 1, 80 + 50 * 2 - 1, 350 + 1, 40 + 1);
+			itLang = Mouse.inRange((width - 350) / 2 - 1, 80 + 50 * 2 - 1, 350 + 1, 40 + 1);
 
 			g.setColor(Color.BLACK);
 			g.fillRect((width - 350) / 2, 80 + 50 * 2, 350, 40);
@@ -153,7 +152,7 @@ public class SettingsScreen extends Screen {
 		}
 
 		if (height >= 370) {
-			frLang = MouseUtils.inRange((width - 350) / 2 - 1, 80 + 50 * 3 - 1, 350 + 1, 40 + 1);
+			frLang = Mouse.inRange((width - 350) / 2 - 1, 80 + 50 * 3 - 1, 350 + 1, 40 + 1);
 
 			g.setColor(Color.BLACK);
 			g.fillRect((width - 350) / 2, 80 + 50 * 3, 350, 40);
@@ -165,7 +164,7 @@ public class SettingsScreen extends Screen {
 		}
 
 		if (height >= 420) {
-			glLang = MouseUtils.inRange((width - 350) / 2 - 1, 80 + 50 * 4 - 1, 350 + 1, 40 + 1);
+			glLang = Mouse.inRange((width - 350) / 2 - 1, 80 + 50 * 4 - 1, 350 + 1, 40 + 1);
 
 			g.setColor(Color.BLACK);
 			g.fillRect((width - 350) / 2, 80 + 50 * 4, 350, 40);
@@ -177,7 +176,7 @@ public class SettingsScreen extends Screen {
 		}
 
 		if (height >= 470) {
-			caLang = MouseUtils.inRange((width - 350) / 2 - 1, 80 + 50 * 5 - 1, 350 + 1, 40 + 1);
+			caLang = Mouse.inRange((width - 350) / 2 - 1, 80 + 50 * 5 - 1, 350 + 1, 40 + 1);
 
 			g.setColor(Color.BLACK);
 			g.fillRect((width - 350) / 2, 80 + 50 * 5, 350, 40);
@@ -189,7 +188,7 @@ public class SettingsScreen extends Screen {
 		}
 
 		if (height >= 512) {
-			ptLang = MouseUtils.inRange((width - 350) / 2 - 1, 80 + 50 * 6 - 1, 350 + 1, 40 + 1);
+			ptLang = Mouse.inRange((width - 350) / 2 - 1, 80 + 50 * 6 - 1, 350 + 1, 40 + 1);
 
 			g.setColor(Color.BLACK);
 			g.fillRect((width - 350) / 2, 80 + 50 * 6, 350, 40);

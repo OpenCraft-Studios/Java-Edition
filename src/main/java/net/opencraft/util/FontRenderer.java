@@ -1,11 +1,8 @@
 package net.opencraft.util;
 
-import static java.awt.Font.TRUETYPE_FONT;
-import static java.awt.Font.createFont;
+import static java.awt.Font.*;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 
@@ -124,11 +121,15 @@ public class FontRenderer {
 	}
 
 	public String getName() {
-		return toFont().getName();
+		return toJavaFont().getName();
 	}
 
-	public Font toFont() {
-		return this.font;
+	public Font toJavaFont() {
+		return this.font.deriveFont(Font.PLAIN, this.size);
+	}
+	
+	public FontMetrics metrics(Graphics g) {
+		return g.getFontMetrics(toJavaFont());
 	}
 
 }

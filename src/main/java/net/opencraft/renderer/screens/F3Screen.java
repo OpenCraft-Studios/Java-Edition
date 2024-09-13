@@ -1,7 +1,9 @@
 package net.opencraft.renderer.screens;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import lombok.Getter;
@@ -10,6 +12,7 @@ import net.opencraft.Locales;
 import net.opencraft.SharedConstants;
 import net.opencraft.renderer.Renderer;
 import net.opencraft.sound.SoundManager;
+import net.opencraft.spectoland.ILogger;
 import net.opencraft.util.FontRenderer;
 
 public class F3Screen {
@@ -23,13 +26,13 @@ public class F3Screen {
 	}
 
 	public static void draw(Graphics2D g2d) {
-		/*if (icIsKeyPressed(KeyEvent.VK_I)) {
+		if (Keyboard.isKeyClicked(KeyEvent.VK_I)) {
 			try {
 				ILogger.writeFile();
 			} catch (Exception ignored) {
 			}
-			setStatus("Saving internal log file...");
-		}*/
+			setStatus("Saved internal log file!");
+		}
 		
 		Composite saveCMP = g2d.getComposite();
 		AlphaComposite alphaCMP = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f);
