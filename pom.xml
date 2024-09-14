@@ -84,15 +84,19 @@
 	</dependencies>
 
 	<build>
+		<!-- JAR name -->
+		<finalName>client</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.11.0</version>
+				<version>3.13.0</version>
 				<configuration>
 					<encoding>${project.build.sourceEncoding}</encoding>
 					<source>1.8</source>
 					<target>1.8</target>
+
+					<!-- Lombok for annotations -->
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
@@ -102,6 +106,8 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+
+			<!-- Plugin for resources/ folder -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -110,27 +116,40 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
+
+			<!-- JAR Packaging plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.3.0</version>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
 				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
+					<finalName>client</finalName>
 					<archive>
 						<manifest>
-							<mainClass>net.opencraft.OpenCraft</mainClass>
+							<mainClass>
+								net.opencraft.OpenCraft
+							</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
+			</plugin>
+
+			<!-- Dependency packaging plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.3.0</version>
 				<executions>
 					<execution>
-						<id>make-assembly</id>
+						<id>copy-dependencies</id>
 						<phase>package</phase>
 						<goals>
-							<goal>single</goal>
+							<goal>copy-dependencies</goal>
 						</goals>
+						<configuration>
+							<outputDirectory>
+								${project.build.directory}/dependencies</outputDirectory>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
