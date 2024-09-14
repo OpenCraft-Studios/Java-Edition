@@ -29,6 +29,8 @@ import net.opencraft.util.FontRenderer;
 public final class OpenCraft extends JPanel
 		implements Runnable, Startable, Stoppable, ComponentListener {
 
+	private static final long serialVersionUID = 1L;
+	
 	/* Static variables... */
 	static final Logger logger = LoggerFactory.getLogger(OpenCraft.class);
 	public static OpenCraft oc;
@@ -208,10 +210,10 @@ public final class OpenCraft extends JPanel
 		parser.accepts("authsessionid");
 
 		OptionSpec<?> legacyFlag = parser.accepts("legacy");
-		OptionSpec<?> gameDirArgument = parser.accepts("gameDir").withRequiredArg();
+		OptionSpec<?> gameDirArgument = parser.accepts("gameDir").withRequiredArg().required();
 		OptionSpec<?> configFileArgument = parser.acceptsAll(Arrays.asList("cnf", "conf", "config")).withRequiredArg();
 		OptionSpec<?> uiScaleArgument = parser.acceptsAll(Arrays.asList("scale", "uiscale")).withRequiredArg();
-		OptionSpec<?> usernameArgument = parser.accepts("username");
+		OptionSpec<?> usernameArgument = parser.accepts("username").withRequiredArg();
 
 		OptionSet argSet = parser.parse(args);
 		GameSettings.LEGACY_CONFIG = argSet.has(legacyFlag);
