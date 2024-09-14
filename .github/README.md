@@ -76,22 +76,7 @@ I hope that you can be part of that community forking the repository or simply, 
 ---
 
 ## ☕ Downloading
-For now, we don't have prebuild jars. You need to compile it manually.
-Although you will need a launcher to play the game because it needs of libraries.
-
-> [!NOTE]
-> Every required libraries are open-source and free, so you can download them easily.
-
-If you don't want to use a launcher, you can execute it manually. Only **follow these steps**:
-
-1. Make sure you have Java **1.8** or above installed: <br />
-   `java --version` *= 1.8*
-
-2. Make sure you have the latest version of OpenCraft downloaded.
-
-3. Make sure you have the libraries to execute OpenCraft.
-
-If you are already to execute OpenCraft. Follow these instructions.
+We already have prebuilt jars. They can be downloaded [here](https://github.com/OpenCraft-Studios/Java-Edition/actions).
 
 ###### Windows
 ```batch
