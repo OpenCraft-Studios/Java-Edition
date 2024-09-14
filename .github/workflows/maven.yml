@@ -40,9 +40,24 @@ jobs:
         MAVEN_PASSWORD: ${{ secrets.SECRET_TOKEN }}
         GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
     
+    - name: Pack dependencies
+      id: packdep
+      run: |
+        mvn dependency:copy-dependencies -DoutputDirectory=target/dependencies
+        cd target/dependencies
+        zip -r ../dependencies.zip .
+        cd ../..
+    
     - uses: ./.github/actions/upload_build
       name: Publish client artifact
       if: ${{ always() && steps.compile.outcome == 'success' }}
       with:
         SOURCE_FILE: 'target/client.jar'
         DEST_NAME: 'client.jar'
+
+    - uses: ./.github/actions/upload_build
+      name: Publish dependencies artifact
+      if: ${{ always() && steps.packdep.outcome == 'success' }}
+      with:
+        SOURCE_FILE: 'target/dependencies.zip'
+        DEST_NAME: 'dependencies.zip'
