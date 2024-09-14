@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import io.vavr.Lazy;
-import net.opencraft.annotations.DoNotCallDirectly;
+import net.opencraft.annotations.MayConsumeCPU;
 
 public class Assets {
 	
@@ -37,7 +37,7 @@ public class Assets {
 	/**
 	 * @return a button.
 	 */
-	@DoNotCallDirectly
+	@MayConsumeCPU
 	public BufferedImage getButton(int button_id) {
 		return gui.get(0, button_id * 20, 200, 20);
 	}
@@ -45,7 +45,7 @@ public class Assets {
 	/**
 	 * @return an arrow.
 	 */
-	@DoNotCallDirectly
+	@MayConsumeCPU
 	public BufferedImage getArrow(int arrow) {
 		return gui.get(200 + 15 * arrow, 20, 14, 22);
 	}
@@ -53,7 +53,7 @@ public class Assets {
 	/**
 	 * @return the Minecraft Logo.
 	 */
-	@DoNotCallDirectly
+	@MayConsumeCPU
 	public BufferedImage getLogo() {
 		return gui.get(0, 61, 271, 44);
 	}
@@ -61,7 +61,7 @@ public class Assets {
 	/**
 	 * @return a dirt block but darker.
 	 */
-	@DoNotCallDirectly
+	@MayConsumeCPU
 	public BufferedImage getBackground() {
 		return gui.get(242, 0, 16, 16);
 	}
@@ -69,7 +69,7 @@ public class Assets {
 	/**
 	 * @return the OpenCraft HAECATOMBE logo.
 	 */
-	@DoNotCallDirectly
+	@MayConsumeCPU
 	public BufferedImage getLoadingLogo() {
 		return loadingLogo.get().getImage();
 	}
