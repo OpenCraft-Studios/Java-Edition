@@ -1,4 +1,4 @@
-package org.lwjgl.input;
+package org.josl.openic;
 
 import java.awt.Component;
 import java.awt.event.KeyEvent;

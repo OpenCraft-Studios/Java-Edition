@@ -11,8 +11,8 @@ import javax.swing.*;
 
 import org.guppy4j.run.Startable;
 import org.guppy4j.run.Stoppable;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
+import org.josl.openic.Keyboard;
+import org.josl.openic.Mouse;
 import org.lwjgl.opengl.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

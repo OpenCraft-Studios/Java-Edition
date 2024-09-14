@@ -38,11 +38,11 @@
 			<version>${joml.version}</version>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>org.josl.openic</groupId>
 			<artifactId>openic</artifactId>
 			<version>${openic.version}</version>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>io.vavr</groupId>

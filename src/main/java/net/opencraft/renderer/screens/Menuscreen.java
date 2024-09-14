@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.Locale;
 import java.util.function.Consumer;
 
-import org.lwjgl.input.Mouse;
+import org.josl.openic.Mouse;
 
 import io.vavr.Lazy;
 import net.opencraft.Locales;

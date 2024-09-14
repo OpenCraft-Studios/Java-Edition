@@ -8,7 +8,7 @@ import static net.opencraft.renderer.gui.GuiButton.*;
 import java.awt.*;
 import java.util.Locale;
 
-import org.lwjgl.input.Mouse;
+import org.josl.openic.Mouse;
 import org.lwjgl.opengl.Display;
 
 import net.opencraft.GameSettings;

@@ -3,7 +3,7 @@ package net.opencraft.renderer.screens;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-import org.lwjgl.input.Keyboard;
+import org.josl.openic.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import lombok.Getter;

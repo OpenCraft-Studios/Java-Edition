@@ -10,7 +10,7 @@ import java.io.FileOutputStream;
 
 import javax.imageio.ImageIO;
 
-import org.lwjgl.input.Keyboard;
+import org.josl.openic.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
