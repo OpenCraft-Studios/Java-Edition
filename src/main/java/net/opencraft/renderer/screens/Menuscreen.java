@@ -37,7 +37,6 @@ public class Menuscreen extends Screen {
 	private void initComponents() {
 		
 		/* Quit Game Button */
-		
 		this.quitButton = new GuiButton(font) {
 			public void mouseClicked(int x, int y, int button) {
 				oc.running = false;
@@ -52,7 +51,6 @@ public class Menuscreen extends Screen {
 			}
 		};
 		settingsButton.setSize(198, 40);
-		
 		
 		/* Singleplayer button */
 		
