@@ -17,7 +17,7 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
- * <h1>Config</h1> The Config class contains every setting in the game. This
+ * <h1>GameSettings</h1> The GameSettings class contains every setting in the game. This
  * class can be converted to a {@code Properties} object that can be readed and
  * saved to a file.
  */
