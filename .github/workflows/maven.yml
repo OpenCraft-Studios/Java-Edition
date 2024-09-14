@@ -41,7 +41,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
     
     - uses: ./.github/actions/upload_build
-    - name: Publish client artifact
+      name: Publish client artifact
       if: ${{ always() && steps.compile.outcome == 'success' }}
       with:
         SOURCE_FILE: 'target/client.jar'
