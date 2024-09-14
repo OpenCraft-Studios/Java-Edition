@@ -6,7 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import net.opencraft.renderer.gui.interfaces.HighlightCalculator;
+import net.opencraft.renderer.gui.interfaces.*;
 
 public class GuiArrow extends GuiElement
 	implements IState, IUpdateable, IHighlight {

@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
-import net.opencraft.renderer.gui.interfaces.HighlightCalculator;
+import net.opencraft.renderer.gui.interfaces.*;
 import net.opencraft.util.FontRenderer;
 
 public class GuiButton extends GuiElement

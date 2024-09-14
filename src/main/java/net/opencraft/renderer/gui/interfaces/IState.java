@@ -1,4 +1,4 @@
-package net.opencraft.renderer.gui;
+package net.opencraft.renderer.gui.interfaces;
 
 public interface IState {
 

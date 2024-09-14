@@ -1,6 +1,4 @@
-package net.opencraft.renderer.gui;
-
-import net.opencraft.renderer.gui.interfaces.HighlightCalculator;
+package net.opencraft.renderer.gui.interfaces;
 
 public interface IHighlight {
 
