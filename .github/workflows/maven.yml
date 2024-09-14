@@ -40,8 +40,8 @@ jobs:
         MAVEN_PASSWORD: ${{ secrets.SECRET_TOKEN }}
         GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
       
-    - uses: ./.github/actions/upload_build
+    - uses: actions/upload-artifact@v4
       if: ${{ always() && steps.compile.outcome == 'success' }}
       with:
-        SOURCE_FILE: 'target/client.jar'
-        DEST_NAME: 'client.jar'
+        name: 'target/client.jar'
+        path: 'client.jar'
