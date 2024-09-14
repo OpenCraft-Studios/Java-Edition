@@ -11,10 +11,8 @@
 name: Generate artifacts
 
 on:
-  push:
-    branches: [ "dev" ]
-  pull_request:
-    branches: [ "dev" ]
+  release:
+    types: [published]
 
 jobs:
   build:
