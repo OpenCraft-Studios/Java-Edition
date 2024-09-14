@@ -39,8 +39,9 @@ jobs:
         MAVEN_USERNAME: CiroZDP
         MAVEN_PASSWORD: ${{ secrets.SECRET_TOKEN }}
         GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
-      
+    
     - uses: ./.github/actions/upload_build
+    - name: Publish client artifact
       if: ${{ always() && steps.compile.outcome == 'success' }}
       with:
         SOURCE_FILE: 'target/client.jar'
