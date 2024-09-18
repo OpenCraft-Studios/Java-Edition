@@ -25,7 +25,7 @@ public final class Locales {
 
 	public static class Loader {
 
-		public static void loadLocales() {
+		public static void load() {
 			parse(getCSVOnline().orElse(getInternalCSV()));
 		}
 

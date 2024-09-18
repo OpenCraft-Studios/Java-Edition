@@ -79,8 +79,9 @@ public class F3Screen {
 		status = null;
 	}
 
-	public static void toggleVisible() {
-		visible = !visible;
+	public static void toggleVisible(Graphics2D g2d) {
+		if (visible = !visible)
+			draw(g2d);
 	}
 
 }

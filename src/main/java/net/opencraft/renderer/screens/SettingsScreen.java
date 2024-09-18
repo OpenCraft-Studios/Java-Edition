@@ -13,6 +13,8 @@ import org.lwjgl.opengl.Display;
 
 import net.opencraft.GameSettings;
 import net.opencraft.Locales;
+import net.opencraft.annotations.Dirty;
+import net.opencraft.annotations.Optimized;
 import net.opencraft.renderer.gui.GuiArrow;
 import net.opencraft.renderer.texture.Assets;
 import net.opencraft.sound.SoundManager;
@@ -21,8 +23,10 @@ import net.opencraft.util.FontRenderer;
 public class SettingsScreen extends Screen {
 
 	private static final SettingsScreen instance = new SettingsScreen();
-
-	private String currentTab = "options.generalTab";
+	public static final int GENERAL_TAB = 0,
+							LOCALES_TAB = 1;
+	
+	private int currentTab = 0;
 
 	private GuiArrow back_arrow, next_arrow;
 	
@@ -30,18 +34,25 @@ public class SettingsScreen extends Screen {
 	public boolean musicBtn = false;
 
 	private SettingsScreen() {
-		back_arrow = new GuiArrow();
+		back_arrow = new GuiArrow() {
+			public void mouseClicked(int x, int y, int button) {
+				previousTab();
+			}
+		};
 		back_arrow.setSize(21, 33);
 		back_arrow.setDirection(ARROW_LEFT);
 		
-		next_arrow = new GuiArrow();
+		next_arrow = new GuiArrow() {
+			public void mouseClicked(int x, int y, int button) {
+				nextTab();
+			}
+		};
 		next_arrow.setSize(21, 33);
 		next_arrow.setDirection(ARROW_RIGHT);
-		
-		
 	}
 
 	@Override
+	@Dirty
 	public void render(Graphics2D g2d) {
 		super.clearScreen(g2d);
 		int width = oc.width;
@@ -49,9 +60,9 @@ public class SettingsScreen extends Screen {
 		
 		drawOptionsBackground(g2d);
 
-		if (currentTab.equalsIgnoreCase("options.generalTab")) {
+		if (currentTab == GENERAL_TAB) {
 			drawGeneralTab(g2d, oc.assets);
-		} else if (currentTab.equalsIgnoreCase("options.localesTab")) {
+		} else {
 			drawLocalesTab(g2d);
 		}
 
@@ -66,14 +77,14 @@ public class SettingsScreen extends Screen {
 		
 		next_arrow.setLocation((width - 400) / 2 + 273, 15);
 		next_arrow.setHighlighted(Mouse.inRange(next_arrow.getBounds())
-				&& currentTab.equals("options.generalTab"));
+				&& currentTab == GENERAL_TAB);
 		next_arrow.draw(g2d);
 		
 		back_arrow.setLocation((width - 400) / 2 + 100, 15);
 		back_arrow.setHighlighted(Mouse::inRange);
 		back_arrow.draw(g2d);
 		
-		font.drawShadow(g2d, translate(currentTab), (width - 400) / 2 + 155, 37, 0xFFFFFF);
+		font.drawShadow(g2d, translate(currentTab == GENERAL_TAB ? "options.generalTab" : "options.localesTab"), (width - 400) / 2 + 155, 37, 0xFFFFFF);
 
 		g2d.setColor(Color.WHITE);
 		g2d.setStroke(new BasicStroke(2F));
@@ -83,6 +94,7 @@ public class SettingsScreen extends Screen {
 		pollEvents();
 	}
 
+	@Dirty
 	private void drawGeneralTab(Graphics g, Assets assets) {
 		FontRenderer font = FontRenderer.mojangles();
 
@@ -97,6 +109,8 @@ public class SettingsScreen extends Screen {
 
 	}
 
+	@Dirty
+	@Optimized(false)
 	private void drawLocalesTab(Graphics g) {
 		// Draw buttons
 		final int width = Display.getWidth();
@@ -227,30 +241,50 @@ public class SettingsScreen extends Screen {
 	}
 
 	public void pollEvents() {
-		if (!Mouse.isButtonClicked(1))
+		final int button = 1;
+		if (!Mouse.isButtonClicked(button))
 			return;
 		
-		if (musicBtn) {
+		// Mouse button is clicked
+		
+		if (musicBtn)
 			SoundManager.toggleSound();
-		} else if (next_arrow.isHighlighted()) {
-			currentTab = "options.localesTab";
-		} else if (back_arrow.isHighlighted()) {
-			if (currentTab.equals("options.generalTab"))
+		else if (next_arrow.isHighlighted())
+			next_arrow.mouseClicked(Mouse.getX(), Mouse.getY(), button);
+		else if (back_arrow.isHighlighted()) {
+			if (currentTab == 0)
 				donesel = true;
 			
-			currentTab = "options.generalTab";
-		}
-		
-		if (donesel) {
+			back_arrow.mouseClicked(Mouse.getX(), Mouse.getY(), button);
+		} else if (donesel) {
 			Screen.setCurrent(Menuscreen.class);
-			currentTab = "options.generalTab";
-			GameSettings.save();
+			resetTab();
+			GameSettings.saveFile();
 		}
+	}
+	
+	private void resetTab() {
+		currentTab = GENERAL_TAB;
+	}
+	
+	private void nextTab() {
+		if (currentTab < LOCALES_TAB)
+			currentTab++;
+	}
+	
+	private void previousTab() {
+		if (currentTab > GENERAL_TAB)
+			currentTab--;
+	}
+	
+	private String strCurrentTab() {
+		return currentTab == GENERAL_TAB ? "options.generalTab"
+				: "options.localesTab";
 	}
 	
 	@Override
 	public String toString() {
-		return super.toString(); //+ "#" + currentTab.substring(8, 15); lateeer...
+		return super.toString() + "#" + strCurrentTab();
 	}
 
 }

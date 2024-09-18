@@ -1,0 +1,66 @@
+{
+	"id": "24r13",
+	"time": "2024-09-15T11:14:24.737Z",
+	"releaseTime": "2024-09-15T11:14:24.737Z",
+	"type": "release",
+	"libraries": [
+	],
+	"mainClass": "net.opencraft.OpenCraft",
+	"minimumLauncherVersion": 21,
+	"assets": "5",
+	"assetIndex": {
+		"id": "5",
+		"totalSize": 626130491,
+		"known": true,
+		"url": "https://piston-meta.mojang.com/v1/packages/9ee5b32d87acded8f2d3d57ceec589ee5243ea61/5.json",
+		"sha1": "9ee5b32d87acded8f2d3d57ceec589ee5243ea61",
+		"size": 411881
+	},
+	"javaVersion": {
+		"component": "java-runtime-gamma",
+		"majorVersion": 17
+	},
+	"arguments": {
+		"game": [
+			"--gameDir",
+			"."
+		],
+		"jvm": [
+			{
+				"value": "-XstartOnFirstThread",
+				"rules": [
+					{
+						"action": "allow",
+						"os": {
+							"name": "osx"
+						}
+					}
+				]
+			},
+			{
+				"value": "-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump",
+				"rules": [
+					{
+						"action": "allow",
+						"os": {
+							"name": "windows"
+						}
+					}
+				]
+			},
+			{
+				"value": "-Xss1M",
+				"rules": [
+					{
+						"action": "allow",
+						"os": {
+							"arch": "x86"
+						}
+					}
+				]
+			},
+			"-cp",
+			"${classpath}"
+		]
+	}
+}

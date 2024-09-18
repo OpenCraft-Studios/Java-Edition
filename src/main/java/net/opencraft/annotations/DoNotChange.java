@@ -4,8 +4,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Do not call this method directly! This method may use too much CPU.
+ * This field/method or class is being used by some method that uses reflection.
  */
 @Retention(RetentionPolicy.SOURCE)
-public @interface MayConsumeCPU {
+public @interface DoNotChange {
 }

@@ -1,0 +1,7 @@
+[15:28:06] [main/INFO] [net.opencraft.renderer.Renderer/]: Render system initialized!
+[15:28:06] [main/INFO] [net.opencraft.renderer.Renderer/]: [OpenGL] Using OpenGL: No
+[15:28:06] [main/INFO] [net.opencraft.sound.SoundManager/]: Sound manager started!
+[15:28:06] [main/INFO] [net.opencraft.sound.SoundManager/]: [SoundAPI] Sound API status: Passive
+[15:28:06] [main/INFO] [net.opencraft.OpenCraft/]: Selected language: English (United States)
+[15:28:06] [main/INFO] [net.opencraft.OpenCraft/]: OpenCraft 24r12 started!
+[15:29:37] [AWT-EventQueue-0/INFO] [net.opencraft.sound.SoundManager/]: Shutdowning sound system!

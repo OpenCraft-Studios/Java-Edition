@@ -17,9 +17,9 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
- * <h1>GameSettings</h1> The GameSettings class contains every setting in the game. This
- * class can be converted to a {@code Properties} object that can be readed and
- * saved to a file.
+ * <h1>GameSettings</h1> The GameSettings class contains every setting in the
+ * game. This class can be converted to a {@code Properties} object that can be
+ * readed and saved to a file.
  */
 public class GameSettings {
 
@@ -62,9 +62,6 @@ public class GameSettings {
 	 * This method reads the configuration written in the default file to apply it.
 	 */
 	public static void read(File gameSettingsFile) {
-		if (!gameSettingsFile.exists())
-			return;
-
 		Properties gameSettings = new Properties();
 		try {
 			gameSettings.load(new FileInputStream(gameSettingsFile));
@@ -127,9 +124,8 @@ public class GameSettings {
 	/**
 	 * This method saves the actual configuration to the default file.
 	 */
-	public static void save() {
+	public static void saveFile() {
 		save(DEF_CONFIG);
 	}
-
 
 }

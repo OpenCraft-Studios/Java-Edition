@@ -122,7 +122,7 @@ public final class OpenCraft extends JPanel
 		GameSettings.read();
 
 		// Configure font and translations
-		Locales.Loader.loadLocales();
+		Locales.Loader.load();
 		FontRenderer.create("/fonts");
 
 		// Create basics resources

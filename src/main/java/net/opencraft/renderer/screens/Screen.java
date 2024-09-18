@@ -5,6 +5,8 @@ import static net.opencraft.OpenCraft.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import net.opencraft.annotations.Optimized;
+
 public abstract class Screen {
 
 	private static Screen current = Loadscreen.getInstance();
@@ -40,6 +42,7 @@ public abstract class Screen {
 		g2d.fillRect(0, 0, oc.width, oc.height);
 	}
 	
+	@Optimized
 	protected void drawOptionsBackground(Graphics2D g2d) {
 		//clearScreen(g2d);
 		BufferedImage dirtTexture = drawDirtBackground(g2d);

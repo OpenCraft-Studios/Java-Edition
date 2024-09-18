@@ -4,8 +4,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Do not call this method directly! This method may use too much CPU.
+ * Dirty code that could cause problems in the future due to difficult
+ * maintenance or unclear purpose.
  */
 @Retention(RetentionPolicy.SOURCE)
-public @interface MayConsumeCPU {
+public @interface Dirty {
+
 }

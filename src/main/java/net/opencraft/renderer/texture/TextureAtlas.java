@@ -4,32 +4,32 @@ import java.awt.image.BufferedImage;
 
 import net.opencraft.util.Files;
 
-public class Tilesheet {
+public class TextureAtlas {
 
     private final Texture tilesheet;
 
-    public Tilesheet(Tilesheet other) {
+    public TextureAtlas(TextureAtlas other) {
         this.tilesheet = other.tilesheet;
     }
     
-    public Tilesheet(Texture tilesheet) {
+    public TextureAtlas(Texture tilesheet) {
         this.tilesheet = tilesheet;
     }
     
-    public Tilesheet(String path) {
+    public TextureAtlas(String path) {
         this(Texture.getTexture("PNG", Files.internal(path)));
     }
 
-    public static Tilesheet forTexture(Texture tilesheet) {
-        return new Tilesheet(tilesheet);
+    public static TextureAtlas forTexture(Texture tilesheet) {
+        return new TextureAtlas(tilesheet);
     }
     
-    public static Tilesheet read(String path) {
-    	return new Tilesheet(path);
+    public static TextureAtlas read(String path) {
+    	return new TextureAtlas(path);
     }
     
-    public static Tilesheet forImage(BufferedImage image) {
-        return Tilesheet.forTexture(Texture.of(image));
+    public static TextureAtlas forImage(BufferedImage image) {
+        return TextureAtlas.forTexture(Texture.of(image));
     }
 
     public final BufferedImage get(int x, int y, int w, int h) {

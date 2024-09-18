@@ -10,28 +10,28 @@ import net.opencraft.annotations.MayConsumeCPU;
 
 public class Assets {
 	
-	private final Tilesheet gui;
+	private final TextureAtlas gui;
 	private Lazy<Texture> loadingLogo;
 
-	private Assets(Tilesheet gui) {
+	private Assets(TextureAtlas gui) {
 		this.gui = gui;
 		this.loadingLogo = Texture.lazyLoad("/loading_logo.png");
 	}
 	
-	private Assets(Tilesheet... tss) {
+	private Assets(TextureAtlas... tss) {
 		this(tss[0]);
 	}
 	
-	public static Assets create(Tilesheet... tss) {
+	public static Assets create(TextureAtlas... tss) {
 		return new Assets(tss);
 	}
 	
 	public static Assets create(String... tss) {
-		List<Tilesheet> tilesheets = Arrays.stream(tss)
-				.map(path -> Tilesheet.read(path))
+		List<TextureAtlas> tilesheets = Arrays.stream(tss)
+				.map(path -> TextureAtlas.read(path))
 				.collect(Collectors.toList());
 		
-		return create(tilesheets.toArray(new Tilesheet[0]));
+		return create(tilesheets.toArray(new TextureAtlas[0]));
 	}
 	
 	/**
